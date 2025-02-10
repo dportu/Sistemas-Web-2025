@@ -17,7 +17,8 @@
         </p>
        <!-- TODO -->
         <h1>Formulario de Contacto</h1>
-        <form action="mailto:eventia@gmail.com" method="post" enctype="text/plain">
+         <form action="mailto:eventia@gmail.com" method="post" enctype="text/plain">
+        
             <label for="Nombre">Nombre:</label>
             <input type="text" id="nombre" name="Nombre" required>
             <br><br>
@@ -40,9 +41,27 @@
             <label for="terminos">Marque esta casilla para verificar que ha leído nuestros términos y condiciones del servicio.</label>
             <br><br>
 
+            <label for = "consulta" > Consulta:</label>
+           
+           
+            <br>
+            <textarea name = "consulta" rows="10" cols = "50"></textarea>
+
 
             <input type="submit" value="Enviar">
-            <!-- Falta ver como se guardan esos datos  -->
+
+
+
+            
     </body>
+    <script> document.querySelector("form").addEventListener("submit", function(event) { 
+            let nombre = document.getElementById("nombre").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let consulta = document.getElementById("consulta").value.trim();
+        
+    if (nombre === "" || email === "" || consulta === "") { alert("Por favor, completa todos los campos.");
+        event.preventDefault(); } }); 
+    </script>
+
 
  </html>
