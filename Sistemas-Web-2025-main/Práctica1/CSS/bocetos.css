@@ -1,0 +1,29 @@
+body {
+    background-color: #ffffff;
+    color: #3d3d3d;
+    font-family: sans-serif;
+    line-height: 1.2;
+}
+p {
+    margin-left: 20px;
+    font-size: 15px;
+}
+h1 {
+    margin-left: 5px;
+    font-size: 24px;
+}
+h2 {
+    margin-left: 5px;
+    font-size: 18px;
+}
+h3 {
+    margin-left: 5px;
+    font-size: 16px;
+}
+.miembro {
+    margin-bottom: 30px;
+}
+img {
+    width: 350px;
+    height: 300px;
+}
