@@ -4,7 +4,7 @@
         <ul>
 
         <li><a href="index.php">indice</a></li>
-        <li><a href="detalles.html">detalles</a></li>
+        <li><a href="detalles.php">detalles</a></li>
         <li><a href="bocetos.html">bocetos</a></li>
         <li><a href="miembros.html">miembros</a></li>
         <li><a href="planificacion.html">planificacion</a></li>

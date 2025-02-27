@@ -1,5 +1,11 @@
 <?php 
 include("conexion.php");
+session_start(); // Manejo de sesiones para el usuario
+
+$_SESSION['usuario_nombre'] = $_SESSION['usuario_nombre'] ?? '';
+$_SESSION['usuario_email'] = $_SESSION['usuario_email'] ?? '';
+
+$usuarioLogueado = isset($_SESSION["login"]) && $_SESSION["login"] === true;
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +27,7 @@ include("conexion.php");
 
        <div id="mensajes">
            <?php
-           $resultado = $conexion->query("SELECT * FROM foro ORDER BY fecha_publicacion DESC");
+           $resultado = $conexion->query("SELECT f.*, e.nombre AS nombre_evento FROM foro f LEFT JOIN eventos e ON f.evento = e.id ORDER BY fecha_publicacion DESC");
 
            if ($resultado->num_rows > 0) {
                while ($fila = $resultado->fetch_assoc()) {
@@ -29,7 +35,7 @@ include("conexion.php");
                    echo "<strong>Título:</strong> " . htmlspecialchars($fila['titulo']) . "<br>";
                    echo "<strong>Autor:</strong> " . htmlspecialchars($fila['autor']) . "<br>";
                    echo "<strong>Email:</strong> " . htmlspecialchars($fila['email']) . "<br>";
-                   echo "<strong>Evento:</strong> " . htmlspecialchars($fila['evento']) . "<br>";
+                   echo "<strong>Evento:</strong> " . htmlspecialchars($fila['nombre_evento'] ? $fila['nombre_evento'] : 'Ninguno') . "<br>";
                    echo "<p class='mensaje-contenido'>" . nl2br(htmlspecialchars($fila['mensaje'])) . "</p>";
                    echo "<small><strong>Fecha:</strong> " . $fila['fecha_publicacion'] . "</small>";
                    echo "</div>";
@@ -40,20 +46,35 @@ include("conexion.php");
            ?>
        </div>
 
+       
+
        <form id="nuevo-mensaje" action="procesar_foro.php" method="post">
            <h2>Escribe un mensaje</h2>
            
            <label for="titulo">Título:</label>
            <input type="text" name="titulo" id="titulo" required><br><br>
            
-           <label for="autor">Autor:</label>
-           <input type="text" name="autor" id="autor" required><br><br>
+           <!-- Campos ocultos para autor y email -->
+           <input type="hidden" name="autor" value="<?= htmlspecialchars($_SESSION['usuario_nombre']) ?>">
+           <input type="hidden" name="email" value="<?= htmlspecialchars($_SESSION['usuario_email']) ?>">
            
-           <label for="email">Email:</label>
-           <input type="email" name="email" id="email" required><br><br>
+           <!-- Mostrar información del usuario (opcional) -->
+           <p>Publicando como: <strong><?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?></strong></p>
            
            <label for="evento">Evento:</label>
-           <input type="text" name="evento" id="evento" required><br><br>
+           <select id="evento" name="evento">
+               <option value="">Ninguno - Tema general</option>
+               <?php
+               // Consultar eventos disponibles
+               $query = "SELECT id, nombre FROM eventos ORDER BY fecha_inicio DESC";
+               $resultado_eventos = $conexion->query($query);
+               
+               // Generar opciones de eventos
+               while($row = $resultado_eventos->fetch_assoc()) {
+                   echo "<option value='" . $row['id'] . "'>" . $row['nombre'] . "</option>";
+               }
+               ?>
+           </select><br><br>
            
            <label for="mensaje">Mensaje:</label>
            <textarea name="mensaje" id="mensaje" rows="4" required></textarea>

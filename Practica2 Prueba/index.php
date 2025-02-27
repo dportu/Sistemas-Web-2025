@@ -15,7 +15,7 @@ if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Eventia</title>
-    <link id="estilo" rel="stylesheet" type="text/css" href="CSS/default.css"/>
+    <link id="estilo" rel="stylesheet" type="text/css" href="estilo.css"/>
 </head>
 <body>
 

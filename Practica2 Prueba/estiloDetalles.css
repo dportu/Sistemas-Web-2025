@@ -79,6 +79,8 @@ main {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     font-size: 1.1em; /* Aumento del tamaño de fuente */
+    display: flex;
+    flex-direction: column;
 }
 
 main h1 {
@@ -87,11 +89,27 @@ main h1 {
     margin-bottom: 20px;
     border-bottom: 2px solid #78a3ff;
     padding-bottom: 10px;
+    order: 1; /* Se asegura de que esté antes del párrafo */
+}
+
+main .introduccion {
+    order: 2; /* Asegura que el párrafo de introducción esté después del h1 */
+}
+
+main h2 {
+    margin-top: 30px;
+    order: 3;
+}
+
+main h3 {
+    margin-top: 30px;
+    order: 5;
 }
 
 main p {
     margin-bottom: 20px;
     text-align: justify;
+    order: 4;
 }
 
 /* Ajustes de adaptabilidad para móviles */
