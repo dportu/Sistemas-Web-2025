@@ -30,7 +30,7 @@ body {
 /* Cabecera */
 header {
     grid-area: cabecera;
-    background-color: #1a3a6c;
+    background-color: #071838;
     color: rgb(231, 215, 215);
     padding: 20px;
     border-radius: 8px;

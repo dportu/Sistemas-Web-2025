@@ -27,8 +27,8 @@ session_destroy();
 
 <div id="contenedor"> 
 
-    <?php require("vistas/comun/cabecera.php"); ?>
-    <?php require("vistas/comun/sidebarIzq.php"); ?>
+    <?php require("includes/vistas/comun/cabecera.php"); ?>
+    <?php require("includes/vistas/comun/sidebarIzq.php"); ?>
 
 
     <main>
@@ -39,8 +39,8 @@ session_destroy();
         </article>
     </main>
 
-    <?php require("vistas/comun/sidebarDer.php"); ?>
-    <?php require("vistas/comun/pie.php"); ?>
+    <?php require("includes/vistas/comun/sidebarDer.php"); ?>
+    <?php require("includes/vistas/comun/pie.php"); ?>
 
 </div>
 

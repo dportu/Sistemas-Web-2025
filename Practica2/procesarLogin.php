@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'conexion_bd.php';
+require("conexion_bd.php");
 
 //DANDO POR HECHO QUE USUARIO ES nombre EN LA BASE DE DATOS
 

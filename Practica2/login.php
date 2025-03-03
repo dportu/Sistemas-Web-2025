@@ -16,7 +16,7 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
 </head>
 <body class="login-page">
 <div id="contenedor">
-    <?php require("vistas/comun/cabeceraLogin.php"); ?>
+    <?php require("includes/vistas/comun/cabeceraLogin.php"); ?>
     
     <main>
         <form action="procesarLogin.php" method="post">
@@ -39,7 +39,7 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
         </form>
     </main>
 
-    <?php require("vistas/comun/pie.php"); ?>
+    <?php require("includes/vistas/comun/pie.php"); ?>
 </div>
 </body>
 </html>

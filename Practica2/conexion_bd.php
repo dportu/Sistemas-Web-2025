@@ -1,14 +1,12 @@
 <?php
-    //CONEXION A BASE DE DATOS
-    $host = "localhost"; 
-    $usuario = "dani";  
-    $clave = "gugugaga";
-    $bd = "eventia_db";
+    $servidor = "localhost";  
+    $usuario = "root";   
+    $password = "";   
+    $base_datos = "eventia_db";
 
-    $conn = new mysqli($host, $usuario, $clave, $bd);
-    // verificacion de errores en la conexión
-    if ($conn->connect_error) {
-        die("Error de conexión: " . $conn->connect_error);
+    $conexion = new mysqli($servidor, $usuario, $password, $base_datos);      
+
+    if ($conexion->connect_error) {
+        die("Error de conexión: " . $conexion->connect_error);
     }
-
 ?>
