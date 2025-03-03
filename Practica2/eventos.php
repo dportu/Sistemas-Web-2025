@@ -11,11 +11,10 @@
             $fecha_texto .= " al " . $fila['fecha_fin'];
         }
         
-        echo "<li><strong>" . $fila['nombre'] . "</strong> - " . $fecha_texto . "<br>";
-        
-        if (!empty($fila['descripcion'])) {
-            echo $fila['descripcion'];
-        }
+        echo "<li>
+            <a href='evento.php?id=" . $fila['id'] . "'>
+                <strong>" . $fila['nombre'] . "</strong>
+            </a> - " . $fecha_texto . "<br>";
         
         echo "</li>";
     }

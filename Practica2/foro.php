@@ -1,21 +1,22 @@
 <?php 
-session_start();
+    include("conexion_bd.php");
+    session_start(); // Manejo de sesiones para el usuario
 
-// Si el usuario no está autenticado, redirigir a la página de login
-$usuarioAutenticado = isset($_SESSION["login"]) && $_SESSION["login"];
+    $_SESSION['usuario_nombre'] = $_SESSION['usuario_nombre'] ?? '';
+    $_SESSION['usuario_email'] = $_SESSION['usuario_email'] ?? '';
 
-// Continuar con el resto del código para usuarios autenticados
+    $usuarioLogueado = isset($_SESSION["login"]) && $_SESSION["login"] === true;
 ?>
-<!DOCTYPE html>
-<html lang = 'es'>
 
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Eventia</title>
     <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css"/>
 </head>
-<body>
 
+<body>
     <div id="contenedor">
 
     <?php require("includes/vistas/comun/cabecera.php"); ?>
@@ -23,12 +24,13 @@ $usuarioAutenticado = isset($_SESSION["login"]) && $_SESSION["login"];
     <?php require("includes/vistas/comun/sidebarIzq.php"); ?>
 
     <main>
-        <?php include_once("eventos.php"); ?>
+        <!-- TODO: Modificar Practica 2 prueba -->
     </main>
-    
+
     <?php require("includes/vistas/comun/sidebarDer.php"); ?>
     <?php require("includes/vistas/comun/pie.php"); ?>
-    
-    </div>
+   <div id="foro-contenedor">
+
+   
 </body>
 </html>

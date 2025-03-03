@@ -1,46 +1,46 @@
 <?php
-session_start();
-require("conexion_bd.php");
+    session_start();
+    require("conexion_bd.php");
 
-//DANDO POR HECHO QUE USUARIO ES nombre EN LA BASE DE DATOS
+    //DANDO POR HECHO QUE USUARIO ES nombre EN LA BASE DE DATOS
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $usuario = trim($_POST["usuario"]);
-    $password = trim($_POST["password"]);
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $usuario = trim($_POST["usuario"]);
+        $password = trim($_POST["password"]);
 
-    if (!empty($usuario) && !empty($password)) {
-        // Preparar la consulta para evitar SQL Injection
-        $sql = "SELECT id, password FROM usuarios WHERE nombre = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $usuario);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
+        if (!empty($usuario) && !empty($password)) {
+            // Preparar la consulta para evitar SQL Injection
+            $sql = "SELECT id, password FROM usuarios WHERE nombre = ?";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bind_param("s", $usuario);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
 
-        if ($resultado->num_rows == 1) {
-            $usuario_result = $resultado->fetch_assoc();
-            // Verificar la contraseña usando password_verify
-            if ($password == $usuario_result["password"]) { //password_verify($password, $usuario_result["password"]) cuando pasemos a contraseñas encriptadas
-                $_SESSION["usuario_id"] = $usuario_result["id"];
-                $_SESSION["usuario_nombre"] = $usuario_result["nombre"];
-                $_SESSION["login"] = true;
-                header("Location: index.php"); // Redirigir a la página de usuario
-                exit();
-            } else {
-                echo "Contraseña incorrecta.";
+            if ($resultado->num_rows == 1) {
+                $usuario_result = $resultado->fetch_assoc();
+                // Verificar la contraseña usando password_verify
+                if ($password == $usuario_result["password"]) { //password_verify($password, $usuario_result["password"]) cuando pasemos a contraseñas encriptadas
+                    $_SESSION["usuario_id"] = $usuario_result["id"];
+                    $_SESSION["usuario_nombre"] = $usuario_result["nombre"];
+                    $_SESSION["login"] = true;
+                    header("Location: index.php"); // Redirigir a la página de usuario
+                    exit();
+                } else {
+                    echo "Contraseña incorrecta.";
+                }
+            } 
+            else if ($resultado->num_rows == 0){
+                echo "Usuario no encontrado.";
             }
-        } 
-        else if ($resultado->num_rows == 0){
-            echo "Usuario no encontrado.";
-        }
-        else {
-            echo "ERROR DE BASE DE DATOS, MULTIPLES USUARIOS CON EL MISMO NOMBRE";
-        }
+            else {
+                echo "ERROR DE BASE DE DATOS, MULTIPLES USUARIOS CON EL MISMO NOMBRE";
+            }
 
-        $stmt->close();
-    } else {
-        echo "Por favor, completa todos los campos.";
+            $stmt->close();
+        } else {
+            echo "Por favor, completa todos los campos.";
+        }
     }
-}
 
-$conn->close();
+    $conn->close();
 ?>

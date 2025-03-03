@@ -35,7 +35,6 @@ session_destroy();
         <article>
             <h1>Sesión cerrada</h1>
             <p>Gracias por visitar nuestra web. Hasta pronto.</p>
-            <p><a href="index.php">Volver a la página principal</a></p>
         </article>
     </main>
 

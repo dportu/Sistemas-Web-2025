@@ -15,8 +15,10 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
     <title>Login - Eventia</title>
 </head>
 <body class="login-page">
-<div id="contenedor">
-    <?php require("includes/vistas/comun/cabeceraLogin.php"); ?>
+
+    <div id="contenedor">
+
+    <?php require("includes/vistas/comun/cabecera.php"); ?>
     
     <main>
         <form action="procesarLogin.php" method="post">
