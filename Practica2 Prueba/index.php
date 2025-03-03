@@ -2,10 +2,7 @@
 session_start();
 
 // Si el usuario no está autenticado, redirigir a la página de login
-if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
-    header("Location: login.php");
-    exit;
-}
+$usuarioAutenticado = isset($_SESSION["login"]) && $_SESSION["login"] === true;
 
 // Continuar con el resto del código para usuarios autenticados
 ?>
@@ -26,6 +23,12 @@ if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
     <?php require("vistas/comun/sidebarIzq.php"); ?>
 
     <main>
+        <?php if(!$usuarioAutenticado): ?>
+            <div class="error">
+            <p>No se ha iniciado sesion. No tendras acceso a algunas funcionalidades</p>
+            </div>
+        <?php endif; ?>
+        
         <h1>Eventia</h1>
         <p>Eventia es el portal de venta de entradas donde quieres estar.
             Ya seas un emergente organizador de eventos, una empresa con un amplio recorrido en este sector o
@@ -39,7 +42,7 @@ if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
             escuchadas y atendidas.
         </p>
         <?php include_once("eventos.php"); ?>
-        <!--poner logotipo-->
+        
     </main>
     
     <?php require("vistas/comun/sidebarDer.php"); ?>

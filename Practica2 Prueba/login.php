@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Redirigir si ya está logueado
+
 if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
     header("Location: index.php");
     exit;
@@ -10,13 +10,13 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="stylesheet" type="text/css" href="CSS/default.css"/>
+    <link rel="stylesheet" type="text/css" href="CSS/estilo.css"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Login - Eventia</title>
 </head>
 <body class="login-page">
 <div id="contenedor">
-    <?php require("vistas/comun/cabecera.php"); ?>
+    <?php require("vistas/comun/cabeceraLogin.php"); ?>
     
     <main>
         <form action="procesarLogin.php" method="post">

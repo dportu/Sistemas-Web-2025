@@ -18,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
   $email = $_SESSION['usuario_email'];
 
   // Preparar la consulta SQL
-  $stmt = $conexion->prepare("INSERT INTO foro (titulo, autor, email, mensaje, evento) VALUES (?, ?, ?, ?, ?)");
+  $stmt = $conexion->prepare("INSERT INTO foro (titulo, autor, email, mensaje, evento) VALUES (?, ?, ?, ?, ?)");   // esto es para evitar inyecciones SQL
   $stmt->bind_param("sssss", $titulo, $autor, $email, $mensaje, $evento);
 
   if($stmt->execute()) {

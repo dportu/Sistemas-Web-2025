@@ -12,6 +12,12 @@ $usuarios_validos = [
         "nombre" => "Administrador",
         "email" => "admin@example.com", // Añadido email
         "esAdmin" => true
+    ],
+    "vip" => [
+        "password" => "vippass",
+        "nombre" => "VIP",
+        "email" => "vip@example.com",
+        "esVip" => true
     ]
 ];
 

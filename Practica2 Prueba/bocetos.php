@@ -1,0 +1,123 @@
+<?php
+session_start();    
+?>
+
+
+<!DOCTYPE html>
+<html lang = 'es'>
+
+<head>
+    <meta charset = "utf-8">
+    <title>Bocetos Eventia</title>
+    <link id="estilo" rel="stylesheet" type="text/css" href="CSS/bocetos.css"/>
+</head>
+    <!-- <img src="url-de-imagen" alt="descripción textual" /> -->
+    <body>
+        <div id="contenedor">
+        <?php require("vistas/comun/cabecera.php"); ?>
+        <?php require("vistas/comun/sidebarIzq.php"); ?>
+
+        <h1> Bocetos de Eventia </h1>
+        
+
+
+        <p> Lista de enlaces: 
+            <a href= "index.php">indice</a>,
+            <a href= "detalles.html">detalles</a>, 
+            <a href= "miembros.html">miembros</a>, 
+            <a href= "planificacion.html">planificacion</a>, 
+            <a href= "contacto.php">contacto</a> 
+        </p>
+        <!-- Funcionalidades: Eventos, Administrador, Foro, Valoraciones, Sistema de puntos -->
+        <h1> Pantallas de las funcionalidades. </h1>
+           <h2> Eventos </h2>
+                <p> 
+                    En esta pantalla, los usuarios registrados podrán comprar entradas o ver la entrada si se ha comprado, 
+                    ver el foro del evento y valorar (si hemos comprado la entrada). Además de una descripción del evento e información relevante
+                    como la duración, ubicación y si es solo para adultos.
+                </p>
+                    <img src="./img/pantalla_evento.png" alt="Evento">
+                <p> Si el usuario ya tiene la entrada, donde pone comprar aparecerá un botón de "Ver mi entrada" y si 
+                    se pulsa se mostrará un QR con la entrada.
+                </p>
+                    <img src="./img/pantalla_entrada_evento.png" alt="Entrada" style="width: 350px; height: 110px;">
+                <p> En cambio, el administrador y el promotor (solo en sus eventos) se les mostrará de esta manera: </p>
+                    <img src="./img/pantalla_evento_administrador.png" alt="Entrada">
+            <h2> Foro </h2>
+                <p>
+                    En esta pantalla aparecerán los comentarios de los usuarios y en el inferior de la página 
+                    los usuarios registrados podrán enviar sus aportaciones.<br>
+                </p>
+                    <img src="./img/pantalla_foro.png" alt="Entrada">
+                <p> 
+                    Los administradores y los promotores, estos últimos, solo en sus eventos, podrán eliminar cualquier comentario que 
+                    les parezca inapropiado.
+                </p>
+            <h2> Valoraciones </h2>
+                <p> Antes de asistir al evento los usuarios tendrán la posibilidad de ver las opiniones de los demás de cada evento. </p>
+                    <img src="./img/pantalla_valoraciones_principal.png" alt="Entrada">
+                <p> 
+                    Cuando ya hayan asistido al evento, podran valorar. 
+                    Aquí, les aparecerá una ventana como la siguiente en la se podrá valorar y poner una breve opinión sobre el evento.
+                </p>
+                <img src="./img/pantalla_valoraciones_anyadir.png" alt="Entrada" style="width: 350px; height: 110px;">
+                <h2> Sistema de puntos </h2>
+                    <p> 
+                        Los usuarios registrados al comprar la entrada les aparecerá una ventana como la siguiente en la que tenemos 
+                        que poner nuestros datos y comprar la entrada. Además, aparecerá la opción de usar puntos y se indicará cuántos se acumularán con la compra.
+                        Y la opción de tener un asiento reservado por ser VIP y bebida ilimitada.
+                    </p>
+                        <img src="./img/pantalla_compra.png" alt="Entrada">
+            <h2> Administrador </h2>
+                <p> 
+                    En su perfil aparecerá una opción de añadir un nuevo evento y todos los eventos que podrá modificar y eliminar.
+                </p>
+                    <img src="./img/pantalla_perfil_administrador.png" alt="Entrada">
+                <p> 
+                    La ventana para añadir un nuevo evento es la siguiente:
+                </p>
+                <img src="./img/pantalla_anyadir_evento.png" alt="Entrada">
+                <p> 
+                    La ventana para modificar un nuevo evento es la siguiente:
+                </p>
+                <img src="./img/pantalla_editar_evento.png" alt="Entrada">
+                <p> Cuando quiera eliminar un evento solo le saldrá la opción de "¿Estás seguro?" </p>
+                
+            <h1> Otras pantallas. </h1>
+                <h2> Inicio </h2>
+                    <p>
+                        Inicio es la primera página que nos saldrá nada más abrir la web. <br>
+                        En esta página nos aparecerán un enlace a los <em>eventos</em> que hay activos ordenados por categorías.
+                        Saldrá una foto e información relevante de dicho evento como el nombre, la valoración, el precio,... <br>
+                        En la parte superior habrá un botón arriba a la izquierda que será un enlace directo al inicio en todas las pantallas. 
+                        También habrá un buscador para encontrar el evento que quieras, un enlace directo al foro general y en la esquina derecha un enlace al <em>perfil</em>.
+                    </p>
+                        <img src="./img/pantalla_inicio.png" alt="Entrada">
+                    <h2>Tipos de usuarios</h2>
+                        <p>Cuando se pulsa en el botón de la esquina superior derecha, se mostrarán diferentes opciones según el tipo de usuario.</p>
+                        <ul>
+                            <li>
+                                <h3>Invitado</h3>
+                                <p>Le aparecerá la opción de iniciar sesión o registrarse. </p>
+                                <img src="./img/pantalla_perfil_invitado.png" alt="Entrada">
+                            </li>
+                            <li>
+                                <h3>Usuario Normal y Usuario Premium</h3>
+                                <p>
+                                    Aquí se mostrará una pantalla en la que los usuarios pueden gestionar su cuenta y sus eventos adquiridos.
+                                    La <em>i</em> que aparece al lado de los puntos y del eventia club es información explicativa de cómo funciona cada uno.
+                                </p>
+                                <img src="./img/pantalla_perfil_usuario.png" alt="Entrada">
+                            </li>
+                            <li>
+                                <h3>Administrador y Promotor</h3>
+                                <p>Aquí aparecerá una pantalla similar a la del administrador, pero solo se mostrarán los eventos que gestionan.</p>
+                            </li>
+                        </ul>
+
+        
+        <?php require("vistas/comun/pie.php"); ?>
+        </div>
+    </body>
+
+ </html>
