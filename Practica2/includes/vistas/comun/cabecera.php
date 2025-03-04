@@ -1,11 +1,11 @@
 <?php 
-function mostrarSaludo() {
-	if (isset($_SESSION['login'])) {
-        echo 'Bienvenid@ '.$_SESSION["usuario_nombre"].'! <a href="logout.php">Cerrar sesión</a>';
-    } else {
-        echo 'Usuario desconocido. <a href="login.php">Iniciar sesión</a>';
+    function mostrarSaludo() {
+        if (isset($_SESSION['login'])) {
+            echo 'Bienvenid@ '.$_SESSION["usuario_nombre"].'! <a href="perfil.php">Ver perfil</a>';
+        } else {
+            echo 'Usuario invitado. <a href="login.php">Iniciar sesión</a>';
+        }
     }
-}
 ?>
 
 <header>
