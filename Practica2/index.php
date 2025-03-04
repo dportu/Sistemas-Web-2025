@@ -1,10 +1,10 @@
 <?php 
-session_start();
+    session_start();
 
-// Si el usuario no está autenticado, redirigir a la página de login
-$usuarioAutenticado = isset($_SESSION["login"]) && $_SESSION["login"];
+    // Si el usuario no está autenticado, redirigir a la página de login
+    $usuarioAutenticado = isset($_SESSION["login"]) && $_SESSION["login"];
 
-// Continuar con el resto del código para usuarios autenticados
+    // Continuar con el resto del código para usuarios autenticados
 ?>
 <!DOCTYPE html>
 <html lang = 'es'>
