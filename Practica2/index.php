@@ -24,7 +24,6 @@ $usuarioAutenticado = isset($_SESSION["login"]) && $_SESSION["login"];
 
     <main>
         <?php include_once("eventos.php"); ?>
-        <?php echo password_hash($password, PASSWORD_DEFAULT);?>
     </main>
     
     <?php require("includes/vistas/comun/sidebarDer.php"); ?>
