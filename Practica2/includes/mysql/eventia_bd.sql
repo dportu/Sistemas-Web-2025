@@ -22,7 +22,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `eventos` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL primary key,
   `nombre` varchar(255) NOT NULL,
   `descripcion` text DEFAULT NULL,
   `fecha_inicio` date NOT NULL,
@@ -47,8 +47,6 @@ INSERT INTO `eventos` (`id`, `nombre`, `descripcion`, `fecha_inicio`, `fecha_fin
 --
 -- Indices de la tabla `eventos`
 --
-ALTER TABLE `eventos`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -64,3 +62,10 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- by dani (a lo mejor esta mal juji)
+CREATE TABLE `usuarios` (
+   `username` varchar(10) NOT NULL primary key,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
