@@ -61,6 +61,7 @@
            
            <!-- Mostrar información del usuario (opcional) -->
            <p>Publicando como: <strong><?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?></strong></p>
+           <p>Publicando como: <strong><?php echo htmlspecialchars($_SESSION['usuario_email']); ?></strong></p>
            
            <label for="evento">Evento:</label>
            <select id="evento" name="evento">
