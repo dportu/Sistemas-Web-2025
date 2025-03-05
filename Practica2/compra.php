@@ -15,9 +15,6 @@
     <?php require("includes/vistas/comun/sidebarIzq.php"); ?>
 
     <main>
-        <?php 
-            
-        ?>
         
     </main>
     

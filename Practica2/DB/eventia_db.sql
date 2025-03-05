@@ -86,6 +86,7 @@ CREATE TABLE usuarios (
 --
 
 INSERT INTO usuarios (username, email, password) VALUES
+('admin', 'admin@eventia.es', 'adminpass', 'administrador'),
 ('user', ' user@gmail.com', 'userpass');
 
 

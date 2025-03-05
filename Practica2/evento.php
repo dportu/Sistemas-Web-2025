@@ -40,20 +40,35 @@ $usuarioAutenticado = isset($_SESSION["login"]) && $_SESSION["login"];
 
     <main>
         <?php 
-            mostrarInfoEvento() 
+            mostrarInfoEvento();
+            if ($_SESSION["usuario_rol"] == "administrador") { 
         ?>
+        <!-- Lo que verá el admin o promotor de ese evento -->
+        <a href="editar_evento.php">
+            <button type="button">Editar</button>
+        </a>
+
+        <a href="eliminar_evento.php">
+            <button type="button">Eliminar</button>
+        </a>
+        <?php 
+            }
+            else {
+        ?>
+        <!-- Lo que verá el usuario normal -->
         <a href="compra.php">
             <button type="button">Compra</button>
         </a>
-
-        <a href="valorar.php">
-            <button type="button">Valorar</button>
+        <?php 
+            }
+        ?>
+        <!-- Esto lo verán todos -->
+        <a href="valoracion.php">
+            <button type="button">Valoración</button>
         </a>
-
         <a href="foro.php">
             <button type="button">Foro Evento</button>
         </a>
-
     </main>
     
     <?php require("includes/vistas/comun/sidebarDer.php"); ?>

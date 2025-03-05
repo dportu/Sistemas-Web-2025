@@ -46,8 +46,13 @@
            }
            ?>
        </div>
-
-       <form id="nuevo-mensaje" action="procesar_foro.php" method="post">
+           
+       <?php
+            if (!$usuarioLogueado) {
+                echo "<p><a href='login.php'>Inicia sesión</a> para poder publicar un mensaje.</p>";
+            } else {
+        ?>
+        <form id="nuevo-mensaje" action="procesar_foro.php" method="post">
            <h2>Escribe un mensaje</h2>
            
            <label for="titulo">Título:</label>
@@ -80,7 +85,8 @@
            <textarea name="mensaje" id="mensaje" rows="4" required></textarea>
 
            <input type="submit" value="Enviar">
-       </form>
+        </form>
+       <?php } ?>
    </div>
 
     </main>
