@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($usuario) && !empty($password)) {
         // Preparar la consulta para evitar SQL Injection
         $sql = "SELECT username, password FROM usuarios WHERE username = ?";
-        $stmt = $conn->prepare($sql);
+        $stmt = $conexion->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $resultado = $stmt->get_result();
