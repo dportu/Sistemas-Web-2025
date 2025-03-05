@@ -20,8 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario_result = $resultado->fetch_assoc();
             // Verificar la contraseña usando password_verify
             if ($password == $usuario_result["password"]) { //password_verify($password, $usuario_result["password"]) cuando pasemos a contraseñas encriptadas
-                $_SESSION["usuario_id"] = $usuario_result["id"];
-                $_SESSION["usuario_nombre"] = $usuario_result["nombre"];
+                $_SESSION["usuario_nombre"] = $usuario_result["username"];
                 $_SESSION["login"] = true;
                 header("Location: index.php"); // Redirigir a la página de usuario
                 exit();
