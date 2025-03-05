@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!empty($usuario) && !empty($password)) {
         // Preparar la consulta para evitar SQL Injection
-        $sql = "SELECT username, email, password FROM usuarios WHERE username = ?";
+        $sql = "SELECT username, email, password, rol FROM usuarios WHERE username = ?";
         $stmt = $conexion->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();
@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["usuario_nombre"] = $usuario_result["username"];
                 $_SESSION["login"] = true;
                 $_SESSION["usuario_email"] = $usuario_result["email"];
+                $_SESSION["usuario_rol"] = $usuario_result["rol"];
                 header("Location: index.php"); // Redirigir a la página de usuario
                 exit();
             } else {

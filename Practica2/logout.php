@@ -1,15 +1,17 @@
 <?php
 session_start();
 
-
 if (isset($_SESSION["login"])) {
     unset($_SESSION["login"]);
 }
-if (isset($_SESSION["nombre"])) {
-    unset($_SESSION["nombre"]);
+if (isset($_SESSION["usuario_nombre"])) {
+    unset($_SESSION["usuario_nombre"]);
 }
-if (isset($_SESSION["esAdmin"])) {
-    unset($_SESSION["esAdmin"]);
+if (isset($_SESSION["usuario_email"])) {
+    unset($_SESSION["usuario_email"]);
+}
+if (isset($_SESSION["usuario_rol"])) {
+    unset($_SESSION["usuario_rol"]);
 }
 
 

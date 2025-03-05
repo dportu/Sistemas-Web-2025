@@ -22,12 +22,15 @@
                  $sql = "INSERT INTO usuarios (username, password, email)values (?, ?, ?)";
                  $stmt = $conexion->prepare($sql);
                  $stmt->bind_param("sss", $usuario, $password, $email);
-                 $stmt->execute(); 
+                 $stmt->execute();
 
-                 //inicio de sesion
-                 $_SESSION["usuario_nombre"] = $usuario_result["username"];
-                $_SESSION["login"] = true;
-                header("Location: index.php");
+                 //INICIO DE SESION AUTOMATICO cambiar a funcion publica?
+                 $_SESSION["usuario_nombre"] = $usuario;
+                 $_SESSION["login"] = true;
+                 $_SESSION["usuario_email"] = $email;
+                 $_SESSION["usuario_rol"] = 'cliente';
+                 header("Location: index.php"); // Redirigir a la página de usuario
+                
                 
             }
             else if ($resultado->num_rows > 0){
