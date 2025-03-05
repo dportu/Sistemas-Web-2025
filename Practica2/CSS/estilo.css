@@ -5,6 +5,19 @@
     box-sizing: border-box;
 }
 
+/* Cambiar color enlaces :) */
+a {
+    color: rgb(212, 0, 255); /* Cambia "blue" por el color que quieras */
+    text-decoration: none; /* Quita el subrayado */
+}
+
+a:hover {
+    color: rgb(139, 0, 7); /* Color cuando pasas el mouse por encima */
+    text-decoration: underline; /* Opcional: subrayado al pasar el mouse */
+}
+
+/* Fin cambiar color enlaces */
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f0f5ff;
