@@ -1,23 +1,16 @@
 <?php
 
-    function mostrarInfoEvento() {
-        include("conexion_bd.php");
-        $id_evento = $_GET['id'];
-            
-        $stmt = $conexion->prepare("SELECT * FROM eventos WHERE id = ?");
-        $stmt->bind_param("i", $id_evento);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
+    include("info_evento.php");
 
-        if ($evento = $resultado->fetch_assoc()) {
-            echo "<h2>" . htmlspecialchars($evento['nombre']) . "</h2>";
-            echo "<p><strong>Fecha:</strong> " . $evento['fecha_inicio'] . 
-                (!empty($evento['fecha_fin']) ? " al " . $evento['fecha_fin'] : "") . "</p>";
-            echo !empty($evento['lugar']) ? "<p><strong>Lugar:</strong> " . htmlspecialchars($evento['lugar']) . "</p>" : "";
-            echo !empty($evento['organizador']) ? "<p><strong>Organizador:</strong> " . htmlspecialchars($evento['organizador']) . "</p>" : "";
-            echo !empty($evento['descripcion']) ? "<p><strong>Descripción:</strong> " . htmlspecialchars($evento['descripcion']) . "</p>" : "";
-        }
-        $stmt->close();
+    function mostrarInfoEvento() {
+        $id_evento = $_GET['id'];
+        $evento = getEvento($id_evento);
+
+        echo "<h2>" . htmlspecialchars($evento['nombre']) . "</h2>";
+        echo "<p><strong>Fecha:</strong> " . $evento['fecha_inicio'] . (!empty($evento['fecha_fin']) ? " al " . $evento['fecha_fin'] : "") . "</p>";
+        echo !empty($evento['lugar']) ? "<p><strong>Lugar:</strong> " . htmlspecialchars($evento['lugar']) . "</p>" : "";
+        echo !empty($evento['organizador']) ? "<p><strong>Organizador:</strong> " . htmlspecialchars($evento['organizador']) . "</p>" : "";
+        echo !empty($evento['descripcion']) ? "<p><strong>Descripción:</strong> " . htmlspecialchars($evento['descripcion']) . "</p>" : "";
     }
 ?>
 <?php 
@@ -45,7 +38,21 @@ $usuarioAutenticado = isset($_SESSION["login"]) && $_SESSION["login"];
     <?php require("includes/vistas/comun/sidebarIzq.php"); ?>
 
     <main>
-        <?php mostrarInfoEvento() ?>
+        <?php 
+            mostrarInfoEvento() 
+        ?>
+        <a href="compra.php">
+            <button type="button">Compra</button>
+        </a>
+
+        <a href="valorar.php">
+            <button type="button">Valorar</button>
+        </a>
+
+        <a href="foro_evento.php">
+            <button type="button">Foro Evento</button>
+        </a>
+
     </main>
     
     <?php require("includes/vistas/comun/sidebarDer.php"); ?>

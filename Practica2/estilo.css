@@ -1,0 +1,121 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Cambiar color enlaces :) */
+a {
+    color: rgb(212, 0, 255); /* Cambia "blue" por el color que quieras */
+    text-decoration: none; /* Quita el subrayado */
+}
+
+a:hover {
+    color: rgb(139, 0, 7); /* Color cuando pasas el mouse por encima */
+    text-decoration: underline; /* Opcional: subrayado al pasar el mouse */
+}
+
+/* Fin cambiar color enlaces */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f5ff;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Contenedor principal */
+#contenedor {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr; /* Se aumentó la proporción del main */
+    grid-template-areas: 
+        "cabecera cabecera cabecera"
+        "izquierda main derecha"
+        "pie pie pie";
+    gap: 20px;
+    padding: 20px 0;
+}
+
+/* Cabecera */
+header {
+    grid-area: cabecera;
+    background-color: #071838;
+    color: rgb(231, 215, 215);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+/* Navegación */
+nav {
+    display: flex;
+    flex-direction: column; /* Se colocan los enlaces en lista vertical */
+    align-items: start;
+    padding: 10px 0;
+}
+
+nav ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+nav ul li {
+    margin-bottom: 10px;
+}
+
+nav a {
+    color: #2f64d8; /* Azul */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #78a3ff;
+}
+
+/* Contenido principal más grande */
+main {
+    grid-area: main;
+    background-color: white;
+    padding: 40px; /* Se aumentó el padding */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    font-size: 1.1em; /* Aumento del tamaño de fuente */
+}
+
+main h1 {
+    color: #1a3a6c;
+    font-size: 2.2em; /* Tamaño más grande */
+    margin-bottom: 20px;
+    border-bottom: 2px solid #78a3ff;
+    padding-bottom: 10px;
+}
+
+main p {
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+/* Ajustes de adaptabilidad para móviles */
+@media (max-width: 768px) {
+    #contenedor {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "cabecera"
+            "izquierda"
+            "main"
+            "derecha"
+            "pie";
+    }
+}
