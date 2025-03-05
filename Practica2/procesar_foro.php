@@ -1,5 +1,6 @@
 <?php
-include("conexion_db.php");
+session_start();
+include("conexion_bd.php");
 
 // Verificar si el usuario está logueado
 if(!isset($_SESSION['usuario_nombre']) || !isset($_SESSION['usuario_email'])) {
