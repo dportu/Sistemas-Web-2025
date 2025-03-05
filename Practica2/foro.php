@@ -13,19 +13,17 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Eventia</title>
-    <link id="estilo" rel="stylesheet" type="text/css" href="CSS/foro.css"/>
+    <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css"/>
 </head>
 
 <body>
-    <div id="foro-contenedor"> 
-    <header class="foro-header">
-    <div class="logo-eventia-box">
-        <a href="index.php">Eventia</a>
-    </div>
+    <div id="contenedor">
 
+    <?php require("includes/vistas/comun/cabecera.php"); ?>
+
+    <?php require("includes/vistas/comun/sidebarIzq.php"); ?>
 
     <main>
-        <!-- TODO: Modificar Practica 2 prueba -->
         <h1>Foro de Eventos</h1>
 
        <div id="mensajes">
@@ -85,18 +83,13 @@
        </form>
    </div>
 
-
-
     </main>
 
     <?php require("includes/vistas/comun/sidebarDer.php"); ?>
     <?php require("includes/vistas/comun/pie.php"); ?>
-   <div id="foro-contenedor">
-
    
-   <?php
-   $conexion->close();
-?>
+   <?php $conexion->close(); ?>
+
 </body>
 
 

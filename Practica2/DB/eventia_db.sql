@@ -38,10 +38,10 @@ CREATE TABLE eventos (
 -- Volcado de datos para la tabla `eventos`
 --
 
-INSERT INTO eventos (id, nombre, descripcion, fecha_inicio, fecha_fin, lugar, organizador) VALUES
-(1, 'Concierto de Metalica', NULL, '2025-03-15', NULL, NULL, NULL),
-(2, 'Concierto Anuel AA', NULL, '2025-03-31', NULL, NULL, NULL),
-(3, 'Halloween en Fabrik', 'Halloween en Fabrik!! No te lo pierdas', '2026-10-31', NULL, 'Fabrik', 'Eventia');
+INSERT INTO `eventos` (`id`, `nombre`, `descripcion`, `fecha_inicio`, `fecha_fin`, `lugar`, `organizador`, `imagen`) VALUES
+(1, 'Concierto de Metalica', NULL, '2025-03-15', NULL, NULL, NULL, 'img/metalica.jpg'),
+(2, 'Concierto Anuel AA', NULL, '2025-03-31', NULL, NULL, NULL, 'img/anuel.jpg'),
+(3, 'Halloween en Fabrik', 'Halloween en Fabrik!! No te lo pierdas', '2026-10-31', NULL, 'Fabrik', 'Eventia', 'img/halloween.jpg');
 
 -- --------------------------------------------------------
 

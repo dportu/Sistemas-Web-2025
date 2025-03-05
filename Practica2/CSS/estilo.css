@@ -119,3 +119,146 @@ main p {
             "pie";
     }
 }
+
+/* Estilo general */
+body {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor principal */
+#foro-contenedor {
+    width: 80%;
+    max-width: 800px;
+    margin: 30px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para los enlaces de navegación */
+.enlaces {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.enlaces a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.enlaces a:hover {
+    color: #0056b3;
+}
+
+/* Estilo para los mensajes */
+.mensaje {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.mensaje .consulta {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+.mensaje small {
+    color: gray;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Cuadro de texto para escribir nuevos mensajes */
+#nuevo-mensaje {
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+#nuevo-mensaje label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#nuevo-mensaje textarea,
+#nuevo-mensaje select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #bbb;
+    font-size: 14px;
+}
+
+#nuevo-mensaje input[type="submit"] {
+    margin-top: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#nuevo-mensaje input[type="submit"]:hover {
+    background: #0056b3;
+}
+
+/* Estilos para la cabecera del foro */
+.foro-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo-eventia-box {
+    background-color: #007bff;
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: 2px solid #0056b3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.logo-eventia-box:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.logo-eventia-box a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    display: block;
+}
+
+.user-info {
+    font-size: 14px;
+}
+
+.user-info a {
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.user-info a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
