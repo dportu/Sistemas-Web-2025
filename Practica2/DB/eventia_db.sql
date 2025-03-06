@@ -1,27 +1,16 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 05-03-2025 a las 13:09:25
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
---
--- Base de datos: `eventia_db`
---
+
+-- Base de datos: eventia_db
+
 CREATE DATABASE IF NOT EXISTS eventia_db DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE eventia_db;
 
--- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `eventos`
---
+
+-- Estructura de  la tabla Eventos
 
 CREATE TABLE eventos (
   id INT(11) NOT NULL AUTO_INCREMENT,
@@ -35,20 +24,20 @@ CREATE TABLE eventos (
   imagen VARCHAR(255) NOT NULL DEFAULT 'img/default.jpg',
   primary key(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
---
--- Volcado de datos para la tabla `eventos`
---
+
+
+-- Insercion de datos en la tabla Eventos
 
 INSERT INTO `eventos` (`id`, `nombre`, `precio`, `descripcion`, `fecha_inicio`, `fecha_fin`, `lugar`, `organizador`, `imagen`) VALUES
 (1, 'Concierto de Metallica', 20, NULL, '2025-03-15', NULL, NULL, NULL, 'img/metallica.jpg'),
 (2, 'Concierto Anuel AA', 3, NULL, '2025-03-31', NULL, NULL, NULL, 'img/anuel.jpg'),
 (3, 'Halloween en Fabrik', 100, 'Halloween en Fabrik!! No te lo pierdas', '2026-10-31', NULL, 'Fabrik', 'Eventia', 'img/halloween.jpg');
 
--- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `foro`
---
+
+
+
+-- Estructura de la tabla Foro
 
 CREATE TABLE foro (
   id int(11) NOT NULL,
@@ -60,19 +49,18 @@ CREATE TABLE foro (
   fecha_publicacion timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `foro`
---
+
+-- Insercion de datos en la tabla Foro
 
 INSERT INTO foro (id, titulo, autor, email, mensaje, evento, fecha_publicacion) VALUES
 (2, 'd', '', '', 'dd', 1, '2025-02-27 09:22:44'),
 (3, 'd', '', '', 'xc', 2, '2025-02-27 09:23:46');
 
--- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `usuarios`
---
+
+
+
+-- Estructura de la tabla Usuarios
 
 CREATE TABLE usuarios (
   username varchar(10) NOT NULL,
@@ -82,13 +70,41 @@ CREATE TABLE usuarios (
   primary key (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `usuarios`
---
+-- Insercion de datos en la tabla Usuarios
 
 INSERT INTO usuarios (username, email, password, rol) VALUES
 ('admin', 'admin@eventia.es', 'adminpass', 'administrador'),
 ('user', ' user@gmail.com', 'userpass', 'cliente');
+
+
+
+--
+-- CREACION DE LOS USUARIOS DE ACCESO A LA BD
+--
+
+-- Clientes
+CREATE USER 'usuario_cliente' @'localhost' IDENTIFIED BY 'clientepass';
+-- Concedemos acceso a select e insert en todas las tablas menos eventos
+GRANT SELECT, INSERT ON eventia_db.usuarios TO 'usuario_cliente'@'localhost';
+GRANT SELECT, INSERT ON eventia_db.foro TO 'usuario_cliente'@'localhost';
+GRANT SELECT, INSERT ON eventia_db.eventos TO 'usuario_cliente'@'localhost';
+
+
+-- Promotores
+CREATE USER 'usuario_promotor' @'localhost' IDENTIFIED BY 'promotorpass';
+-- Concedemos acceso a select e insert en todas las tablas, ademas de update y delete en eventos
+GRANT SELECT, INSERT ON eventia_db.usuarios TO 'usuario_promotor'@'localhost';
+GRANT SELECT, INSERT ON eventia_db.foro TO 'usuario_promotor'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON eventia_db.eventos TO 'usuario_promotor'@'localhost';
+
+
+-- Administrador
+CREATE USER 'usuario_admin' @'localhost' IDENTIFIED BY 'adminpass';
+-- Concedemos todos los permisos
+GRANT ALL PRIVILEGES ON eventia_db.* TO 'usuario_admin'@'localhost';
+
+-- Apply changes
+FLUSH PRIVILEGES;
 
 
 COMMIT;

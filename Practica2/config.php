@@ -3,9 +3,9 @@
  * Parámetros de conexión a la BD
  */
 define('BD_HOST', 'localhost');
-define('BD_NAME', 'awp2');
-define('BD_USER', 'awp2');
-define('BD_PASS', 'awpass');
+define('BD_NAME', 'eventia_db');
+define('BD_USER', 'usuario_cliente');
+define('BD_PASS', 'clientepass');
 
 /**
  * Parámetros de configuración utilizados para generar las URLs y las rutas a ficheros en la aplicación
@@ -13,7 +13,7 @@ define('BD_PASS', 'awpass');
 define('RAIZ_APP', __DIR__);
 define('RUTA_APP', '/practica2');
 define('RUTA_IMGS', RUTA_APP.'img/');
-define('RUTA_CSS', RUTA_APP.'css/');
+define('RUTA_CSS', RUTA_APP.'CSS/');
 define('RUTA_JS', RUTA_APP.'js/');
 
 /**
