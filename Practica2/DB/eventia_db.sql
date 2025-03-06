@@ -26,6 +26,7 @@ USE eventia_db;
 CREATE TABLE eventos (
   id INT(11) NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(255) NOT NULL,
+  precio VARCHAR(255) NOT NULL,
   descripcion TEXT DEFAULT NULL,
   fecha_inicio DATE NOT NULL,
   fecha_fin DATE DEFAULT NULL,
@@ -38,10 +39,10 @@ CREATE TABLE eventos (
 -- Volcado de datos para la tabla `eventos`
 --
 
-INSERT INTO `eventos` (`id`, `nombre`, `descripcion`, `fecha_inicio`, `fecha_fin`, `lugar`, `organizador`, `imagen`) VALUES
-(1, 'Concierto de Metalica', NULL, '2025-03-15', NULL, NULL, NULL, 'img/metalica.jpg'),
-(2, 'Concierto Anuel AA', NULL, '2025-03-31', NULL, NULL, NULL, 'img/anuel.jpg'),
-(3, 'Halloween en Fabrik', 'Halloween en Fabrik!! No te lo pierdas', '2026-10-31', NULL, 'Fabrik', 'Eventia', 'img/halloween.jpg');
+INSERT INTO `eventos` (`id`, `nombre`, `precio`, `descripcion`, `fecha_inicio`, `fecha_fin`, `lugar`, `organizador`, `imagen`) VALUES
+(1, 'Concierto de Metallica', 20, NULL, '2025-03-15', NULL, NULL, NULL, 'img/metallica.jpg'),
+(2, 'Concierto Anuel AA', 3, NULL, '2025-03-31', NULL, NULL, NULL, 'img/anuel.jpg'),
+(3, 'Halloween en Fabrik', 100, 'Halloween en Fabrik!! No te lo pierdas', '2026-10-31', NULL, 'Fabrik', 'Eventia', 'img/halloween.jpg');
 
 -- --------------------------------------------------------
 
@@ -85,9 +86,9 @@ CREATE TABLE usuarios (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO usuarios (username, email, password) VALUES
+INSERT INTO usuarios (username, email, password, rol) VALUES
 ('admin', 'admin@eventia.es', 'adminpass', 'administrador'),
-('user', ' user@gmail.com', 'userpass');
+('user', ' user@gmail.com', 'userpass', 'cliente');
 
 
 COMMIT;
