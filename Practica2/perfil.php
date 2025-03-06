@@ -1,30 +1,58 @@
-<?php 
-    session_start();
-    $rol = $_SESSION["usuario_rol"];
-?>
-<!DOCTYPE html>
-<html lang='es'>
+<?php
+session_start();
+require 'config.php'; // Cargar configuración de BD
 
+// Verificar si el usuario ha iniciado sesión
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+$usuario_nombre = $_SESSION['usuario_nombre'];
+$usuario_email = $_SESSION['usuario_email'];
+$usuario_rol = $_SESSION['usuario_rol'];
+
+?>
+
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="utf-8">
-    <title>Perfil - Eventia</title>
-    <link rel="stylesheet" type="text/css" href="CSS/estilo.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de <?php echo htmlspecialchars($usuario_nombre); ?></title>
+    <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css"/> <!-- Asegúrate de tener un archivo CSS -->
 </head>
 <body>
     <div id="contenedor">
-        <?php require("includes/vistas/comun/cabecera.php"); ?>
-        <?php require("includes/vistas/comun/sidebarIzq.php"); ?>
 
-        <main>
-            <!-- Datos -->
-            
-            <!-- Eventos -->
-            <!-- Puntos -->
-            <p><a href="logout.php">Cerrar sesión</a></p>
-        </main>
+    <?php require("includes/vistas/comun/cabecera.php"); ?>
 
-        <?php require("includes/vistas/comun/sidebarDer.php"); ?>
-        <?php require("includes/vistas/comun/pie.php"); ?>
+    <?php require("includes/vistas/comun/sidebarIzq.php"); ?>
+    <main>
+    <h1>Bienvenido, <?php echo htmlspecialchars($usuario_nombre); ?>!</h1>
+    <p>Email: <?php echo htmlspecialchars($usuario_email); ?></p>
+    
+    
+    <?php if ($usuario_rol === 'admin') : ?>
+        <h2>Opciones de Administrador</h2>
+        <ul>
+            <p>Rol: <?php echo htmlspecialchars($usuario_rol); ?></p>
+            <li><a href="admin_dashboard.php">Panel de Administración</a></li>
+            <li><a href="gestionar_usuarios.php">Gestionar Usuarios</a></li>
+        </ul>
+    <?php else : ?>
+        <h2>Opciones de Usuario</h2>
+        <ul>
+            <li><a href="editar_perfil.php">Editar Perfil</a></li>
+            <li><a href="mis_compras.php">Mis Compras</a></li>
+        </ul>
+    <?php endif; ?>
+    
+    <a href="logout.php">Cerrar sesión</a>
+    </main>
+    <?php require("includes/vistas/comun/sidebarDer.php"); ?>
+    <?php require("includes/vistas/comun/pie.php"); ?>
+    
     </div>
 </body>
 </html>

@@ -5,10 +5,11 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $usuario = trim($_POST["usuario"]);
         $password = trim($_POST["password"]);
-        //$password = password_hash($password, PASSWORD_DEFAULT); //encriptamos la contraseña
         $email = trim($_POST["email"]);
 
-        //FALTA COMPROBAR QUE EL USUARIO NO ESTE REGISTRADO YA
+        // Hashear la contraseña
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
         if (!empty($usuario) && !empty($password) && !empty($email)) {
             $sql = "SELECT username, password FROM usuarios WHERE username = ?";
             $stmt = $conexion->prepare($sql);
@@ -17,30 +18,35 @@
             $resultado = $stmt->get_result();
 
             if ($resultado->num_rows == 0) {
-                $usuario_result = $resultado->fetch_assoc();
-                 // Preparar la consulta para evitar SQL Injection
-                 $sql = "INSERT INTO usuarios (username, password, email)values (?, ?, ?)";
-                 $stmt = $conexion->prepare($sql);
-                 $stmt->bind_param("sss", $usuario, $password, $email);
-                 $stmt->execute();
+                // Preparar la consulta para evitar SQL Injection
+                $sql = "INSERT INTO usuarios (username, password, email, rol) VALUES (?, ?, ?, ?)";
+                $stmt = $conexion->prepare($sql);
+                $rol = 'cliente'; // Definir rol por defecto
+                $stmt->bind_param("ssss", $usuario, $hashed_password, $email, $rol);
+                $stmt->execute();
 
-                 //INICIO DE SESION AUTOMATICO cambiar a funcion publica?
-                 $_SESSION["usuario_nombre"] = $usuario;
-                 $_SESSION["login"] = true;
-                 $_SESSION["usuario_email"] = $email;
-                 $_SESSION["usuario_rol"] = 'cliente';
-                 header("Location: index.php"); // Redirigir a la página de usuario
-                
-                
+                if ($stmt->affected_rows > 0) {
+                    //INICIO DE SESION AUTOMATICO
+                    $_SESSION["usuario_nombre"] = $usuario;
+                    $_SESSION["login"] = true;
+                    $_SESSION["usuario_email"] = $email;
+                    $_SESSION["usuario_rol"] = 'cliente';
+                    header("Location: index.php"); // Redirigir a la página de usuario
+                    exit();
+                } else {
+                    $_SESSION['error_registro'] = "Error al crear la cuenta. Por favor, inténtelo de nuevo.";
+                }
             }
             else if ($resultado->num_rows > 0){
-                echo "YA EXISTE UN USUARIO CON EL NOMBRE DE USUARIO ELEGIDO";
+                $_SESSION['error_registro'] = "Ya existe un usuario con ese nombre. Por favor, elige otro nombre de usuario.";
             }
-            else {
-                echo "Por favor, completa todos los campos.";
-            } 
-        }
+        } else {
+            $_SESSION['error_registro'] = "Por favor, completa todos los campos.";
+        } 
+        
+        // Si llegamos aquí, hubo un error
+        header("Location: registro.php");
+        exit();
     }
     $conexion->close();
-    
 ?>
