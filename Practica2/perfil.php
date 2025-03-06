@@ -1,16 +1,16 @@
 <?php
-session_start();
-require 'config.php'; // Cargar configuración de BD
+    session_start();
+    require 'config.php'; // Cargar configuración de BD
 
-// Verificar si el usuario ha iniciado sesión
-if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
-    header("Location: login.php");
-    exit();
-}
+    // Verificar si el usuario ha iniciado sesión
+    if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+        header("Location: login.php");
+        exit();
+    }
 
-$usuario_nombre = $_SESSION['usuario_nombre'];
-$usuario_email = $_SESSION['usuario_email'];
-$usuario_rol = $_SESSION['usuario_rol'];
+    $usuario_nombre = $_SESSION['usuario_nombre'];
+    $usuario_email = $_SESSION['usuario_email'];
+    $usuario_rol = $_SESSION['usuario_rol'];
 
 ?>
 
@@ -31,19 +31,18 @@ $usuario_rol = $_SESSION['usuario_rol'];
     <main>
     <h1>Bienvenido, <?php echo htmlspecialchars($usuario_nombre); ?>!</h1>
     <p>Email: <?php echo htmlspecialchars($usuario_email); ?></p>
+    <li><a href="editar_perfil.php">Editar Perfil</a></li>
     
-    
-    <?php if ($usuario_rol === 'admin') : ?>
+    <?php if ($usuario_rol === 'administrador' || $usuario_rol === 'promotor') : ?>
         <h2>Opciones de Administrador</h2>
         <ul>
             <p>Rol: <?php echo htmlspecialchars($usuario_rol); ?></p>
             <li><a href="admin_dashboard.php">Panel de Administración</a></li>
-            <li><a href="gestionar_usuarios.php">Gestionar Usuarios</a></li>
+            <li><a href="gestionar_eventos.php">Gestionar Eventos</a></li>
         </ul>
     <?php else : ?>
         <h2>Opciones de Usuario</h2>
         <ul>
-            <li><a href="editar_perfil.php">Editar Perfil</a></li>
             <li><a href="mis_compras.php">Mis Compras</a></li>
         </ul>
     <?php endif; ?>
