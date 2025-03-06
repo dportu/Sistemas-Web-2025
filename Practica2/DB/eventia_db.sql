@@ -73,8 +73,8 @@ CREATE TABLE usuarios (
 -- Insercion de datos en la tabla Usuarios
 
 INSERT INTO usuarios (username, email, password, rol) VALUES
-('admin', 'admin@eventia.es', 'adminpass', 'administrador'),
-('user', ' user@gmail.com', 'userpass', 'cliente');
+('admin', 'admin@eventia.es', '$2y$10$nx7sPLOeZyLFfQ5wHYDSnea7eJOtf5XGhEKDK7YJpe8Bmp8wk5dkG', 'administrador'),
+('user', ' user@gmail.com', '$2y$10$0jHBrtOHcO/BQi8mZ1ZZvulNjN4UUQhjRlkx/m55RaH8GbKdd.db.', 'cliente');
 
 
 

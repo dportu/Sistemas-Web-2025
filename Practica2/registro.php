@@ -31,13 +31,13 @@ session_start();
                 <input type="password" name="password" id="password" required>
                 <br>
                 <label for="email">Correo electrónico:</label>
-                <input type="text" name="email" id="email" required>
+                <input type="email " name="email" id="email" required>
                 <input type="submit" value="Entrar">
             </fieldset>
             <?php
-            if (isset($_SESSION['error_login'])) {
-                echo "<div class='error'>" . htmlspecialchars($_SESSION['error_login']) . "</div>";
-                unset($_SESSION['error_login']);
+            if (isset($_SESSION['error_registro'])) {
+                echo "<div class='error'>" . htmlspecialchars($_SESSION['error_registro']) . "</div>";
+                unset($_SESSION['error_registro']);
             }
             ?>
         </form>
