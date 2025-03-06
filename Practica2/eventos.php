@@ -12,14 +12,14 @@
         }
         
         $imagen = $fila['imagen'];
+        $precio = $fila['precio'];
     
         echo "<a href='evento.php?id=" . $fila['id'] . "' class='evento-card'>
-            <img src='$imagen' alt='Imagen de " . htmlspecialchars($fila['nombre']) . "' class='evento-imagen'>
-            <div class='evento-info'>
-                <h3 class='evento-nombre'>" . htmlspecialchars($fila['nombre']) . "</h3>
-                <p class='evento-fecha'>$fecha_texto</p>
-            </div>
-          </a>";
+                <img src='$imagen' alt='Imagen de " . htmlspecialchars($fila['nombre']) . "' class='evento-imagen'>
+                <h3>" . htmlspecialchars($fila['nombre']) . "</h3>
+                <p> $precio € </p>
+                <p> $fecha_texto </p>
+             </a>";
     }
     echo "</div>";
 ?>

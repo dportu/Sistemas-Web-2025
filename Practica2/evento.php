@@ -1,5 +1,8 @@
 <?php
+    session_start();
 
+    // Si el usuario no está autenticado, redirigir a la página de login
+    $usuarioAutenticado = isset($_SESSION["login"]) && $_SESSION["login"];
     include("info_evento.php");
 
     function mostrarInfoEvento() {
@@ -15,10 +18,7 @@
     }
 ?>
 <?php 
-session_start();
 
-// Si el usuario no está autenticado, redirigir a la página de login
-$usuarioAutenticado = isset($_SESSION["login"]) && $_SESSION["login"];
 
 // Continuar con el resto del código para usuarios autenticados
 ?>
@@ -41,7 +41,7 @@ $usuarioAutenticado = isset($_SESSION["login"]) && $_SESSION["login"];
     <main>
         <?php 
             mostrarInfoEvento();
-            if ($_SESSION["usuario_rol"] == "administrador") { 
+            if ($usuarioAutenticado && $_SESSION["usuario_rol"] == "administrador") { 
         ?>
         <!-- Lo que verá el admin o promotor de ese evento -->
         <a href="editar_evento.php">
