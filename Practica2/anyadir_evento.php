@@ -15,7 +15,7 @@
     <?php require("includes/vistas/comun/sidebarIzq.php"); ?>
 
     <main>
-        <p> Aqui el administrador podrá gestionar todo. </p>
+        <p> Aqui se podrá modificar los datos de evento. </p>
     </main>
     
     <?php require("includes/vistas/comun/sidebarDer.php"); ?>

@@ -38,13 +38,14 @@
         <h2>Opciones de Administrador</h2>
         <ul>
             <p>Rol: <?php echo htmlspecialchars($usuario_rol); ?></p>
-            <li><a href="admin_dashboard.php">Panel de Administración</a></li>
+            <p> Aquí se mostrarán los eventos para poder gestionarlos.</p>
+            <p><a href="anyadir_evento.php">Añadir evento</a></p>
         </ul>
     <?php } else { ?>
         <h2>Opciones de Usuario</h2>
         <ul>
-            <li><a href="mis_compras.php">Mis Compras</a></li>
-            <p> Tienes <?php echo htmlspecialchars($usuario_puntos); ?> puntos en tu cuenta. </p>
+            <a href="mis_compras.php">Mis Compras</a>
+            <p> Aqui estarán los puntos del usuario. </p>
         </ul>
     <?php } ?>
     
