@@ -1,9 +1,8 @@
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
+-- Crear la base de datos si no existe
 CREATE DATABASE IF NOT EXISTS `eventia_db` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `eventia_db`;
 
@@ -156,5 +155,34 @@ ALTER TABLE `foro`
 ALTER TABLE `valoraciones`
   ADD CONSTRAINT `valoraciones_ibfk_1` FOREIGN KEY (`id_evento`) REFERENCES `eventos` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `valoraciones_ibfk_2` FOREIGN KEY (`username`) REFERENCES `usuarios` (`username`) ON DELETE SET NULL;
-COMMIT;
 
+-- Eliminamos usuarios si existen para evitar errores
+DROP USER IF EXISTS 'usuario_cliente'@'localhost';
+DROP USER IF EXISTS 'usuario_promotor'@'localhost';
+DROP USER IF EXISTS 'usuario_admin'@'localhost';
+
+-- Clientes - MODIFICADO para incluir UPDATE en la tabla foro
+CREATE USER 'usuario_cliente'@'localhost' IDENTIFIED BY 'clientepass';
+-- Concedemos acceso a select, insert y UPDATE en foro para que puedan editar sus propios mensajes
+GRANT SELECT, INSERT ON eventia_db.usuarios TO 'usuario_cliente'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON eventia_db.foro TO 'usuario_cliente'@'localhost';
+GRANT SELECT, INSERT ON eventia_db.eventos TO 'usuario_cliente'@'localhost';
+GRANT SELECT, INSERT ON eventia_db.valoraciones TO 'usuario_cliente'@'localhost';
+
+-- Promotores
+CREATE USER 'usuario_promotor'@'localhost' IDENTIFIED BY 'promotorpass';
+-- Concedemos acceso a select e insert en todas las tablas, ademas de update y delete en eventos
+GRANT SELECT, INSERT ON eventia_db.usuarios TO 'usuario_promotor'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON eventia_db.foro TO 'usuario_promotor'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON eventia_db.eventos TO 'usuario_promotor'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON eventia_db.valoraciones TO 'usuario_promotor'@'localhost';
+
+-- Administrador
+CREATE USER 'usuario_admin'@'localhost' IDENTIFIED BY 'adminpass';
+-- Concedemos todos los permisos
+GRANT ALL PRIVILEGES ON eventia_db.* TO 'usuario_admin'@'localhost';
+
+-- Aplicar cambios
+FLUSH PRIVILEGES;
+
+COMMIT;
