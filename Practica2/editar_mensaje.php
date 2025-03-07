@@ -55,10 +55,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     
     if($stmt->execute()) {
-        echo "<script>alert('Mensaje actualizado con éxito'); window.location='foro.php';</script>";
+        // Redirigir según si el mensaje está en un evento o en el foro general
+        if ($mensaje['evento'] !== null) {
+            echo "<script>alert('Mensaje actualizado con éxito'); window.location = 'foro.php?id=" . $mensaje['evento'] . "';</script>";
+        } else {
+            echo "<script>alert('Mensaje actualizado con éxito'); window.location = 'foro.php';</script>";
+        }
     } else {
         $error = "Error al actualizar el mensaje: " . $conexion->error;
     }
+    
     
     $stmt->close();
 }
@@ -101,15 +107,11 @@ while($row = $resultado_eventos->fetch_assoc()) {
            <p>Autor: <strong><?php echo htmlspecialchars($mensaje['autor']); ?></strong></p>
            <p>Email: <strong><?php echo htmlspecialchars($mensaje['email']); ?></strong></p>
            
-           <label for="evento">Evento:</label>
-           <select id="evento" name="evento">
-               <option value="">Ninguno - Tema general</option>
-               <?php foreach($eventos as $evento): ?>
-                   <option value="<?php echo $evento['id']; ?>" <?php echo ($mensaje['evento'] == $evento['id']) ? 'selected' : ''; ?>>
-                       <?php echo htmlspecialchars($evento['nombre']); ?>
-                   </option>
-               <?php endforeach; ?>
-           </select><br><br>
+            <?php if ($mensaje['evento']): ?>
+                <p>Evento: <?php echo htmlspecialchars($mensaje['nombre_evento']); ?></p>
+            <?php else: ?>
+                <p>Evento: No asignado a ningún evento.</p>
+            <?php endif; ?>
            
            <label for="mensaje">Mensaje:</label>
            <textarea name="mensaje" id="mensaje" rows="4" required><?php echo htmlspecialchars($mensaje['mensaje']); ?></textarea>

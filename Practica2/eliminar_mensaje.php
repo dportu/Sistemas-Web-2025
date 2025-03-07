@@ -30,26 +30,27 @@ if(isset($_GET['id']) && is_numeric($_GET['id'])) {
                 
                 try {
                     if($stmt->execute()) {
-                        echo "<script>alert('Mensaje eliminado con éxito'); window.location='foro.php';</script>";
+                        // Redirigir a la página de donde vino el usuario (usando HTTP_REFERER)
+                        echo "<script>alert('Mensaje eliminado con éxito'); window.location='" . $_SERVER['HTTP_REFERER'] . "';</script>";
                     } else {
                         throw new Exception($conexion->error);
                     }
                 } catch (Exception $e) {
-                    echo "<script>alert('Error al eliminar el mensaje: " . $e->getMessage() . "'); window.location='foro.php';</script>";
+                    echo "<script>alert('Error al eliminar el mensaje: " . $e->getMessage() . "'); window.location='" . $_SERVER['HTTP_REFERER'] . "';</script>";
                 }
             } else {
-                echo "<script>alert('No tienes permiso para eliminar este mensaje'); window.location='foro.php';</script>";
+                echo "<script>alert('No tienes permiso para eliminar este mensaje'); window.location='" . $_SERVER['HTTP_REFERER'] . "';</script>";
             }
         } else {
-            echo "<script>alert('El mensaje no existe'); window.location='foro.php';</script>";
+            echo "<script>alert('El mensaje no existe'); window.location='" . $_SERVER['HTTP_REFERER'] . "';</script>";
         }
     } catch (Exception $e) {
-        echo "<script>alert('Error al verificar el mensaje: " . $e->getMessage() . "'); window.location='foro.php';</script>";
+        echo "<script>alert('Error al verificar el mensaje: " . $e->getMessage() . "'); window.location='" . $_SERVER['HTTP_REFERER'] . "';</script>";
     }
     
     $stmt->close();
 } else {
-    echo "<script>alert('ID de mensaje no válido'); window.location='foro.php';</script>";
+    echo "<script>alert('ID de mensaje no válido'); window.location='" . $_SERVER['HTTP_REFERER'] . "';</script>";
 }
 
 $conexion->close();
