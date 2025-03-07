@@ -1,18 +1,8 @@
 <?php
     include("info_evento.php");
     
+    // Valoraciones añadidas en la BD :)) pero no lo he podido probar desde este ordenador
     function mostrarValoraciones($id_evento) {
-        $evento = getEvento($id_evento);
-        //$valoraciones = getValoraciones($id_evento);
-
-        echo "<h2>Valoraciones [ " . htmlspecialchars($evento['nombre']) . " ]</h2>";
-        echo "<p>Ninguno de nuestros usuarios ha valorado todavía este evento . . .</p>";
-        echo "<p> ( anímate!! podrías ser tú el primero c: ) </p>";
-    }
-
-    // Hasta que no se añada soporte para las valoraciones en la base de datos esto no funciona :/
-
-    /*function mostrarValoraciones($id_evento) {
         $evento = getEvento($id_evento);
         $valoraciones = getValoraciones($id_evento);
 
@@ -22,9 +12,10 @@
             echo "<ul>";
             foreach ($valoraciones as $valoracion) {
                 echo "<li>";
-                echo "<p>" . htmlspecialchars($valoracion['usuario']) . "<p>";
-                echo "<p><strong>Valoración:</strong> " . htmlspecialchars($valoracion['valoracion']) . " / 5<p>";
+                echo "<p>" . htmlspecialchars($valoracion['username']) . "<p>";
+                echo "<p><strong>Valoración:</strong> " . htmlspecialchars($valoracion['nota']) . " / 5<p>";
                 echo "<p><strong>Comentario:</strong> " . htmlspecialchars($valoracion['comentario']) . "</p>";
+                echo "<p>" . htmlspecialchars($valoracion['fecha']) . "<p>";
                 echo "</li>";
             }
             echo "</ul>";
@@ -33,11 +24,26 @@
             echo "<p>Ninguno de nuestros usuarios ha valorado todavía este evento . . .</p>";
             echo "<p> ( anímate!! podrías ser tú el primero c: ) </p>";
         }
-    } */
+    }
 ?>
 
 <?php
+    // INSERT INTO valoraciones (id_evento, id_usuario, nota, comentario) VALUES (?, ?, ?, ?);
     function añadirValoracion($id_evento) {
+        echo "<p> Actualmente no disponible ://<p>";
+    }
+?>
+
+<?php
+    // UPDATE valoraciones SET nota = ?, comentario = ? WHERE id = ? AND id_usuario = ?;
+    function editarValoracion($id_evento) {
+        echo "<p> Actualmente no disponible ://<p>";
+    }
+?>
+
+<?php
+    // DELETE FROM valoraciones WHERE id = ? AND id_usuario = ?;
+    function eliminarValoracion($id_evento) {
         echo "<p> Actualmente no disponible ://<p>";
     }
 ?>
@@ -69,7 +75,6 @@
         </form>
 
         <?php
-            // Comprobar si el formulario ha sido enviado
             if (isset($_POST['valorar'])) {
                 añadirValoracion($id_evento);
             }
