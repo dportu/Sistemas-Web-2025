@@ -1,15 +1,11 @@
 <?php 
     include("conexion_bd.php");
-    include("info_evento.php");
-    session_start(); // Manejo de sesiones para el usuario
+    session_start(); 
 
     $_SESSION['usuario_nombre'] = $_SESSION['usuario_nombre'] ?? '';
     $_SESSION['usuario_email'] = $_SESSION['usuario_email'] ?? '';
 
     $usuarioLogueado = isset($_SESSION["login"]) && $_SESSION["login"] === true;
-
-    $id_evento = $_GET['id'];
-    $evento = getEvento($id_evento);
 ?>
 
 <!DOCTYPE html>
@@ -18,6 +14,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Eventia</title>
     <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css"/>
+
 </head>
 
 <body>
@@ -44,12 +41,22 @@
                    echo "<p class='mensaje-contenido'>" . nl2br(htmlspecialchars($fila['mensaje'])) . "</p>";
                    echo "<small><strong>Fecha:</strong> " . $fila['fecha_publicacion'] . "</small>";
                    echo "</div>";
-               }
-           } else {
-               echo "<p>No hay mensajes aún.</p>";
-           }
-           ?>
-       </div>
+
+
+                   if ($usuarioLogueado && $_SESSION['usuario_nombre'] === $fila['autor']) {
+                    echo "<div class='acciones-mensaje'>";
+                    echo "<a href='editar_mensaje.php?id=" . $fila['id'] . "'>Editar     </a>";
+                    echo "<a href='eliminar_mensaje.php?id=" . $fila['id'] . "' class='eliminar' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este mensaje?\")'>Eliminar</a>";
+                    echo "</div>";
+                }
+                   
+               
+            }
+        } else {
+            echo "<p>No hay mensajes aún.</p>";
+        }
+        ?>
+    </div>
            
        <?php
             if (!$usuarioLogueado) {
@@ -62,14 +69,12 @@
            <label for="titulo">Título:</label>
            <input type="text" name="titulo" id="titulo" required><br><br>
            
-           <!-- Campos ocultos para autor y email -->
+           <!-- Esto es para ocultar el autor y el email-->
            <input type="hidden" name="autor" value="<?= htmlspecialchars($_SESSION['usuario_nombre']) ?>">
            <input type="hidden" name="email" value="<?= htmlspecialchars($_SESSION['usuario_email']) ?>">
            
-           <!-- Mostrar información del usuario (opcional) -->
-           <p>Publicando como: <strong><?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?></strong></p>
-           <p>Publicando como: <strong><?php echo htmlspecialchars($_SESSION['usuario_email']); ?></strong></p>
            
+           <p>Publicando como: <strong><?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?></strong> (<?php echo htmlspecialchars($_SESSION['usuario_email']); ?>)</p>
            <label for="evento">Evento:</label>
            <select id="evento" name="evento">
                <option value="">Ninguno - Tema general</option>
@@ -91,7 +96,7 @@
            <input type="submit" value="Enviar">
         </form>
        <?php } ?>
-   </div>
+   
 
     </main>
 

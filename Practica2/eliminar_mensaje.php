@@ -1,0 +1,55 @@
+<?php
+include("conexion_bd.php");  // Asegúrate de que este archivo use un usuario con permisos DELETE
+session_start();
+
+// Verificar si el usuario está logueado
+if(!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    echo "<script>alert('Debe iniciar sesión para eliminar mensajes'); window.location='login.php';</script>";
+    exit();
+}
+
+if(isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id_mensaje = $_GET['id'];
+    
+    // Verificar que el mensaje pertenece al usuario actual
+    $stmt = $conexion->prepare("SELECT autor FROM foro WHERE id = ?");
+    $stmt->bind_param("i", $id_mensaje);
+    
+    try {
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        
+        if($resultado->num_rows === 1) {
+            $fila = $resultado->fetch_assoc();
+            
+            // Comprobar si el usuario actual es el autor del mensaje
+            if($fila['autor'] === $_SESSION['usuario_nombre']) {
+                // Eliminar el mensaje
+                $stmt = $conexion->prepare("DELETE FROM foro WHERE id = ?");
+                $stmt->bind_param("i", $id_mensaje);
+                
+                try {
+                    if($stmt->execute()) {
+                        echo "<script>alert('Mensaje eliminado con éxito'); window.location='foro.php';</script>";
+                    } else {
+                        throw new Exception($conexion->error);
+                    }
+                } catch (Exception $e) {
+                    echo "<script>alert('Error al eliminar el mensaje: " . $e->getMessage() . "'); window.location='foro.php';</script>";
+                }
+            } else {
+                echo "<script>alert('No tienes permiso para eliminar este mensaje'); window.location='foro.php';</script>";
+            }
+        } else {
+            echo "<script>alert('El mensaje no existe'); window.location='foro.php';</script>";
+        }
+    } catch (Exception $e) {
+        echo "<script>alert('Error al verificar el mensaje: " . $e->getMessage() . "'); window.location='foro.php';</script>";
+    }
+    
+    $stmt->close();
+} else {
+    echo "<script>alert('ID de mensaje no válido'); window.location='foro.php';</script>";
+}
+
+$conexion->close();
