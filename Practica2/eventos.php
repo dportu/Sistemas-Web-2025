@@ -16,7 +16,7 @@
     
         echo "<a href='evento.php?id=" . $fila['id'] . "' class='evento-card'>
                 <img src='$imagen' alt='Imagen de " . htmlspecialchars($fila['nombre']) . "' class='evento-imagen'>
-                <h3>" . htmlspecialchars($fila['nombre']) . "</h3>
+                <h3>[ " . htmlspecialchars($fila['nombre']) . " ]</h3>
                 <p> $precio € </p>
                 <p> $fecha_texto </p>
              </a>";
