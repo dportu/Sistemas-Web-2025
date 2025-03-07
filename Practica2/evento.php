@@ -11,11 +11,11 @@
         global $id_evento;
         $evento = getEvento($id_evento);
 
-        echo "<h2>[ " . htmlspecialchars($evento['nombre']) . " ]</h2>";
+        echo "<h2> " . htmlspecialchars($evento['nombre']) . " </h2>";
 
         echo "<img src='" . htmlspecialchars($evento['imagen']) . "' alt='Imagen del evento'>";
         echo "<p><strong>Precio:</strong> " . $evento['precio'] . " €</p>";
-        echo "<p><strong>Fecha:</strong> " . $evento['fecha_inicio'] . (!empty($evento['fecha_fin']) ? " al " . $evento['fecha_fin'] : "") . "</p>";
+        echo "<p><strong>Fecha:</strong> " . $evento['fecha_inicio'] . "</p>";
 
         echo !empty($evento['lugar']) ? "<p><strong>Lugar:</strong> " . htmlspecialchars($evento['lugar']) . "</p>" : "";
         echo !empty($evento['organizador']) ? "<p><strong>Organizador:</strong> " . htmlspecialchars($evento['organizador']) . "</p>" : "";
@@ -71,7 +71,7 @@
         <a href="valoraciones.php?id=<?php echo $id_evento; ?>">
             <button type="button">Valoraciones</button>
         </a>
-        <a href="foro.php">
+        <a href="foro.php?id=<?php echo $id_evento; ?>">
             <button type="button">Foro Evento</button>
         </a>
     </main>
