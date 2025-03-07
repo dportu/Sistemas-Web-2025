@@ -1,8 +1,7 @@
 <?php
-include("conexion_bd.php");  // Asegúrate de que este archivo use un usuario con permisos DELETE
+include("conexion_bd.php");  
 session_start();
 
-// Verificar si el usuario está logueado
 if(!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
     echo "<script>alert('Debe iniciar sesión para eliminar mensajes'); window.location='login.php';</script>";
     exit();
@@ -11,7 +10,7 @@ if(!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
 if(isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_mensaje = $_GET['id'];
     
-    // Verificar que el mensaje pertenece al usuario actual
+    //Vemos si pertenece al autor
     $stmt = $conexion->prepare("SELECT autor FROM foro WHERE id = ?");
     $stmt->bind_param("i", $id_mensaje);
     

@@ -2,7 +2,7 @@
 include("conexion_bd.php");
 session_start();
 
-// Verificar si el usuario está logueado
+
 if(!isset($_SESSION['login']) || $_SESSION['login'] !== true || !isset($_SESSION['usuario_nombre'])) {
     echo "<script>alert('Debe iniciar sesión para editar mensajes'); window.location='login.php';</script>";
     exit();
@@ -14,8 +14,8 @@ $error = '';
 if(isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_mensaje = $_GET['id'];
     
-    // Obtener el mensaje y verificar que pertenece al usuario actual
-    $stmt = $conexion->prepare("SELECT f.*, e.nombre AS nombre_evento FROM foro f LEFT JOIN eventos e ON f.evento = e.id WHERE f.id = ?");
+
+    $stmt = $conexion->prepare("SELECT f.*, e.nombre AS nombre_evento FROM foro f LEFT JOIN eventos e ON f.evento = e.id WHERE f.id = ?");  // Con esto cogemos el mensaje y vemos si es del usuario actual
     $stmt->bind_param("i", $id_mensaje);
     $stmt->execute();
     $resultado = $stmt->get_result();
@@ -23,9 +23,9 @@ if(isset($_GET['id']) && is_numeric($_GET['id'])) {
     if($resultado->num_rows === 1) {
         $mensaje = $resultado->fetch_assoc();
         
-        // Comprobar si el usuario actual es el autor del mensaje
-        if($mensaje['autor'] !== $_SESSION['usuario_nombre']) {
-            echo "<script>alert('No tienes permiso para editar este mensaje'); window.location='foro.php';</script>";
+      
+        if($mensaje['autor'] !== $_SESSION['usuario_nombre']) {    // Se comprueba si es el autor del mensaje
+            echo "<script>alert('No tienes permiso para editar este mensaje'); window.location='foro.php';</script>";   
             exit();
         }
     } else {
@@ -39,14 +39,14 @@ if(isset($_GET['id']) && is_numeric($_GET['id'])) {
     exit();
 }
 
-// Procesar formulario cuando se envía
-if($_SERVER["REQUEST_METHOD"] == "POST") {
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {  // Procesamos el formulario al enviarl
     $titulo = $_POST["titulo"];
     $mensaje_contenido = $_POST["mensaje"];
     $evento = $_POST["evento"];
     
-    // Actualizar mensaje con manejo adecuado de valores NULL
-    if($evento === "") {
+    
+    if($evento === "") {   // Se actualiza el mensaje manejado con los adecuados valores de NULL
         $stmt = $conexion->prepare("UPDATE foro SET titulo = ?, mensaje = ?, evento = NULL WHERE id = ? AND autor = ?");
         $stmt->bind_param("ssis", $titulo, $mensaje_contenido, $id_mensaje, $_SESSION['usuario_nombre']);
     } else {
@@ -55,7 +55,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     
     if($stmt->execute()) {
-        // Redirigir según si el mensaje está en un evento o en el foro general
+        
+        // Lo redirigimos si vemos que esta en un evento o en el general 
         if ($mensaje['evento'] !== null) {
             echo "<script>alert('Mensaje actualizado con éxito'); window.location = 'foro.php?id=" . $mensaje['evento'] . "';</script>";
         } else {
@@ -83,7 +84,7 @@ while($row = $resultado_eventos->fetch_assoc()) {
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Editar Mensaje - Eventia</title>
-    <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css"/>
+    <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css">
 </head>
 
 <body>

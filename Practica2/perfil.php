@@ -11,7 +11,7 @@
     $usuario_nombre = $_SESSION['usuario_nombre'];
     $usuario_email = $_SESSION['usuario_email'];
     $usuario_rol = $_SESSION['usuario_rol'];
-    $usuario_puntos = $_SESSION['puntos'];
+   
 
 ?>
 

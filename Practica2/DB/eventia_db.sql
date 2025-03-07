@@ -60,9 +60,8 @@ CREATE TABLE foro (
 
 -- Insercion de datos en la tabla Foro
 
-INSERT INTO foro (id, titulo, autor, email, mensaje, evento, fecha_publicacion) VALUES
-(2, 'd', '', '', 'dd', 1, '2025-02-27 09:22:44'),
-(3, 'd', '', '', 'xc', 2, '2025-02-27 09:23:46');
+INSERT INTO `foro` (`id`, `titulo`, `autor`, `email`, `mensaje`, `evento`, `fecha_publicacion`) VALUES
+(4, 'Prueba ', 'admin', 'admin@eventia.es', 'Probando \r\n', NULL, '2025-03-07 19:37:51');
 
 
 

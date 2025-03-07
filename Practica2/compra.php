@@ -27,7 +27,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Eventia</title>
-    <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css"/>
+    <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css">
 </head>
 <body>
 
@@ -43,15 +43,14 @@
             seleccionarEntradas($id_evento);
         ?>
 
-        <a href="evento.php?id=<?php echo $id_evento; ?>">
-            <button type="button">Cancelar</button>
-        </a>
+        <a href="evento.php?id=<?php echo $id_evento; ?>" class="boton-cancelar">Cancelar</a>
 
+         <!-- No he podido hacer que no de error y que siga para mostrar el mensaje  -->
         <form method="POST">
             <button type="submit" name="comprar">Continuar</button>
         </form>
 
-        <?php
+        <?php 
             if (isset($_POST['comprar'])) {
                 comprarEntrada($id_evento);
             }

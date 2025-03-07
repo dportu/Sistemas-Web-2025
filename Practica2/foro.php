@@ -25,7 +25,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>Eventia</title>
-        <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css"/>
+        <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css">
 
     </head>
 
@@ -111,10 +111,11 @@
 
         <?php require("includes/vistas/comun/sidebarDer.php"); ?>
         <?php require("includes/vistas/comun/pie.php"); ?>
+    </div>
     
     <?php $conexion->close(); ?>
 
-    </body>
+  
 
 
     </html>

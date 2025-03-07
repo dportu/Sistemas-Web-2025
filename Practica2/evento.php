@@ -33,7 +33,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Eventia</title>
-    <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css"/>
+    <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css">
 </head>
 <body>
 
@@ -51,33 +51,29 @@
 
         <!-- Elegir entre (formulario y funciones en un mismo script) o (ir a un script diferente con cada botón) -->
         <!-- Lo que verá el admin o promotor de ese evento -->
-        <a href="editar_evento.php">
-            <button type="button">Editar</button>
-        </a>
-        <a href="eliminar_evento.php">
-            <button type="button">Eliminar</button>
-        </a>
+        <a href="editar_evento.php" class="boton_editar">Editar</a>
+       
+        <a href="eliminar_evento.php" class="boton_eliminar">Eliminar</a>
+      
 
         <?php 
             } else {
         ?>
 
         <!-- Lo que verá el usuario normal -->
-        <a href="compra.php?id=<?php echo $id_evento; ?>">
-            <button type="button">Compra</button>
-        </a>
+        <a href="compra.php?id=<?php echo $id_evento; ?>" class="boton-compra">Compra</a>
+
 
         <?php 
             }
         ?>
 
         <!-- Esto lo verán todos -->
-        <a href="valoraciones.php?id=<?php echo $id_evento; ?>">
-            <button type="button">Valoraciones</button>
-        </a>
-        <a href="foro.php">
-            <button type="button">Foro Evento</button>
-        </a>
+        <a href="valoraciones.php?id=<?php echo $id_evento; ?>"  class="boton-valoraciones">Valoraciones</a>
+     
+
+        <a href="foro.php?id=<?php echo $id_evento;?>" class= "boton-foro">Foro evento</a>
+      
     </main>
     
     <?php require("includes/vistas/comun/sidebarDer.php"); ?>
