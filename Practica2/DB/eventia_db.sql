@@ -39,9 +39,9 @@ CREATE TABLE eventos (
 -- Insercion de datos en la tabla Eventos
 
 INSERT INTO eventos (id, nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen) VALUES
-(1, 'Concierto de Metallica', 20, NULL, '2025-03-15', NULL, NULL, NULL, 'img/metallica.jpg'),
-(2, 'Concierto Anuel AA', 3, NULL, '2025-03-31', NULL, NULL, NULL, 'img/anuel.jpg'),
-(3, 'Halloween en Fabrik', 100, 'Halloween en Fabrik!! No te lo pierdas', '2026-10-31', NULL, 'Fabrik', 'Eventia', 'img/halloween.jpg');
+(1, 'Concierto de Metallica', 20, NULL, '2025-03-15', NULL, NULL, 'img/metallica.jpg'),
+(2, 'Concierto Anuel AA', 3, NULL, '2025-03-31', NULL, NULL, 'img/anuel.jpg'),
+(3, 'Halloween en Fabrik', 100, 'Halloween en Fabrik!! No te lo pierdas', '2026-10-31', 'Fabrik', 'Eventia', 'img/halloween.jpg');
 
 
 -- Estructura de la tabla Foro
@@ -103,8 +103,8 @@ CREATE TABLE valoraciones (
 
 INSERT INTO valoraciones (id_evento, username, nota, comentario, fecha) VALUES
 (1, 'admin', 5, 'Tercio gratis para aquellos que lleguéis antes de las 19:00!!! No te lo pierdas ;)', '2025-03-13'),
-(1, 'user', 5, 'guapísimo', '2025-03-17'),
-(1, 'user', 4, 'aunque me decepcionó un poco que no se rompiera la camiseta al terminar el conci :(', '2025-03-17');
+(2, 'user', 5, 'guapísimo', '2025-03-17'),
+(3, 'user', 4, 'aunque me decepcionó un poco que no se rompiera la camiseta al terminar el conci :(', '2025-03-17');
 
 
 
