@@ -12,13 +12,13 @@
 
         $stmt->close();
 
-        return $evento; 
+        return $evento; // array asociativo
     }
 
     function getValoraciones($id_evento) {
         include("conexion_bd.php");
     
-        $stmt = $conexion->prepare("SELECT * FROM valoraciones WHERE id_evento = ?");
+        $stmt = $conexion->prepare("SELECT * FROM valoraciones WHERE id = ?");
         $stmt->bind_param("i", $id_evento);
         $stmt->execute();
         $resultado = $stmt->get_result();
