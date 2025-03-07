@@ -88,15 +88,16 @@ CREATE TABLE usuarios (
   email varchar(100) NOT NULL,
   password varchar(255) NOT NULL,
   rol ENUM('cliente', 'promotor', 'administrador') NOT NULL DEFAULT 'cliente',
+  puntos VARCHAR(255) NOT NULL DEFAULT 0,
   PRIMARY KEY(username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- Insercion de datos en la tabla Usuarios
 
-INSERT INTO usuarios (username, email, password, rol) VALUES
-('admin', 'admin@eventia.es', '$2y$10$nx7sPLOeZyLFfQ5wHYDSnea7eJOtf5XGhEKDK7YJpe8Bmp8wk5dkG', 'administrador'),
-('user', ' user@gmail.com', '$2y$10$0jHBrtOHcO/BQi8mZ1ZZvulNjN4UUQhjRlkx/m55RaH8GbKdd.db.', 'cliente');
+INSERT INTO usuarios (username, email, password, rol, puntos) VALUES
+('admin', 'admin@eventia.es', '$2y$10$nx7sPLOeZyLFfQ5wHYDSnea7eJOtf5XGhEKDK7YJpe8Bmp8wk5dkG', 'administrador', 0),
+('user', ' user@gmail.com', '$2y$10$0jHBrtOHcO/BQi8mZ1ZZvulNjN4UUQhjRlkx/m55RaH8GbKdd.db.', 'cliente', 0);
 
 
 
