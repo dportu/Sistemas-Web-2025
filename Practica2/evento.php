@@ -15,7 +15,7 @@
 
         echo "<img src='" . htmlspecialchars($evento['imagen']) . "' alt='Imagen del evento'>";
         echo "<p><strong>Precio:</strong> " . $evento['precio'] . " €</p>";
-        echo "<p><strong>Fecha:</strong> " . $evento['fecha_inicio'] . (!empty($evento['fecha_fin']) ? " al " . $evento['fecha_fin'] : "") . "</p>";
+        echo "<p><strong>Fecha:</strong> " . $evento['fecha_inicio'] . "</p>";
 
         echo !empty($evento['ubicacion']) ? "<p><strong>Ubicacion:</strong> " . htmlspecialchars($evento['ubicacion']) . "</p>" : "";
         echo !empty($evento['organizador']) ? "<p><strong>Organizador:</strong> " . htmlspecialchars($evento['organizador']) . "</p>" : "";

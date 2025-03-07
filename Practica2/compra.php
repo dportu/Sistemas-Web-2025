@@ -1,12 +1,12 @@
 <?php
     include("info_evento.php");
     
-    function seleccionarEntrada($id_evento) {
+    function seleccionarEntradas($id_evento) {
         $evento = getEvento($id_evento);
         
         echo "<h2>[ " . htmlspecialchars($evento['nombre']) . " ]</h2>";
         echo "<img src='" . htmlspecialchars($evento['imagen']) . "' alt='Imagen del evento'>";
-        echo "<p>" . $evento['fecha_inicio'] . (!empty($evento['fecha_fin']) ? " al " . $evento['fecha_fin'] : "") . "</p>";
+        echo "<p>" . $evento['fecha_inicio'] . "</p>";
         echo !empty($evento['ubicacion']) ? "<p><strong>Ubicacion:</strong> " . htmlspecialchars($evento['ubicacion']) . "</p>" : "";
         echo "<p>" . $evento['precio'] . " €</p>";
         // Añadir botones para incrementar o decrementar número de entradas
@@ -40,7 +40,7 @@
     <main>
         <?php
             $id_evento = $_GET['id'];
-            sleccionarEntradas($id_evento);
+            seleccionarEntradas($id_evento);
         ?>
 
         <a href="evento.php?id=<?php echo $id_evento; ?>">
