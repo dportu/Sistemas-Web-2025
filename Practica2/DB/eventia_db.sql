@@ -3,14 +3,15 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 
--- Base de datos: eventia_db
+-- Base de datos: eventia_db :D
 
 CREATE DATABASE IF NOT EXISTS eventia_db DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE eventia_db;
 
 
 
--- Estructura de  la tabla Eventos
+
+-- Estructura de la tabla Eventos
 
 CREATE TABLE eventos (
   id INT(11) NOT NULL AUTO_INCREMENT,
@@ -19,20 +20,41 @@ CREATE TABLE eventos (
   descripcion TEXT DEFAULT NULL,
   fecha_inicio DATE NOT NULL,
   fecha_fin DATE DEFAULT NULL,
-  lugar VARCHAR(255) DEFAULT NULL,
+  ubicacion VARCHAR(255) DEFAULT NULL,
   organizador VARCHAR(100) DEFAULT NULL,
   imagen VARCHAR(255) NOT NULL DEFAULT 'img/default.jpg',
-  primary key(id)
+  PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- Insercion de datos en la tabla Eventos
 
-INSERT INTO `eventos` (`id`, `nombre`, `precio`, `descripcion`, `fecha_inicio`, `fecha_fin`, `lugar`, `organizador`, `imagen`) VALUES
+INSERT INTO `eventos` (`id`, `nombre`, `precio`, `descripcion`, `fecha_inicio`, `fecha_fin`, `ubicacion`, `organizador`, `imagen`) VALUES
 (1, 'Concierto de Metallica', 20, NULL, '2025-03-15', NULL, NULL, NULL, 'img/metallica.jpg'),
 (2, 'Concierto Anuel AA', 3, NULL, '2025-03-31', NULL, NULL, NULL, 'img/anuel.jpg'),
 (3, 'Halloween en Fabrik', 100, 'Halloween en Fabrik!! No te lo pierdas', '2026-10-31', NULL, 'Fabrik', 'Eventia', 'img/halloween.jpg');
 
+
+
+
+-- Estructura de la tabla Valoraciones
+CREATE TABLE valoraciones (
+  id_evento INT(11) NOT NULL,
+  username varchar(10) DEFAULT NULL,
+  nota INT(1) NOT NULL CHECK (nota BETWEEN 1 AND 5),
+  comentario TEXT DEFAULT NULL,
+  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha en que se realizó la valoración
+  FOREIGN KEY (id_evento) REFERENCES eventos(id) ON DELETE CASCADE,
+  FOREIGN KEY (username) REFERENCES usuarios(username) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- Insercion de datos en la tabla Valoraciones
+
+INSERT INTO `valoraciones` (`id_evento`, `username`, `nota`, `comentario`, `fecha`) VALUES
+(1, 'admin', 5, 'Tercio gratis para aquellos que lleguéis antes de las 19:00!!! No te lo pierdas ;)', '2025-03-13'),
+(1, 'user', 5, 'guapísimo', '2025-03-17'),
+(1, 'user', 4, 'aunque me decepcionó un poco que no se rompiera la camiseta al terminar el conci :(', '2025-03-17');
 
 
 
@@ -59,7 +81,6 @@ INSERT INTO foro (id, titulo, autor, email, mensaje, evento, fecha_publicacion) 
 
 
 
-
 -- Estructura de la tabla Usuarios
 
 CREATE TABLE usuarios (
@@ -67,8 +88,9 @@ CREATE TABLE usuarios (
   email varchar(100) NOT NULL,
   password varchar(255) NOT NULL,
   rol ENUM('cliente', 'promotor', 'administrador') NOT NULL DEFAULT 'cliente',
-  primary key (username)
+  PRIMARY KEY(username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 -- Insercion de datos en la tabla Usuarios
 
@@ -78,9 +100,11 @@ INSERT INTO usuarios (username, email, password, rol) VALUES
 
 
 
+
 --
 -- CREACION DE LOS USUARIOS DE ACCESO A LA BD
 --
+
 
 -- Clientes
 CREATE USER 'usuario_cliente' @'localhost' IDENTIFIED BY 'clientepass';
@@ -102,6 +126,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON eventia_db.eventos TO 'usuario_promotor'
 CREATE USER 'usuario_admin' @'localhost' IDENTIFIED BY 'adminpass';
 -- Concedemos todos los permisos
 GRANT ALL PRIVILEGES ON eventia_db.* TO 'usuario_admin'@'localhost';
+
 
 -- Apply changes
 FLUSH PRIVILEGES;
