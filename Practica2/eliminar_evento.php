@@ -15,7 +15,7 @@
     <?php require("includes/vistas/comun/sidebarIzq.php"); ?>
 
     <main>
-        
+        <p> Esta pantalla eliminará el evento. </p>
     </main>
     
     <?php require("includes/vistas/comun/sidebarDer.php"); ?>

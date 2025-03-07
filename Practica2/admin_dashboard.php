@@ -15,7 +15,7 @@
     <?php require("includes/vistas/comun/sidebarIzq.php"); ?>
 
     <main>
-        
+        <p> Aqui el administrador podrá gestionar todo. </p>
     </main>
     
     <?php require("includes/vistas/comun/sidebarDer.php"); ?>

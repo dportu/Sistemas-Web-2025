@@ -15,7 +15,7 @@
     <?php require("includes/vistas/comun/sidebarIzq.php"); ?>
 
     <main>
-        
+        <p> Aqui se podrá modificar los datos de usuario. </p>
     </main>
     
     <?php require("includes/vistas/comun/sidebarDer.php"); ?>

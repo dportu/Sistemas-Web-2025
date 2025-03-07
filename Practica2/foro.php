@@ -1,11 +1,15 @@
 <?php 
     include("conexion_bd.php");
+    include("info_evento.php");
     session_start(); // Manejo de sesiones para el usuario
 
     $_SESSION['usuario_nombre'] = $_SESSION['usuario_nombre'] ?? '';
     $_SESSION['usuario_email'] = $_SESSION['usuario_email'] ?? '';
 
     $usuarioLogueado = isset($_SESSION["login"]) && $_SESSION["login"] === true;
+
+    $id_evento = $_GET['id'];
+    $evento = getEvento($id_evento);
 ?>
 
 <!DOCTYPE html>

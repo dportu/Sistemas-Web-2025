@@ -22,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["login"] = true;
                 $_SESSION["usuario_email"] = $usuario_result["email"];
                 $_SESSION["usuario_rol"] = $usuario_result["rol"];
+                $_SESSION['puntos'] = $usuario_result["puntos"];
                 header("Location: index.php");
                 exit();
             } else {

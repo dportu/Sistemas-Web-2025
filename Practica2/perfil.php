@@ -11,6 +11,7 @@
     $usuario_nombre = $_SESSION['usuario_nombre'];
     $usuario_email = $_SESSION['usuario_email'];
     $usuario_rol = $_SESSION['usuario_rol'];
+    $usuario_puntos = $_SESSION['puntos'];
 
 ?>
 
@@ -31,21 +32,21 @@
     <main>
     <h1>Bienvenido, <?php echo htmlspecialchars($usuario_nombre); ?>!</h1>
     <p>Email: <?php echo htmlspecialchars($usuario_email); ?></p>
-    <li><a href="editar_perfil.php">Editar Perfil</a></li>
+    <a href="editar_perfil.php">Editar Perfil</a>
     
-    <?php if ($usuario_rol === 'administrador' || $usuario_rol === 'promotor') : ?>
+    <?php if ($usuario_rol === 'administrador' || $usuario_rol === 'promotor') { ?>
         <h2>Opciones de Administrador</h2>
         <ul>
             <p>Rol: <?php echo htmlspecialchars($usuario_rol); ?></p>
             <li><a href="admin_dashboard.php">Panel de Administración</a></li>
-            <li><a href="gestionar_eventos.php">Gestionar Eventos</a></li>
         </ul>
-    <?php else : ?>
+    <?php } else { ?>
         <h2>Opciones de Usuario</h2>
         <ul>
             <li><a href="mis_compras.php">Mis Compras</a></li>
+            <p> Tienes <?php echo htmlspecialchars($usuario_puntos); ?> puntos en tu cuenta. </p>
         </ul>
-    <?php endif; ?>
+    <?php } ?>
     
     <a href="logout.php">Cerrar sesión</a>
     </main>

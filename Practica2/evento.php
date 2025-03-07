@@ -75,7 +75,7 @@
         <a href="valoraciones.php?id=<?php echo $id_evento; ?>">
             <button type="button">Valoraciones</button>
         </a>
-        <a href="foro.php">
+        <a href="foro.php?id=<?php echo $id_evento; ?>">
             <button type="button">Foro Evento</button>
         </a>
     </main>

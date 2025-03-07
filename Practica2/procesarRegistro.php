@@ -6,6 +6,7 @@
         $usuario = trim($_POST["usuario"]);
         $password = trim($_POST["password"]);
         $email = trim($_POST["email"]);
+        $puntos = trim($_POST["puntos"]);
 
         // Hashear la contraseña
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -31,6 +32,7 @@
                     $_SESSION["login"] = true;
                     $_SESSION["usuario_email"] = $email;
                     $_SESSION["usuario_rol"] = 'cliente';
+                    $_SESSION['puntos'] = $puntos;
                     header("Location: index.php"); // Redirigir a la página de usuario
                     exit();
                 } else {
