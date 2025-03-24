@@ -1,11 +1,11 @@
 <?php 
-include("conexion.php");
-session_start(); // Manejo de sesiones para el usuario
+    include("conexion.php");
+    session_start(); // Manejo de sesiones para el usuario
 
-$_SESSION['usuario_nombre'] = $_SESSION['usuario_nombre'] ?? '';
-$_SESSION['usuario_email'] = $_SESSION['usuario_email'] ?? '';
+    $_SESSION['usuario_nombre'] = $_SESSION['usuario_nombre'] ?? '';
+    $_SESSION['usuario_email'] = $_SESSION['usuario_email'] ?? '';
 
-$usuarioLogueado = isset($_SESSION["login"]) && $_SESSION["login"] === true;
+    $usuarioLogueado = isset($_SESSION["login"]) && $_SESSION["login"] === true;
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +13,7 @@ $usuarioLogueado = isset($_SESSION["login"]) && $_SESSION["login"] === true;
 <head>
    <meta charset="utf-8">
    <title>Foro de Eventos</title>
-   <link rel="stylesheet" type="text/css" href="CSS/foro.css"/>
+   <link rel="stylesheet" type="text/css" href="CSS/estilo.css"/>
 </head>
 
 <body>
