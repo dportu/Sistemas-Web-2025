@@ -1,101 +1,144 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.2
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: vm006.db.swarm.test
+-- Tiempo de generación: 24-03-2025 a las 11:43:10
+-- Versión del servidor: 10.4.28-MariaDB-1:10.4.28+maria~ubu2004
+-- Versión de PHP: 8.2.27
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
---
--- Base de datos: eventia_db
---
 
-
--- Borrado de usuarios y base de datos previos
-DROP DATABASE IF EXISTS eventia_db;
-DROP USER IF EXISTS 'usuario_cliente'@'localhost';
-DROP USER IF EXISTS 'usuario_admin'@'localhost';
-DROP USER IF EXISTS 'usuario_promotor'@'localhost';
-
-
--- Creacion de la base de datos
-CREATE DATABASE IF NOT EXISTS eventia_db DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE eventia_db;
-
-
-
-
--- Estructura de la tabla Eventos
-
-CREATE TABLE eventos (
-  id INT(11) NOT NULL AUTO_INCREMENT,
-  nombre VARCHAR(255) NOT NULL,
-  precio VARCHAR(255) NOT NULL,
-  descripcion TEXT DEFAULT NULL,
-  fecha_inicio DATE NOT NULL,
-  ubicacion VARCHAR(255) DEFAULT NULL,
-  organizador VARCHAR(100) DEFAULT NULL,
-  imagen VARCHAR(255) NOT NULL DEFAULT 'img/default.jpg',
-  PRIMARY KEY(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Estructura de la tabla Foro
-
-CREATE TABLE foro (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  titulo varchar(255) NOT NULL,
-  autor varchar(100) NOT NULL,
-  email varchar(100) NOT NULL,
-  mensaje text NOT NULL,
-  evento int(11) DEFAULT NULL,
-  fecha_publicacion timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Estructura de la tabla Usuarios
-
-CREATE TABLE usuarios (
-  username varchar(10) NOT NULL,
-  email varchar(100) NOT NULL,
-  password varchar(255) NOT NULL,
-  rol ENUM('cliente', 'promotor', 'administrador') NOT NULL DEFAULT 'cliente',
-  puntos VARCHAR(255) NOT NULL DEFAULT 0,
-  PRIMARY KEY(username)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Estructura de la tabla Valoraciones
-CREATE TABLE valoraciones (
-  id_evento INT(11) NOT NULL,
-  username varchar(10) DEFAULT NULL,
-  nota INT(1) NOT NULL CHECK (nota BETWEEN 1 AND 5),
-  comentario TEXT DEFAULT NULL,
-  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha en que se realizó la valoración
-  FOREIGN KEY (id_evento) REFERENCES eventos(id) ON DELETE CASCADE,
-  FOREIGN KEY (username) REFERENCES usuarios(username) ON DELETE SET NULL,
-  PRIMARY KEY(id_evento)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- CREACION DE LOS USUARIOS DE ACCESO A LA BD
+-- Base de datos: `eventia_db`
 --
 
+-- --------------------------------------------------------
 
--- Clientes - MODIFICADO para incluir UPDATE en la tabla foro
-CREATE USER 'usuario_cliente'@'localhost' IDENTIFIED BY 'clientepass';
--- Concedemos acceso a select, insert y UPDATE en foro para que puedan editar sus propios mensajes
-GRANT SELECT, INSERT ON eventia_db.usuarios TO 'usuario_cliente'@'localhost';
-GRANT SELECT, INSERT, UPDATE, DELETE ON eventia_db.foro TO 'usuario_cliente'@'localhost';
-GRANT SELECT, INSERT ON eventia_db.eventos TO 'usuario_cliente'@'localhost';
-GRANT SELECT, INSERT ON eventia_db.valoraciones TO 'usuario_cliente'@'localhost';
+--
+-- Estructura de tabla para la tabla `eventos`
+--
 
--- Promotores
-CREATE USER 'usuario_promotor'@'localhost' IDENTIFIED BY 'promotorpass';
--- Concedemos acceso a select e insert en todas las tablas, ademas de update y delete en eventos
-GRANT SELECT, INSERT ON eventia_db.usuarios TO 'usuario_promotor'@'localhost';
-GRANT SELECT, INSERT, UPDATE, DELETE ON eventia_db.foro TO 'usuario_promotor'@'localhost';
-GRANT SELECT, INSERT, UPDATE, DELETE ON eventia_db.eventos TO 'usuario_promotor'@'localhost';
-GRANT SELECT, INSERT, UPDATE, DELETE ON eventia_db.valoraciones TO 'usuario_promotor'@'localhost';
+CREATE TABLE `eventos` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `precio` varchar(255) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `fecha_inicio` date NOT NULL,
+  `ubicacion` varchar(255) DEFAULT NULL,
+  `organizador` varchar(100) DEFAULT NULL,
+  `imagen` varchar(255) NOT NULL DEFAULT 'img/default.jpg'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Administrador
-CREATE USER 'usuario_admin'@'localhost' IDENTIFIED BY 'adminpass';
--- Concedemos todos los permisos
-GRANT ALL PRIVILEGES ON eventia_db.* TO 'usuario_admin'@'localhost';
+-- --------------------------------------------------------
 
--- Aplicar cambios
-FLUSH PRIVILEGES;
+--
+-- Estructura de tabla para la tabla `foro`
+--
+
+CREATE TABLE `foro` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(255) NOT NULL,
+  `autor` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `mensaje` text NOT NULL,
+  `evento` int(11) DEFAULT NULL,
+  `fecha_publicacion` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `username` varchar(10) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `rol` enum('cliente','promotor','administrador') NOT NULL DEFAULT 'cliente',
+  `puntos` varchar(255) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `valoraciones`
+--
+
+CREATE TABLE `valoraciones` (
+  `id_evento` int(11) NOT NULL,
+  `username` varchar(10) DEFAULT NULL,
+  `nota` int(1) NOT NULL CHECK (`nota` between 1 and 5),
+  `comentario` text DEFAULT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `eventos`
+--
+ALTER TABLE `eventos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `foro`
+--
+ALTER TABLE `foro`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`username`);
+
+--
+-- Indices de la tabla `valoraciones`
+--
+ALTER TABLE `valoraciones`
+  ADD PRIMARY KEY (`id_evento`),
+  ADD KEY `username` (`username`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `eventos`
+--
+ALTER TABLE `eventos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `foro`
+--
+ALTER TABLE `foro`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `valoraciones`
+--
+ALTER TABLE `valoraciones`
+  ADD CONSTRAINT `valoraciones_ibfk_1` FOREIGN KEY (`id_evento`) REFERENCES `eventos` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `valoraciones_ibfk_2` FOREIGN KEY (`username`) REFERENCES `usuarios` (`username`) ON DELETE SET NULL;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
