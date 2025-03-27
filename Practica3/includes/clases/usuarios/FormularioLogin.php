@@ -10,8 +10,7 @@ class FormularioLogin extends Formulario
         parent::__construct('formLogin', ['urlRedireccion' => Aplicacion::getInstance()->resuelve('/index.php')]);
     }
     
-    protected function generaCamposFormulario(&$datos)
-    {
+    protected function generaCamposFormulario(&$datos) {
         // Se reutiliza el nombre de usuario introducido previamente o se deja en blanco
         $nombreUsuario = $datos['nombreUsuario'] ?? '';
 

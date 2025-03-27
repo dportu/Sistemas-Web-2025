@@ -12,8 +12,7 @@ class Usuario
 
     public const USER_ROLE = 2;
 
-    public static function login($nombreUsuario, $password)
-    {
+    public static function login($nombreUsuario, $password) {
         $usuario = self::buscaUsuario($nombreUsuario);
         if ($usuario && $usuario->compruebaPassword($password)) {
             return self::cargaRoles($usuario);

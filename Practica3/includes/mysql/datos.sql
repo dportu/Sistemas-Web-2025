@@ -1,3 +1,9 @@
+--
+-- Base de datos: `eventia_db`
+--
+CREATE DATABASE IF NOT EXISTS `eventia_db` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `eventia_db`;
+
 -- Insercion de datos en la tabla Eventos
 
 INSERT INTO eventos (id, nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen) VALUES

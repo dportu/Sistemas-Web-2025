@@ -1,16 +1,20 @@
 <?php
+  require_once __DIR__.'/includes/config.php';
+  // require_once __DIR__.'/includes/clases/Usuarios/FormularioLogin.php';
+  use es\ucm\fdi\aw\usuarios\FormularioLogin;
 
-require_once __DIR__.'/includes/config.php';
+  $form = new FormularioLogin();
+  $htmlFormLogin = $form->gestiona();
 
-$formLogin = new \es\ucm\fdi\aw\usuarios\FormularioLogin();
-$formLogin = $formLogin->gestiona();
+  $tituloPagina = 'Login';
 
+  $contenidoPrincipal = <<<EOS
+    <h1>Iniciar sesión </h1>
+    $htmlFormLogin
+    <div class="enlace-registro">
+        <a href="registro.php">¿No tienes cuenta? Regístrate aquí</a>
+    </div>
+  EOS;
 
-$tituloPagina = 'Login';
-$contenidoPrincipal=<<<EOF
-  	<h1>Acceso al sistema</h1>
-    $formLogin
-EOF;
-
-$params = ['tituloPagina' => $tituloPagina, 'contenidoPrincipal' => $contenidoPrincipal, 'cabecera' => 'Login'];
-$app->generaVista('/plantillas/plantilla.php', $params);
+  require __DIR__.'/includes/vistas/plantillas/plantilla.php';
+?>

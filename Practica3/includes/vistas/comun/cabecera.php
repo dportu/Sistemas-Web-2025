@@ -1,33 +1,20 @@
-<?php
-
-use es\ucm\fdi\aw\Aplicacion;
-use es\ucm\fdi\aw\usuarios\FormularioLogout;
-
-function mostrarSaludo()
-{
-    $html = '';
-    $app = Aplicacion::getInstance();
-    if ($app->usuarioLogueado()) {
-        $nombreUsuario = $app->nombreUsuario();
-
-        $formLogout = new FormularioLogout();
-        $htmlLogout = $formLogout->gestiona();
-        $html = "Bienvenido, {$nombreUsuario}. $htmlLogout";
-    } else {
-        $loginUrl = $app->resuelve('/login.php');
-        $registroUrl = $app->resuelve('/registro.php');
-        $html = <<<EOS
-        Usuario desconocido. <a href="{$loginUrl}">Login</a> <a href="{$registroUrl}">Registro</a>
-      EOS;
+<?php 
+    function mostrarSaludo() {
+        if (isset($_SESSION['login'])) {
+            echo 'Bienvenid@ '.$_SESSION["usuario_nombre"].'! <a href="perfil.php">Ver perfil</a>';
+        } else {
+            echo 'Usuario invitado. <a href="login.php">Iniciar sesión</a>';
+        }
     }
-
-    return $html;
-}
-
 ?>
+
 <header>
-    <h1><?= $params['cabecera'] ?? 'Mi gran página web' ?></h1>
+    <h1>Eventia</h1>
     <div class="saludo">
-        <?= mostrarSaludo(); ?>
+        <?php
+            $pagina_actual = basename($_SERVER['PHP_SELF']);
+            if ($pagina_actual != "login.php") mostrarSaludo();
+            else echo '<a href="index.php">Inicio</a>'
+        ?>
     </div>
 </header>

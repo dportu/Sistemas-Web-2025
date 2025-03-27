@@ -20,7 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `eventia_db`
 --
-
+CREATE DATABASE IF NOT EXISTS `eventia_db` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `eventia_db`;
 -- --------------------------------------------------------
 
 --

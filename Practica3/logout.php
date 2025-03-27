@@ -1,10 +1,25 @@
-<?php
-require_once __DIR__.'/includes/config.php';
+<?php 
+	
+	require_once __DIR__.'/includes/config.php';
 
+	// Borrar las variables
+    // TODO: borrar las variables adaptada a nuestra tabla
+	unset($_SESSION["nombre"]);
+	unset($_SESSION["login"]);
+	if (isset($_SESSION["esAdmin"])){
+		unset($_SESSION["esAdmin"]);
+	}
+	// Destruir la sesion
+	session_destroy();
 
-if (strtoupper($_SERVER['REQUEST_METHOD']) !== 'POST') {
-    $app->redirige('/index.php');
-}
+	// Vista
 
-$formLogout = new \es\ucm\fdi\aw\usuarios\FormularioLogout();
-$formLogout->gestiona();
+	$tituloPagina = 'Logout';
+
+	$contenidoPrincipal = <<<EOS
+		<h1>Sesión cerrada</h1>
+		<p> Gracias por visitar nuestra web. Hasta pronto. </p>
+	EOS;
+
+	require __DIR__.'/includes/vistas/plantillas/plantilla.php';
+?>
