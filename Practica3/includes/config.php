@@ -4,16 +4,20 @@
  * Parámetros de conexión a la BD
  */
 // define('BD_HOST', 'localhost');
-define('BD_HOST', '172.17.0.2');
-define('BD_NAME', 'proyectoaw');
-define('BD_USER', 'proyectoaw');
-define('BD_PASS', 'proyectoaw');
+//define('BD_HOST', '172.17.0.2');
+//define('BD_NAME', 'proyectoaw');
+//define('BD_USER', 'proyectoaw');
+//define('BD_PASS', 'proyectoaw');
 
+define('BD_HOST', 'localhost');
+define('BD_NAME', 'eventia_db');
+define('BD_USER', 'root');
+define('BD_PASS', '');
 /**
  * Parámetros de configuración utilizados para generar las URLs y las rutas a ficheros en la aplicación
  */
 define('RAIZ_APP', __DIR__);
-define('RUTA_APP', '/www');
+define('RUTA_APP', '/Sistemas-Web-2025/Practica3');
 define('RUTA_IMGS', RUTA_APP.'img/');
 define('RUTA_CSS', RUTA_APP.'css/');
 define('RUTA_JS', RUTA_APP.'js/');

@@ -1,20 +1,19 @@
-<?php 
-    function mostrarSaludo() {
-        if (isset($_SESSION['login'])) {
-            echo 'Bienvenid@ '.$_SESSION["usuario_nombre"].'! <a href="perfil.php">Ver perfil</a>';
-        } else {
-            echo 'Usuario invitado. <a href="login.php">Iniciar sesión</a>';
-        }
-    }
-?>
+<?php
 
+function mostrarSaludo() {
+	$rutaApp = RUTA_APP;
+	$html='';
+	if (isset($_SESSION["login"]) && ($_SESSION["login"]===true)) {
+		return "Bienvenido, {$_SESSION['username']} <a href='{$rutaApp}/logout.php'>(salir)</a>";
+	} else {
+		return "Usuario desconocido. <a href='login.php'>Login</a> <a href='registro.php'>Registro</a>";
+	}
+	return $html;
+}
+?>
 <header>
-    <h1>Eventia</h1>
-    <div class="saludo">
-        <?php
-            $pagina_actual = basename($_SERVER['PHP_SELF']);
-            if ($pagina_actual != "login.php") mostrarSaludo();
-            else echo '<a href="index.php">Inicio</a>'
-        ?>
-    </div>
+	<h1>Mi gran página web</h1>
+	<div class="saludo">
+	<?= mostrarSaludo() ?>
+	</div>
 </header>
