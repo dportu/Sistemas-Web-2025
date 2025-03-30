@@ -22,7 +22,6 @@ class FormularioLogin extends Formulario
         $html = <<<EOF
         $htmlErroresGlobales
         <fieldset>
-            <legend>Usuario y contraseña</legend>
             <div>
                 <label for="nombreUsuario">Nombre de usuario:</label>
                 <input id="nombreUsuario" type="text" name="nombreUsuario" value="$nombreUsuario" />
@@ -41,10 +40,7 @@ class FormularioLogin extends Formulario
         return $html;
     }
 
-    protected function procesaFormulario(&$datos)
-    {
-
-        
+    protected function procesaFormulario(&$datos) {
         $this->errores = [];
         $nombreUsuario = trim($datos['nombreUsuario'] ?? '');
         $nombreUsuario = filter_var($nombreUsuario, FILTER_SANITIZE_FULL_SPECIAL_CHARS);

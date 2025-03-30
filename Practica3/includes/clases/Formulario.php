@@ -4,8 +4,7 @@ namespace es\ucm\fdi\aw;
 /**
  * Clase base para la gestión de formularios.
  */
-abstract class Formulario
-{
+abstract class Formulario {
 
     /**
      * Genera la lista de mensajes de errores globales (no asociada a un campo) a incluir en el formulario.
@@ -16,8 +15,7 @@ abstract class Formulario
      *
      * @return string El HTML asociado a los mensajes de error.
      */
-    protected static function generaListaErroresGlobales($errores = array(), $classAtt = '')
-    {
+    protected static function generaListaErroresGlobales($errores = array(), $classAtt = '') {
         $clavesErroresGlobales = array_filter(array_keys($errores), function ($elem) {
             return is_numeric($elem);
         });
@@ -45,8 +43,7 @@ abstract class Formulario
      * @param string   $htmlElement (opcional) Etiqueta HTML a crear para mostrar el error.
      * @param array    $atts        (opcional) Tabla asociativa con los atributos a añadir a la etiqueta que mostrará el error.
      */
-    protected static function createMensajeError($errores = [], $idError = '', $htmlElement = 'span', $atts = [])
-    {
+    protected static function createMensajeError($errores = [], $idError = '', $htmlElement = 'span', $atts = []) {
         if (! isset($errores[$idError])) {
             return '';
         }
@@ -159,8 +156,7 @@ abstract class Formulario
      * @param string $tipoFormulario Parámetro de la petición utilizado para comprobar que el usuario ha enviado el formulario.
      * @param array $opciones (opcional) Array de opciones para el formulario (ver más arriba).
      */
-    public function __construct($tipoFormulario, $opciones = array())
-    {
+    public function __construct($tipoFormulario, $opciones = array()) {
         $this->tipoFormulario = $tipoFormulario;
 
         $opcionesPorDefecto = array('action' => null, 'method' => 'POST', 'class' => null, 'enctype' => null, 'urlRedireccion' => null, 'formId' => '');
@@ -195,8 +191,7 @@ abstract class Formulario
      *   </li>
      * </ul>
      */
-    public function gestiona()
-    {
+    public function gestiona() {
         $datos = &$_POST;
         if (strcasecmp('GET', $this->method) == 0) {
             $datos = &$_GET;
@@ -231,8 +226,7 @@ abstract class Formulario
      *
      * @return string HTML asociado a los campos del formulario.
      */
-    protected function generaCamposFormulario(&$datos)
-    {
+    protected function generaCamposFormulario(&$datos) {
         return '';
     }
 
@@ -242,9 +236,7 @@ abstract class Formulario
      * @param string[] $datos Datos enviado por el usuario.
      *
      */
-    protected function procesaFormulario(&$datos)
-    {
-    }
+    protected function procesaFormulario(&$datos) { }
 
     /**
      * Función que verifica si el usuario ha enviado el formulario.
@@ -255,8 +247,7 @@ abstract class Formulario
      *
      * @return boolean Devuelve <code>true</code> si <code>$formId</code> existe como clave en <code>$datos</code>
      */
-    protected function formularioEnviado(&$datos)
-    {
+    protected function formularioEnviado(&$datos) {
         return isset($datos['tipoFormulario']) && $datos['tipoFormulario'] == $this->tipoFormulario;
     }
 
@@ -267,8 +258,7 @@ abstract class Formulario
      *
      * @return string HTML asociado al formulario.
      */
-    protected function generaFormulario(&$datos = array())
-    {
+    protected function generaFormulario(&$datos = array()) {
         $htmlCamposFormularios = $this->generaCamposFormulario($datos);
 
         $classAtt = $this->classAtt != null ? "class=\"{$this->classAtt}\"" : '';

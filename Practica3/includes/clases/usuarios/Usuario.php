@@ -21,24 +21,19 @@ class Usuario
         return false;
     }
 
-
-
-    
-
-public static function crea($username, $password, $email, $rol = self::CLIENTE_ROLE, $puntos = 0) {
-    // Hashear la contraseña antes de almacenarla
-    $hashedPassword = self::hashPassword($password);
-    $usuario = new Usuario($username, $hashedPassword, $email, $rol, $puntos);
-    if ($usuario->guarda()) {
-        return $usuario;
-    } else {
-        error_log("Error al guardar el usuario: $username");
-        return false;
+    public static function crea($username, $password, $email, $rol = self::CLIENTE_ROLE, $puntos = 0) {
+        // Hashear la contraseña antes de almacenarla
+        $hashedPassword = self::hashPassword($password);
+        $usuario = new Usuario($username, $hashedPassword, $email, $rol, $puntos);
+        if ($usuario->guarda()) {
+            return $usuario;
+        } else {
+            error_log("Error al guardar el usuario: $username");
+            return false;
+        }
     }
-}
 
-    public static function buscaUsuario($username)
-    {
+    public static function buscaUsuario($username) {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf(
             "SELECT * FROM usuarios WHERE username='%s'",
@@ -62,12 +57,7 @@ public static function crea($username, $password, $email, $rol = self::CLIENTE_R
         return false;
     }
 
-
-    
-   
-
-    private static function cargaRoles($usuario)
-    {
+    private static function cargaRoles($usuario) {
         $roles=[];
             
         $conn = Aplicacion::getInstance()->getConexionBd();
@@ -91,8 +81,7 @@ public static function crea($username, $password, $email, $rol = self::CLIENTE_R
         return false;
     }
    
-    private static function inserta($usuario)
-    {
+    private static function inserta($usuario) {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf(
             "INSERT INTO usuarios (username, email, password, rol, puntos) 
@@ -122,8 +111,7 @@ public static function crea($username, $password, $email, $rol = self::CLIENTE_R
         return $usuario;
     }
     
-    private static function actualiza($usuario)
-    {
+    private static function actualiza($usuario) {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf(
             "UPDATE usuarios SET 
@@ -142,8 +130,7 @@ public static function crea($username, $password, $email, $rol = self::CLIENTE_R
     }
 
    
-    private static function borraRoles($usuario)
-    {
+    private static function borraRoles($usuario) {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf("DELETE FROM RolesUsuario RU WHERE RU.usuario = %d"
             , $usuario->id
@@ -155,13 +142,11 @@ public static function crea($username, $password, $email, $rol = self::CLIENTE_R
         return $usuario;
     }
     
-    private static function borra($usuario)
-    {
+    private static function borra($usuario) {
         return self::borraPorUsername($usuario->username);
     }
     
-    private static function borraPorUsername($username)
-    {
+    private static function borraPorUsername($username) {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf(
             "DELETE FROM usuarios WHERE username = '%s'",
@@ -176,8 +161,7 @@ public static function crea($username, $password, $email, $rol = self::CLIENTE_R
     private $rol;
     private $puntos;
 
-    private function __construct($username, $password, $email, $rol, $puntos)
-    {
+    private function __construct($username, $password, $email, $rol, $puntos) {
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;

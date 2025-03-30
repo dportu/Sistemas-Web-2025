@@ -29,7 +29,6 @@ class FormularioRegistro extends Formulario
         $html = <<<EOF
         $htmlErroresGlobales
         <fieldset>
-            <legend>Registro de usuario</legend>
             <div>
                 <label for="username">Nombre de usuario:</label>
                 <input id="username" type="text" name="username" value="$username" required />

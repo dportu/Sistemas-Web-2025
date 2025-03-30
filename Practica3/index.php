@@ -5,6 +5,7 @@
 	$tituloPagina = 'Inicio';
 
 	// TODO: include_once(__DIR__."/eventos.php");
+	$eventos = new Eventos();
 
 	$contenidoPrincipal = '';
 

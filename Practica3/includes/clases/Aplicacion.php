@@ -8,8 +8,7 @@ use es\ucm\fdi\aw\usuarios\Usuario;
 /**
  * Clase que mantiene el estado global de la aplicación.
  */
-class Aplicacion
-{
+class Aplicacion {
     const ATRIBUTOS_PETICION = 'attsPeticion';
 
     private static $instancia;
@@ -69,8 +68,7 @@ class Aplicacion
     private $atributosPeticion;
 
 
-    private function __construct()
-    {
+    private function __construct() {
         $this->inicializada = false;
         $this->generandoError = false;
     }
@@ -281,20 +279,17 @@ class Aplicacion
 
  
 
-    public function esAdmin()
-    {
+    public function esAdmin() {
         $this->compruebaInstanciaInicializada();
         return $this->usuarioLogueado() && (array_search(Usuario::ADMIN_ROLE, $_SESSION['rol']) !== false);
     }
 
-    public function tieneRol($rol)
-    {
+    public function tieneRol($rol) {
         $this->compruebaInstanciaInicializada();
         return $this->usuarioLogueado() && (array_search($rol, $_SESSION['rol']) !== false);
     }
 
-    public function paginaError($codigoRespuesta, $tituloPagina, $mensajeError, $explicacion = '')
-    {
+    public function paginaError($codigoRespuesta, $tituloPagina, $mensajeError, $explicacion = '') {
         $this->generandoError = true;
         http_response_code($codigoRespuesta);
 
