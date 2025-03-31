@@ -61,9 +61,9 @@ class Evento {
     public static function getEventos() {
         //return: array con todos los eventos en la base de datos actualmente
 
-        $conn = Aplicacion::getInstance()->getConexionBd();
+        $conexion = Aplicacion::getInstance()->getConexionBd();
         $query = "SELECT id, nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen FROM eventos";
-        $result = $conn->query($query);
+        $result = $conexion->query($query);
 
         $eventos = [];
 
@@ -88,9 +88,9 @@ class Evento {
     public static function buscaPorNombre($nombre) {
         //modificacion sobre buscaUsuario
 
-        $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("SELECT * FROM eventos WHERE nombre='%s'", $conn->real_escape_string($nombre));
-        $rs = $conn->query($query);
+        $conexion = Aplicacion::getInstance()->getConexionBd();
+        $query = sprintf("SELECT * FROM eventos WHERE nombre='%s'", $conexion->real_escape_string($nombre));
+        $rs = $conexion->query($query);
         $result = false;
         if ($rs) {
             $fila = $rs->fetch_assoc();
@@ -99,7 +99,7 @@ class Evento {
             }
             $rs->free();
         } else {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            error_log("Error BD ({$conexion->errno}): {$conexion->error}");
         }
         return $result;
     }
@@ -107,9 +107,9 @@ class Evento {
     public static function buscaPorId($idEvento) {
         //modificacion sobre buscaPorId
         
-        $conn = Aplicacion::getInstance()->getConexionBd();
+        $conexion = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf("SELECT * FROM eventos WHERE id=%d", $idEvento);
-        $rs = $conn->query($query);
+        $rs = $conexion->query($query);
         $result = false;
         if ($rs) {
             $fila = $rs->fetch_assoc();
@@ -118,7 +118,7 @@ class Evento {
             }
             $rs->free();
         } else {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            error_log("Error BD ({$conexion->errno}): {$conexion->error}");
         }
         return $result;
     }
@@ -197,20 +197,20 @@ class Evento {
 
     //solo puede ser usada en altaevento
     private static function insertarEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen) {
-        $conn = Aplicacion::getInstance()->getConexionBd();
+        $conexion = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf("INSERT INTO eventos (nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen) VALUES ('%s', %d, '%s', '%s', '%s', '%s', '%s')",
-            $conn->real_escape_string($nombre),
+            $conexion->real_escape_string($nombre),
             $precio,
-            $conn->real_escape_string($descripcion),
-            $conn->real_escape_string($fecha_inicio),
-            $conn->real_escape_string($ubicacion),
-            $conn->real_escape_string($organizador),
-            $conn->real_escape_string($imagen)
+            $conexion->real_escape_string($descripcion),
+            $conexion->real_escape_string($fecha_inicio),
+            $conexion->real_escape_string($ubicacion),
+            $conexion->real_escape_string($organizador),
+            $conexion->real_escape_string($imagen)
         );
-        if ($conn->query($query)) {
-            return $conn->insert_id;
+        if ($conexion->query($query)) {
+            return $conexion->insert_id;
         } else {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            error_log("Error BD ({$conexion->errno}): {$conexion->error}");
             return false;
         }
     }
