@@ -6,7 +6,7 @@
 
 	$contenidoPrincipal = '';
 
-	// TODO: Mostrar los eventos que hay disponibles
+    // Mostrar el foro dependiendo de su categoría
 
 	require __DIR__.'/includes/vistas/plantillas/plantilla.php';
   
