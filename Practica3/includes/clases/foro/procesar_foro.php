@@ -4,7 +4,7 @@ session_start();
 $pagina_act = basename($_SERVER['PHP_SELF']);
 
 // Vemos si esta logeado
-if(!isset($_SESSION['login']) || $_SESSION['login'] !== true || !isset($_SESSION['usuario_nombre']) || !isset($_SESSION['usuario_email'])) {
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true || !isset($_SESSION['usuario_nombre']) || !isset($_SESSION['usuario_email'])) {
     echo "<script>alert('Debe iniciar sesión para publicar'); window.location=$pagina_act;</script>";
     exit();
 }
