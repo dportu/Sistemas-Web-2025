@@ -34,19 +34,7 @@ class mensajeForo { //no hay un foro como tal, sino menajes sobre un evento en c
     }
 
     public static function altaMensajeForo($titulo, $autor, $mensaje, $evento, $fecha_publicacion) {
-        $mensajeF = mensajeForo::buscaPorId($titulo);
-        if($mensajeF != null) {
-            $mensaje = "Ya existe un mensaje con ese id";
-            $ret = false;
-        }
-        else {
-            new mensajeForo($titulo, $autor, $mensaje, $evento, $fecha_publicacion);
-            $mensaje = "Mensaje dado de alta con éxito";
-            $ret = true;
-        }
         
-        echo "<script>alert('$mensaje');</script>";
-        return $ret;
     }
 
     

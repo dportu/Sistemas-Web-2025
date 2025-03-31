@@ -10,23 +10,24 @@ class Evento {
     private $conn;
 
     private $id;
-    private $nombreEvento;
+    private $nombre;
     private $precio;
     private $descripcion;
-    private $fecha;
+    private $fecha_inicio;
     private $ubicacion;
     private $organizador;
     private $imagen;
 
     //  CONSTRUCTOR
-    private function __construct($id, $nombreEvento, $precio, $descripcion, $fecha, $ubicacion, $organizador, $imagen) {
+    private function __construct($id, $nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen) {
         $this->id = $id;
-        $this->nombreEvento = $nombreEvento;
+        $this->nombre = $nombre;
         $this->precio = $precio;
         $this->descripcion = $descripcion;
-        $this->fecha = $fecha;
+        $this->fecha_inicio = $fecha_inicio;
         $this->ubicacion = $ubicacion;
         $this->organizador = $organizador;
+        $this->imagen = $imagen;
 
         $this->conn = Aplicacion::getInstance()->getConexionBd();
     }
@@ -34,16 +35,16 @@ class Evento {
 
     //  METODOS PUBLICOS
     //  ESTATICOS
-    public static function altaEvento($nombreEvento, $precio, $descripcion, $fecha, $ubicacion, $organizador, $imagen) {
-        $evento = Evento::buscaPorNombre($nombreEvento);
+    public static function altaEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen) {
+        $evento = Evento::buscaPorNombre($nombre);
         if($evento != null) {
             $mensaje = "Ya existe un evento con ese nombre";
             $ret = false;
         }
         else {
-            $eventoId = Evento::insertarEvento($nombreEvento, $precio, $descripcion, $fecha, $ubicacion, $organizador, $imagen);
+            $eventoId = Evento::insertarEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen);
             if($eventoId != false) {
-                new Evento($eventoId, $nombreEvento, $precio, $descripcion, $fecha, $ubicacion, $organizador, $imagen);
+                new Evento($eventoId, $nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen);
                 $mensaje = "Evento dado de alta con éxito";
                 $ret = true;
             }
@@ -63,7 +64,7 @@ class Evento {
         //return: array con todos los eventos en la base de datos actualmente
 
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = "SELECT id, nombreEvento, precio, descripcion, fecha, ubicacion, organizador, imagen FROM eventos";
+        $query = "SELECT id, nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen FROM eventos";
         $result = $conn->query($query);
 
         $eventos = [];
@@ -72,10 +73,10 @@ class Evento {
             while ($row = $result->fetch_assoc()) {
                 $eventos[] = new Evento(
                     $row['id'], 
-                    $row['nombreEvento'], 
+                    $row['nombre'], 
                     $row['precio'], 
                     $row['descripcion'], 
-                    $row['fecha'], 
+                    $row['fecha_inicio'], 
                     $row['ubicacion'], 
                     $row['organizador'], 
                     $row['imagen']
@@ -86,11 +87,11 @@ class Evento {
         return $eventos; // devolvemos el array con todos los eventos
     }
 
-    public static function buscaPorNombre($nombreEvento) {
+    public static function buscaPorNombre($nombre) {
         //modificacion sobre buscaUsuario
 
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("SELECT * FROM eventos WHERE nombreEvento='%s'", $conn->real_escape_string($nombreEvento));
+        $query = sprintf("SELECT * FROM eventos WHERE nombre='%s'", $conn->real_escape_string($nombre));
         $rs = $conn->query($query);
         $result = false;
         if ($rs) {
@@ -115,7 +116,7 @@ class Evento {
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Evento($idEvento, $fila['nombreEvento'], $fila['precio'], $fila['descripcion'], $fila['fecha'], $fila['ubicacion'], $fila['organizador'], $fila['imagen']);
+                $result = new Evento($idEvento, $fila['nombre'], $fila['precio'], $fila['descripcion'], $fila['fecha_inicio'], $fila['ubicacion'], $fila['organizador'], $fila['imagen']);
             }
             $rs->free();
         } else {
@@ -142,16 +143,16 @@ class Evento {
     }
 
     //  INSTANCIADOS
-    public function editarEvento($nombreEvento, $precio, $descripcion, $fecha, $ubicacion, $organizador, $imagen) {
-        $this->nombreEvento = $nombreEvento;
+    public function editarEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen) {
+        $this->nombre = $nombre;
         $this->precio = $precio;
         $this->descripcion = $descripcion;
-        $this->fecha = $fecha;
+        $this->fecha_inicio = $fecha_inicio;
         $this->ubicacion = $ubicacion;
         $this->organizador = $organizador;
         $this->imagen = $imagen;
 
-        $sql = "UPDATE eventos SET nombreEvento=?, precio=?, descripcion=?, fecha=?, ubicacion=?, organizador=?, imagen=? WHERE id=?";
+        $sql = "UPDATE eventos SET nombre=?, precio=?, descripcion=?, fecha_inicio=?, ubicacion=?, organizador=?, imagen=? WHERE id=?";
 
         //preparamos la insercion
         $stmt = $this->conn->prepare($sql);
@@ -161,10 +162,10 @@ class Evento {
 
         //vinculamos los parametros
         $stmt->bind_param("sdsssssi",
-            $this->nombreEvento, 
+            $this->nombre, 
             $this->precio, 
             $this->descripcion, 
-            $this->fecha, 
+            $this->fecha_inicio, 
             $this->ubicacion, 
             $this->organizador, 
             $this->imagen,
@@ -200,13 +201,13 @@ class Evento {
     //METODOS PRIVADOS
 
     //solo puede ser usada en altaevento
-    private static function insertarEvento($nombreEvento, $precio, $descripcion, $fecha, $ubicacion, $organizador, $imagen) {
+    private static function insertarEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen) {
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("INSERT INTO eventos (nombreEvento, precio, descripcion, fecha, ubicacion, organizador, imagen) VALUES ('%s', %d, '%s', '%s', '%s', '%s', '%s')",
-            $conn->real_escape_string($nombreEvento),
+        $query = sprintf("INSERT INTO eventos (nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen) VALUES ('%s', %d, '%s', '%s', '%s', '%s', '%s')",
+            $conn->real_escape_string($nombre),
             $precio,
             $conn->real_escape_string($descripcion),
-            $conn->real_escape_string($fecha),
+            $conn->real_escape_string($fecha_inicio),
             $conn->real_escape_string($ubicacion),
             $conn->real_escape_string($organizador),
             $conn->real_escape_string($imagen)
@@ -219,14 +220,35 @@ class Evento {
         }
     }
 
-    
-    
-    
+    public function getId() {
+        return $this->id;
+    }
 
+    public function getNombre() {
+        return $this->nombre;
+    }
     
+    public function getPrecio() {
+        return $this->precio;
+    }
 
-    
+    public function getDescripcion() {
+        return $this->descripcion;
+    }
 
-    
+    public function getFecha() {
+        return $this->fecha_inicio;
+    }
 
+    public function getUbicacion() {
+        return $this->ubicacion;
+    }
+
+    public function getOrganizador() {
+        return $this->organizador;
+    }
+
+    public function getImagen() {
+        return $this->imagen;
+    }
 }

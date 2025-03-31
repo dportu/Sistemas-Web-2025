@@ -1,23 +1,31 @@
 <?php 
 
 	require_once __DIR__.'/includes/config.php';
+	use es\ucm\fdi\aw\eventos\Evento;
 
 	$tituloPagina = 'Inicio';
 
 	$contenidoPrincipal = '';
 
 	// TODO: Mostrar los eventos que hay disponibles
-	
-	while ($evento = $eventos->fetch_array(MYSQLI_ASSOC)) {
-		$contenidoPrincipal .= '<div class="card mb-3">';
-		$contenidoPrincipal .= '<div class="card-body">';
-		$contenidoPrincipal .= '<h5 class="card-title">'.$evento['nombre'].'</h5>';
-		$contenidoPrincipal .= '<p class="card-text">'.$evento['descripcion'].'</p>';
-		$contenidoPrincipal .= '<p class="card-text"><small class="text-muted">Fecha: '.$evento['fecha'].'</small></p>';
-		$contenidoPrincipal .= '</div>';
-		$contenidoPrincipal .= '</div>';
-	}
+	$eventos = Evento::getEventos();
+	for ($i = 0; $i < count($eventos); $i++) {
+		$id = $eventos[$i]->id;
+		$imagen = $eventos[$i]->imagen;
+		$nombre = $eventos[$i]->nombre;
+		$precio = $eventos[$i]->precio;
+		$fecha = $eventos[$i]->fecha;
 
+		$contenidoPrincipal .= <<<EOS
+			<a href="vistaEvento.php?id={$id}" class="evento-card">
+				<img src="{$imagen}" alt="Imagen de {$nombre}" class="evento-imagen">
+				<h3>[ {$nombre} ]</h3>
+				<p> {$precio} € </p>
+				<p> {$fecha} </p>
+			</a>
+		EOS;
+	}
+	
 	require __DIR__.'/includes/vistas/plantillas/plantilla.php';
   
 ?>
