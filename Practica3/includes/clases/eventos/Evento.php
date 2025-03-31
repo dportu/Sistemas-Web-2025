@@ -53,9 +53,7 @@ class Evento {
             }
         }
 
-        //Mostramos un mensaje de éxito o de error
-        echo "<script>alert('$mensaje');</script>";
-        return $ret; //devolvemos si se ha realizado el alta o no
+        return [$ret, $mensaje]; //devolvemos si se ha realizado el alta o no
     }
     
     
@@ -129,16 +127,13 @@ class Evento {
         if (Evento::buscaPorId($id)) { //comprobar tambien que queden entradas y reducirlas?
             //$usuario->addPuntos($precio / 4); se añadiria los puntos desde usuario?
             $ret = true;
-            $mensaje = "¡Operación realizada con éxito!";
         }
         else {
             $ret = false;
-            $mensaje = "Error en la compra";
         }
 
-        //Mostramos un mensaje de éxito o de error
-        echo "<script>alert('$mensaje');</script>";
-        return $ret; //devolvemos si se ha realizado la compra o no
+        
+        return $ret; //devolvemos booleano de exito o error
     }
 
     //  INSTANCIADOS
