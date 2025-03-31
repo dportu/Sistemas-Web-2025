@@ -4,10 +4,9 @@
 
 	$tituloPagina = 'Inicio';
 
-	// TODO: include_once(__DIR__."/eventos.php");
-	$eventos = new Eventos();
-
 	$contenidoPrincipal = '';
+
+	// TODO: Mostrar los eventos que hay disponibles
 
 	require __DIR__.'/includes/vistas/plantillas/plantilla.php';
   
