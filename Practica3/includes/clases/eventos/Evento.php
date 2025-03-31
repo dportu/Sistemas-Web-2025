@@ -2,9 +2,12 @@
 namespace es\ucm\fdi\aw\productos;
 
 use es\ucm\fdi\aw\MagicProperties;
+use es\ucm\fdi\aw\Aplicacion; //import de aplicacion?
 
 class Evento {
     use MagicProperties;
+
+    private $conn;
 
     private $id;
     private $nombreEvento;
@@ -16,14 +19,12 @@ class Evento {
     private $imagen;
 
     /* Gestion:
-    - Editar evento
-    - Eliminar evento
-    - Mostrar evento
-    - Mostrar lista eventos
+    - Mostrar evento no seria de evento, sino de las vistas
+    - Mostrar lista eventos tampoco seria de evento
     */
 
     //pensado para hacer uso del autoincrement de id de la base de datos
-    __contruct($nombreEvento, $precio, $descripcion, $fecha, $ubicacion, $organizador, $imagen) {
+    private function __construct($nombreEvento, $precio, $descripcion, $fecha, $ubicacion, $organizador, $imagen) {
         $this->nombreEvento = $nombreEvento;
         $this->precio = $precio;
         $this->descripcion = $descripcion;
@@ -31,18 +32,21 @@ class Evento {
         $this->ubicacion = $ubicacion;
         $this->organizador = $organizador;
 
-        $conn = Aplicacion::getInstance()->getConexionBd();
-        $this->id = $this->insertarEvento($conn);
+        $this->conn = Aplicacion::getInstance()->getConexionBd();
+        
+        //la creacion como tal del evento se haria en alta evento
+        //$this->id = $this->insertarEvento($conn);
     }
 
-    private function insertarEvento($pdo) {
+    //solo puede ser usada en altaevento
+    private function insertarEvento() {
         $sql = "INSERT INTO eventos (nombreEvento, precio, descripcion, fecha, ubicacion, organizador, imagen) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         //preparamos la insercion
-        $stmt = $conn->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
         if (!$stmt) {
-            die("Error en la preparación de la consulta: " . $conn->error);
+            die("Error en la preparación de la consulta: " . $this->conn->error);
         }
 
         //vinculamos los parametros
@@ -64,27 +68,29 @@ class Evento {
 
         $stmt->close(); //hay que cerrar ?
 
-        return ret;
+        return $ret;
     }
-    }
-
 
     public function compra($evento, $usuario, $precio, $cantidad) { //parametros de entrada provisionales
         $id = Evento::buscaPorNombre($evento); //se podria simplificar a busqueda solo por nombre
-        if (Evento::buscaEvento($id)) { //comprobar tambien que queden entradas y reducirlas?
+        if (Evento::buscaPorId($id)) { //comprobar tambien que queden entradas y reducirlas?
             //$usuario->addPuntos($precio / 4); se añadiria los puntos desde usuario?
+            $ret = true;
             $mensaje = "¡Operación realizada con éxito!";
         }
         else {
+            $ret = false;
             $mensaje = "Error en la compra";
         }
 
         //Mostramos un mensaje de éxito o de error
         echo "<script>alert('$mensaje');</script>";
+        return $ret; //devolvemos si se ha realizado la compra o no
     }
     
     public static function altaEvento($nombreEvento, $precio, $descripcion, $fecha, $ubicacion, $organizador, $imagen) {
-        if(Evento::buscaPorNombre($nombreEvento)) {
+        $evento = Evento::buscaPorNombre($nombreEvento);
+        if($evento != null) {
             $mensaje = "Ya existe un evento con ese nombre";
             $ret = false;
         }
@@ -94,20 +100,21 @@ class Evento {
             $ret = true;
         }
 
-        return ret;
+        //Mostramos un mensaje de éxito o de error
+        echo "<script>alert('$mensaje');</script>";
+        return $ret; //devolvemos si se ha realizado el alta o no
     }
 
-    /*
-    public static function buscaUsuario($nombreUsuario)
-    {
+    //modificacion sobre buscaUsuario
+    public static function buscaPorNombre($nombreEvento) {
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("SELECT * FROM Usuarios U WHERE U.nombreUsuario='%s'", $conn->real_escape_string($nombreUsuario));
+        $query = sprintf("SELECT * FROM eventos WHERE nombreEvento='%s'", $conn->real_escape_string($nombreEvento));
         $rs = $conn->query($query);
         $result = false;
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Usuario($fila['nombreUsuario'], $fila['password'], $fila['nombre'], $fila['id']);
+                $result = $fila['id'];
             }
             $rs->free();
         } else {
@@ -115,6 +122,83 @@ class Evento {
         }
         return $result;
     }
+
+    //modificacion sobre buscaPorId
+    public static function buscaPorId($idEvento) {
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $query = sprintf("SELECT * FROM eventos WHERE id=%d", $idEvento);
+        $rs = $conn->query($query);
+        $result = false;
+        if ($rs) {
+            $fila = $rs->fetch_assoc();
+            if ($fila) {
+                $result = new Evento($fila['nombreEvento'], $fila['precio'], $fila['descripcion'], $fila['fecha'], $fila['ubicacion'], $fila['organizador'], $fila['imagen']);
+            }
+            $rs->free();
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        return $result;
+    }
+
+    public function editarEvento($nombreEvento, $precio, $descripcion, $fecha, $ubicacion, $organizador, $imagen) {
+        $this->nombreEvento = $nombreEvento;
+        $this->precio = $precio;
+        $this->descripcion = $descripcion;
+        $this->fecha = $fecha;
+        $this->ubicacion = $ubicacion;
+        $this->organizador = $organizador;
+        $this->imagen = $imagen;
+
+        $sql = "UPDATE eventos SET nombreEvento=?, precio=?, descripcion=?, fecha=?, ubicacion=?, organizador=?, imagen=? WHERE id=?";
+
+        //preparamos la insercion
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            die("Error en la preparación de la consulta: " . $this->conn->error);
+        }
+
+        //vinculamos los parametros
+        $stmt->bind_param("sdsssssi",
+            $this->nombreEvento, 
+            $this->precio, 
+            $this->descripcion, 
+            $this->fecha, 
+            $this->ubicacion, 
+            $this->organizador, 
+            $this->imagen,
+            $this->id
+        );
+
+        if (!$stmt->execute()) {
+            die("Error al modificar evento: " . $stmt->error);
+        }
+        
+        $stmt->close(); //hay que cerrar ?
+    }
+
+    public function eliminarEvento() {
+        $sql = "DELETE FROM eventos WHERE id=?";
+
+        //preparamos la insercion
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            die("Error en la preparación de la consulta: " . $this->conn->error);
+        }
+
+        //vinculamos los parametros
+        $stmt->bind_param("i", $this->id);
+
+        if (!$stmt->execute()) {
+            die("Error al eliminar evento: " . $stmt->error);
+        }
+        
+        $stmt->close(); //hay que cerrar ?
+    }
+
+}
+
+    /*
 
     public static function buscaPorId($idUsuario)
     {
@@ -245,7 +329,7 @@ class Evento {
         } 
         /* Los roles se borran en cascada por la FK
          * $result = self::borraRoles($usuario) !== false;
-         */
+         
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf("DELETE FROM Usuarios U WHERE U.id = %d"
             , $idUsuario
@@ -334,4 +418,4 @@ class Evento {
         }
         return false;
     }
-}
+*/
