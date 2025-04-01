@@ -286,7 +286,7 @@ class Aplicacion {
 
     public function tieneRol($rol) {
         $this->compruebaInstanciaInicializada();
-        return $this->usuarioLogueado() && (array_search($rol, $_SESSION['rol']) !== false);
+        return $this->usuarioLogueado() && ($_SESSION['rol'] === $rol);
     }
 
     public function paginaError($codigoRespuesta, $tituloPagina, $mensajeError, $explicacion = '') {
