@@ -41,66 +41,66 @@ class FormularioEditarEvento extends Formulario{
 
         $html .= <<<EOF
         <div class="editar-evento">
-            <h1>Editar Evento: {$app->escape($this->evento->getNombre())}</h1>
+            <h1>Editar Evento: {$this->evento->getNombre()}</h1>
             
             <div class="campo-formulario">
                 <label for="nombre">Nombre del evento:</label>
                 <input type="text" id="nombre" name="nombre" required 
-                       value="{$app->escape($datos['nombre'])}">
+                       value="{$nombreValor}">
                 {$erroresCampos['nombre']}
             </div>
 
             <div class="campo-formulario">
                 <label for="precio">Precio (€):</label>
-                <input type="number" id="precio" name="precio" step="0.01" min="0" required
-                       value="{$app->escape($datos['precio'])}">
+                <input type="number" id="precio" name="precio"required
+                       value="{$precioValor}">
                 {$erroresCampos['precio']}
             </div>
 
             <div class="campo-formulario">
                 <label for="descripcion">Descripción:</label>
-                <textarea id="descripcion" name="descripcion">{$app->escape($datos['descripcion'])}</textarea>
+                <textarea id="descripcion" name="descripcion">{$descripcionValor}</textarea>
                 {$erroresCampos['descripcion']}
             </div>
 
             <div class="campo-formulario">
                 <label for="fecha_inicio">Fecha de inicio:</label>
                 <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" required
-                       value="{$app->escape(date('Y-m-d\TH:i', strtotime($datos['fecha_inicio'])))}">
+                       value="{$fechaValor}">
                 {$erroresCampos['fecha_inicio']}
             </div>
 
             <div class="campo-formulario">
                 <label for="ubicacion">Ubicación:</label>
                 <input type="text" id="ubicacion" name="ubicacion" required
-                       value="{$app->escape($datos['ubicacion'])}">
+                       value="{$ubicacionValor}">
                 {$erroresCampos['ubicacion']}
             </div>
 
             <div class="campo-formulario">
                 <label for="organizador">Organizador:</label>
                 <input type="text" id="organizador" name="organizador" required
-                       value="{$app->escape($datos['organizador'])}">
+                       value="{$organizadorValor}">
                 {$erroresCampos['organizador']}
             </div>
 
             <div class="campo-formulario">
                 <label for="imagen">URL de la imagen:</label>
                 <input type="url" id="imagen" name="imagen" 
-                       value="{$app->escape($datos['imagen'])}">
+                       value="{$imagenValor}">
                 {$erroresCampos['imagen']}
             </div>
 
             <div class="acciones">
                 <button type="submit" class="boton-guardar">Guardar cambios</button>
-                <a href="admin.php" class="boton-cancelar">Cancelar</a>
+                <a href="{$app->resuelve('admin.php')}" class="boton-cancelar">Cancelar</a>
             </div>
         </div>
         EOF;
 
         return $html;
-
     }
+}
 
     protected function procesaFormulario(&$datos) {
         // Validar datos
