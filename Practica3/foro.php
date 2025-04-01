@@ -12,7 +12,8 @@
 	$contenidoPrincipal = '';
 
     // Mostrar el foro dependiendo de su categoría
-	$mensajes = mensajeForo::getMensajes($_GET['id'] ?? null);
+    $id_evento = $_GET['id'] ?? null;
+	$mensajes = mensajeForo::getMensajes($id_evento);
 
     if (count($mensajes) == 0) {
         $contenidoPrincipal .= "<p>Todavía no hay mensajes.</p>";
@@ -36,9 +37,16 @@
         // Si el usuario está logueado y es el autor del mensaje, mostrar opciones de edición y eliminación
         if ($aplicacion->usuarioLogueado() && $aplicacion->nombreUsuario() === $autor) {
             $modificarMensaje .= 
-                "<a href='editar_mensaje.php?id=" . $mensajes[$i]->id . "'>Editar</a>
-                <a href='eliminar_mensaje.php?id=" . $mensajes[$i]->id . "' class='eliminar' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este mensaje?\")'>Eliminar</a>";
+                "<form action='' method='POST' style='display:inline;'>
+                    <input type='hidden' name='mensaje_id' value='$mensajeId'>
+                    <button type='submit' name='accion' value='eliminar'>Eliminar</button>
+                </form>
+                <form action='' method='POST' style='display:inline;'>
+                    <input type='hidden' name='mensaje_id' value='$mensajeId'>
+                    <button type='submit' name='accion' value='editar'>Editar</button>
+                </form>";
         }
+
 		$contenidoPrincipal .= <<<EOS
             <div class='mensaje'>
                 <strong>Título:</strong> $titulo <br>
@@ -52,7 +60,8 @@
 	}
 
     // Formulario para añadir un nuevo mensaje al foro
-    $form = new FormularioForo();
+
+    $form = new FormularioForo($id_evento);
     $htmlFormLogin = $form->gestiona();
     $contenidoPrincipal .= <<<EOS
         <div class="formulario-contenedor">

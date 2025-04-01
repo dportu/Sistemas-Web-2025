@@ -16,7 +16,8 @@
 
         private $conn;
 
-        private function __construct($titulo, $autor, $mensaje, $evento, $fecha_publicacion) {
+        private function __construct($id, $titulo, $autor, $mensaje, $evento, $fecha_publicacion) {
+            $this->id = $id;
             $this->titulo = $titulo;
             $this->autor = $autor;
             $this->mensaje = $mensaje;
@@ -47,6 +48,7 @@
             if ($result) {
                 while ($row = $result->fetch_assoc()) {
                     $mensajes[] = new mensajeForo(
+                        $row['id'],
                         $row['titulo'], 
                         $row['autor'], 
                         $row['mensaje'], 
@@ -59,33 +61,91 @@
         }     
         
         // Insertar un mensaje nuevo
-        public function agregarMensaje($titulo, $mensaje, $autor, $email, $evento) {
-            $sql = "INSERT INTO foro (titulo, autor, email, mensaje, evento) VALUES (?, ?, ?, ?, ?)";
-            $stmt = $this->conexion->prepare($sql);
-            if (empty($evento)) {
-                $evento = null; // Si está vacío, asignamos NULL
+        public static function agregarMensaje($titulo, $mensaje, $autor, $evento) {
+            $conexion = Aplicacion::getInstance()->getConexionBd();
+            $sql = "INSERT INTO foro (titulo, autor, mensaje, evento, fecha_publicacion) VALUES (?, ?, ?, ?, NOW())";
+            
+            $stmt = $conexion->prepare($sql);
+            if (!$stmt) {
+                die("Error en la preparación de la consulta: " . $conexion->error);
             }
-            $stmt->bind_param("ssssi", $titulo, $autor, $email, $mensaje, $evento);
-            return $stmt->execute();
-        }
-
-        // Editar un mensaje existente
-        public function editarMensaje($id_mensaje, $titulo, $mensaje, $evento, $autor) {
-            $sql = "UPDATE foro SET titulo = ?, mensaje = ?, evento = ? WHERE id = ? AND autor = ?";
-            $stmt = $this->conexion->prepare($sql);
+        
             if (empty($evento)) {
                 $evento = null;
             }
+        
+            $stmt->bind_param("sssi", $titulo, $autor, $mensaje, $evento);
+            if (!$stmt->execute()) {
+                die("Error al insertar el mensaje: " . $stmt->error);
+            }
+        
+            // Obtener el ID del mensaje recién insertado
+            $idMensaje = $conexion->insert_id;
+        
+            // Cerrar la consulta
+            $stmt->close();
+        
+            // Crear y devolver el objeto mensajeForo
+            return new mensajeForo($idMensaje, $titulo, $autor, $mensaje, $evento, date("Y-m-d H:i:s"));
+        }
+
+        // Editar un mensaje existente
+        public static function editarMensaje($id_mensaje, $titulo, $mensaje, $evento, $autor) {
+            $conexion = Aplicacion::getInstance()->getConexionBd();
+
+            $titulo = $conexion->real_escape_string($titulo);
+            $mensaje = $conexion->real_escape_string($mensaje);
+            $autor = $conexion->real_escape_string($autor);
+            $evento = $conexion->real_escape_string($evento);
+
+            $sql = "UPDATE foro SET titulo = ?, mensaje = ?, evento = ? WHERE id = ? AND autor = ?";
+            
+            $stmt = $conexion->prepare($sql);
+            if (!$stmt) {
+                die("Error en la preparación de la consulta: " . $conexion->error);
+            }
+
+            if (empty($evento)) {
+                $evento = null;
+            }
+
             $stmt->bind_param("ssiis", $titulo, $mensaje, $evento, $id_mensaje, $autor);
-            return $stmt->execute();
+            if (!$stmt->execute()) {
+                die("Error al editar el mensaje: " . $stmt->error);
+            }
+
+            $stmt->close();
+
+            $resultado = $conexion->query($sql);
+
+            // Si la consulta afectó alguna fila, es porque se editó correctamente
+            if ($resultado && $conexion->affected_rows > 0) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         // Eliminar un mensaje (solo si el usuario es el autor)
-        public function eliminarMensaje($id_mensaje, $autor) {
-            $stmt = $this->conexion->prepare("DELETE FROM foro WHERE id = ? AND autor = ?");
+        public static function eliminarMensaje($id_mensaje, $autor) {
+            $conexion = Aplicacion::getInstance()->getConexionBd();
+            $sql = "DELETE FROM foro WHERE id = ? AND autor = ?";
+            
+            $stmt = $conexion->prepare($sql);
+            if (!$stmt) {
+                die("Error en la preparación de la consulta: " . $conexion->error);
+            }
+
             $stmt->bind_param("is", $id_mensaje, $autor);
-            return $stmt->execute();
+            if (!$stmt->execute()) {
+                die("Error al eliminar el mensaje: " . $stmt->error);
+            }
+
+            $stmt->close();
+
+            return true; // Se eliminó correctamente
         }
+
 
         public function getConexion() {
             return $this->conn;
@@ -116,15 +176,3 @@
         }
         
     }
-
-    /*
-
-        // Obtener un mensaje por su ID
-        public function obtenerMensajePorId($id_mensaje) {
-            $stmt = $this->conexion->prepare("SELECT * FROM foro WHERE id = ?");
-            $stmt->bind_param("i", $id_mensaje);
-            $stmt->execute();
-            return $stmt->get_result()->fetch_assoc();
-        }
-
-    */
