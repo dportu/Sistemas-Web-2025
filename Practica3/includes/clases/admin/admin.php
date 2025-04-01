@@ -13,8 +13,7 @@ class Admin extends Usuario
         parent::__construct($username, $password, $email, $rol);
     }
 
-    // ======================== MÉTODOS PARA EVENTOS ========================
-    
+   
     /**
      * Crea un nuevo evento en la base de datos
      */
