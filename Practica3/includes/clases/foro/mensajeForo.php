@@ -14,7 +14,7 @@
         private $evento;
         private $fecha_publicacion;
 
-        private $conexion;
+        private $conn;
 
         private function __construct($titulo, $autor, $mensaje, $evento, $fecha_publicacion) {
             $this->titulo = $titulo;
@@ -23,7 +23,7 @@
             $this->evento = $evento;
             $this->fecha_publicacion = $fecha_publicacion;
 
-            $this->conexion = Aplicacion::getInstance()->getConexionBd();
+            $this->conn = Aplicacion::getInstance()->getConexionBd();
         }
 
         // Obtener lista de mensajes del foro (general o por evento)
@@ -32,8 +32,11 @@
             $query = "SELECT f.*, e.nombre AS nombre_evento FROM foro f 
                       LEFT JOIN eventos e ON f.evento = e.id ";
         
-            if ($id !== null) { // Asegurar que solo se añade WHERE si $id no es null
+            if ($id !== null) {
                 $query .= "WHERE f.evento = $id ";
+            } 
+            else {
+                $query .= "WHERE f.evento IS NULL "; // Solo mensajes generales
             }
         
             $query .= "ORDER BY fecha_publicacion DESC";
@@ -82,6 +85,10 @@
             $stmt = $this->conexion->prepare("DELETE FROM foro WHERE id = ? AND autor = ?");
             $stmt->bind_param("is", $id_mensaje, $autor);
             return $stmt->execute();
+        }
+
+        public function getConexion() {
+            return $this->conn;
         }
 
         public function getId() {

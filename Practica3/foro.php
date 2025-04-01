@@ -2,46 +2,63 @@
 
 	require_once __DIR__.'/includes/config.php';
 
+    use es\ucm\fdi\aw\Aplicacion;
+    use es\ucm\fdi\aw\eventos\Evento;
 	use es\ucm\fdi\aw\foro\mensajeForo;
+    use es\ucm\fdi\aw\foro\FormularioForo;
 
 	$tituloPagina = 'Foro';
 
 	$contenidoPrincipal = '';
 
-    // TODO: Mostrar el foro dependiendo de su categoría
-	// TODO: Comprobar que funciona la clase foro
+    // Mostrar el foro dependiendo de su categoría
 	$mensajes = mensajeForo::getMensajes($_GET['id'] ?? null);
+
+    if (count($mensajes) == 0) {
+        $contenidoPrincipal .= "<p>Todavía no hay mensajes.</p>";
+    }
+
 	for ($i = 0; $i < count($mensajes); $i++) {
+        $titulo = $mensajes[$i]->getTitulo();
+        $autor = $mensajes[$i]->getAutor();
+        $nombre_evento = $mensajes[$i]->getEvento();
+        if (!$nombre_evento) {
+            $nombre_evento = 'General';
+        }
+        else {
+            $nombre_evento = Evento::buscaPorId($nombre_evento)->getNombre();
+        }
+        $mensaje = $mensajes[$i]->mensaje;
+        $fecha_publicacion = $mensajes[$i]->fechaPublicacion;
+
+        $aplicacion = Aplicacion::getInstance();
+        $modificarMensaje = '';
+        // Si el usuario está logueado y es el autor del mensaje, mostrar opciones de edición y eliminación
+        if ($aplicacion->usuarioLogueado() && $aplicacion->nombreUsuario() === $autor) {
+            $modificarMensaje .= 
+                "<a href='editar_mensaje.php?id=" . $mensajes[$i]->id . "'>Editar</a>
+                <a href='eliminar_mensaje.php?id=" . $mensajes[$i]->id . "' class='eliminar' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este mensaje?\")'>Eliminar</a>";
+        }
 		$contenidoPrincipal .= <<<EOS
-			
-		EOS;
+            <div class='mensaje'>
+                <strong>Título:</strong> $titulo <br>
+                <strong>Autor:</strong> $autor <br>
+                <strong>Evento:</strong> $nombre_evento <br>
+                <p class='mensaje-contenido'>$mensaje</p>
+                <small><strong>Fecha:</strong> $fecha_publicacion</small>
+                $modificarMensaje
+            </div>
+        EOS;
 	}
 
-	/*
-		if ($resultado->num_rows > 0) {
-                        while ($fila = $resultado->fetch_assoc()) {
-                            echo "<div class='mensaje'>";
-                            echo "<strong>Título:</strong> " . htmlspecialchars($fila['titulo']) . "<br>";
-                            echo "<strong>Autor:</strong> " . htmlspecialchars($fila['autor']) . "<br>";
-                            echo "<strong>Evento:</strong> " . htmlspecialchars($fila['nombre_evento'] ? $fila['nombre_evento'] : 'General') . "<br>";
-                            echo "<p class='mensaje-contenido'>" . nl2br(htmlspecialchars($fila['mensaje'])) . "</p>";
-                            echo "<small><strong>Fecha:</strong> " . $fila['fecha_publicacion'] . "</small>";
-                            echo "</div>";
-
-                            if ($usuarioLogueado && $_SESSION['usuario_nombre'] === $fila['autor']) {
-                                echo "<div class='acciones-mensaje'>";
-                                echo "<a href='editar_mensaje.php?id=" . $fila['id'] . "'>Editar     </a>";
-                                echo "<a href='eliminar_mensaje.php?id=" . $fila['id'] . "' class='eliminar' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este mensaje?\")'>Eliminar</a>";
-                                echo "</div>";
-                            }
-                        }
-                    } 
-            else {
-                echo "<p>No hay mensajes aún.</p>";
-            }
-
-			// Formulario para enviar un nuevo mensaje al foro (Ver foro.php de la practica 2)
-	*/
+    // Formulario para añadir un nuevo mensaje al foro
+    $form = new FormularioForo();
+    $htmlFormLogin = $form->gestiona();
+    $contenidoPrincipal .= <<<EOS
+        <div class="formulario-contenedor">
+            $htmlFormLogin
+        </div>
+    EOS;
 
 	require __DIR__.'/includes/vistas/plantillas/plantilla.php';
   
