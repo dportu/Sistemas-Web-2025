@@ -1,5 +1,4 @@
 <?php 
-
 	require_once __DIR__.'/includes/config.php';
 
     use es\ucm\fdi\aw\Aplicacion;
@@ -12,7 +11,8 @@
 	$contenidoPrincipal = '';
 
     // Mostrar el foro dependiendo de su categoría
-	$mensajes = mensajeForo::getMensajes($_GET['id'] ?? null);
+    $id_evento = $_GET['id'] ?? null;
+	$mensajes = mensajeForo::getMensajes($id_evento);
 
     if (count($mensajes) == 0) {
         $contenidoPrincipal .= "<p>Todavía no hay mensajes.</p>";
@@ -21,12 +21,12 @@
 	for ($i = 0; $i < count($mensajes); $i++) {
         $titulo = $mensajes[$i]->getTitulo();
         $autor = $mensajes[$i]->getAutor();
-        $nombre_evento = $mensajes[$i]->getEvento();
-        if (!$nombre_evento) {
+        $$id_evento = $mensajes[$i]->evento;
+        if (!$id_evento) {
             $nombre_evento = 'General';
         }
         else {
-            $nombre_evento = Evento::buscaPorId($nombre_evento)->getNombre();
+            $nombre_evento = Evento::buscaPorId($id_evento)->nombre;
         }
         $mensaje = $mensajes[$i]->mensaje;
         $fecha_publicacion = $mensajes[$i]->fechaPublicacion;
@@ -35,10 +35,34 @@
         $modificarMensaje = '';
         // Si el usuario está logueado y es el autor del mensaje, mostrar opciones de edición y eliminación
         if ($aplicacion->usuarioLogueado() && $aplicacion->nombreUsuario() === $autor) {
+            $mensajeId = $mensajes[$i]->id;
             $modificarMensaje .= 
-                "<a href='editar_mensaje.php?id=" . $mensajes[$i]->id . "'>Editar</a>
-                <a href='eliminar_mensaje.php?id=" . $mensajes[$i]->id . "' class='eliminar' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este mensaje?\")'>Eliminar</a>";
+                "<form action='editar_mensaje' method='POST' style='display:inline;'>
+                    <button type='submit'>Editar</button>
+                </form>
+                <form action='' method='POST' style='display:inline;'>
+                    <input type='hidden' name='mensaje_id' value='$mensajeId'>
+                    <button type='submit' name='accion' value='eliminar' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este mensaje?\")'>Eliminar</button>
+                </form>";
         }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Obtener los valores enviados
+            $mensajeId = $_POST['mensaje_id'] ?? null;
+            $accion = $_POST['accion'] ?? null;
+        
+            if ($accion) {
+                mensajeForo::eliminarMensaje($mensajeId);
+                if ($nombre_evento != 'General') {
+                    header("Location: foro.php?id=$id_evento");
+                } 
+                else {
+                    header("Location: foro.php");
+                }
+                exit;
+            }
+        }
+
 		$contenidoPrincipal .= <<<EOS
             <div class='mensaje'>
                 <strong>Título:</strong> $titulo <br>
@@ -52,7 +76,8 @@
 	}
 
     // Formulario para añadir un nuevo mensaje al foro
-    $form = new FormularioForo();
+
+    $form = new FormularioForo($id_evento);
     $htmlFormLogin = $form->gestiona();
     $contenidoPrincipal .= <<<EOS
         <div class="formulario-contenedor">

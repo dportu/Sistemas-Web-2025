@@ -13,8 +13,8 @@ INSERT INTO eventos (id, nombre, precio, descripcion, fecha_inicio, ubicacion, o
 
 -- Insercion de datos en la tabla Foro
 
-INSERT INTO foro (id, titulo, autor, email, mensaje, evento, fecha_publicacion) VALUES
-(4, 'Prueba ', 'admin', 'admin@eventia.es', 'Probando \r\n', NULL, '2025-03-07 19:37:51');
+INSERT INTO foro (id, titulo, autor, mensaje, evento, fecha_publicacion) VALUES
+(4, 'Prueba ', 'admin', 'Probando \r\n', NULL, '2025-03-07 19:37:51');
 
 -- Insercion de datos en la tabla Usuarios
 

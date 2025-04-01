@@ -49,7 +49,6 @@ CREATE TABLE `foro` (
   `id` int(11) NOT NULL,
   `titulo` varchar(255) NOT NULL,
   `autor` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
   `mensaje` text NOT NULL,
   `evento` int(11) DEFAULT NULL,
   `fecha_publicacion` timestamp NOT NULL DEFAULT current_timestamp()
