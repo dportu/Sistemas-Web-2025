@@ -10,7 +10,8 @@
 
         private $idEvento;  // Guardamos el ID del evento, si existe.
 
-        public function __construct($idEvento) {
+        public function __construct($idEvento = null) {
+            // Llamamos al constructor de la clase base.
             $this->idEvento = $idEvento;
             parent::__construct('formForo');
         }
@@ -77,42 +78,39 @@
         }
 
         protected function procesaFormulario(&$datos) {
+            // TODO: usar clase mensajeForo
             $this->errores = [];
-
+    
             // Validación de título y mensaje.
             $titulo = trim($datos['titulo'] ?? '');
             $mensaje = trim($datos['mensaje'] ?? '');
-            $evento = isset($datos['evento']) && !empty($datos['evento']) ? trim($datos['evento']) : null;
-
+    
             if (empty($titulo)) {
                 $this->errores['titulo'] = 'El título no puede estar vacío.';
             }
-
+    
             if (empty($mensaje)) {
                 $this->errores['mensaje'] = 'El mensaje no puede estar vacío.';
             }
-
-            // Verificar si el usuario está logueado
-            $app = Aplicacion::getInstance();
-            if (!$app->usuarioLogueado()) {
-                $this->errores[] = 'Debes iniciar sesión para publicar.';
-                return;
+    
+            // Si el usuario no está logueado y no quiere publicar de forma anónima, se muestra un error.
+            if (Aplicacion::getInstance()->usuarioLogueado() && isset($datos['anonimo'])) {
+                $this->errores[] = 'Debes estar registrado.';
             }
-
-            // Obtener los datos del usuario
-            $usuario = $app->nombreUsuario();
-
-            // Si no hay errores, se inserta el mensaje en la base de datos
+    
+            // Si no hay errores, guardamos el mensaje en la base de datos.
             if (count($this->errores) === 0) {
-                // Intentar agregar el mensaje
-                if (MensajeForo::agregarMensaje($titulo, $mensaje, $usuario, $evento)) {
-                    // Redirección después de la inserción
-                    $redirectUrl = 'foro.php' . ($evento ? "?id=$evento" : '');
-                    echo "<script>alert('Mensaje enviado con éxito'); window.location = '$redirectUrl';</script>";
-                    exit();
-                } 
-                else {
-                    $this->errores[] = 'Error al enviar el mensaje.';
+                $evento = $this->idEvento;
+                $usuario = Aplicacion::getInstance()->nombreUsuario();
+    
+                // Insertamos el mensaje en la base de datos.
+                $sql = "INSERT INTO foro (titulo, autor, mensaje, evento) VALUES (?, ?, ?, ?)";
+                $stmt = Aplicacion::getInstance()->getConexionBd()->prepare($sql);
+    
+                // Usamos un tipo de parámetro adecuado para cada valor.
+                $stmt->bind_param("ssssi", $titulo, $usuario, $mensaje, $evento);
+                if (!$stmt->execute()) {
+                    $this->errores[] = 'Error al enviar el mensaje: ' . $stmt->error;
                 }
             }
         }

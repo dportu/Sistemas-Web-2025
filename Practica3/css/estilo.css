@@ -1,10 +1,18 @@
+/* Importar la fuente */
+@import url('https://fonts.googleapis.com/css2?family=Handjet:wght@100..900&display=swap');
 /* Estilos generales */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
+.fascinate-inline-regular {
+    font-family: "Fascinate Inline", system-ui;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
 /* Cambiar color enlaces :) */
 a {
     color: rgb(212, 0, 255); /* Cambia "blue" por el color que quieras */
@@ -41,6 +49,9 @@ body {
 }
 
 /* Cabecera */
+
+
+/* Aplicar la fuente en el header */
 header {
     grid-area: cabecera;
     background-color: #071838;
@@ -48,12 +59,16 @@ header {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: "Handjet", sans-serif; /* Aquí aplicamos la fuente */
 }
 
+/* Aplicar la fuente con tamaño al h1 */
 header h1 {
-    font-size: 2.5em;
+    font-size: 7em;
     margin-bottom: 10px;
+    font-weight: 440; /* Puedes ajustar entre 100 y 900 */
 }
+
 
 /* Navegación */
 nav {
