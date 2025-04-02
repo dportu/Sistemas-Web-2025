@@ -10,8 +10,7 @@ class FormularioEditarEvento extends Formulario{
     private $evento;
 
     public function __construct($idEvento){
-        parent::__construct('formEditarEvento', ['action' => 'admin.php', 'class' => 'form-Editar' ]);
-
+        parent::__construct('formEditarEvento', ['urlRedireccion' => 'admin.php', 'method' => 'POST', 'class' => 'form-Editar']);
         $this->idEvento = $idEvento;
         $this->evento = Evento::buscaPorId($idEvento);
         
@@ -22,8 +21,11 @@ class FormularioEditarEvento extends Formulario{
     
 
     protected function generaCamposFormulario(&$datos) {
+
+
         if (empty($datos)) {
             $datos = [
+                'id' => $this->evento->getId(),
                 'nombre' => $this->evento->getNombre(),
                 'precio' => $this->evento->getPrecio(),
                 'descripcion' => $this->evento->getDescripcion(),
@@ -46,48 +48,48 @@ class FormularioEditarEvento extends Formulario{
             <div class="campo-formulario">
                 <label for="nombre">Nombre del evento:</label>
                 <input type="text" id="nombre" name="nombre" required 
-                       value="{$nombreValor}">
+                       value="{$datos['nombre']}">
                 {$erroresCampos['nombre']}
             </div>
 
             <div class="campo-formulario">
                 <label for="precio">Precio (€):</label>
                 <input type="number" id="precio" name="precio"required
-                       value="{$precioValor}">
+                       value="{$datos['precio']}">
                 {$erroresCampos['precio']}
             </div>
 
             <div class="campo-formulario">
                 <label for="descripcion">Descripción:</label>
-                <textarea id="descripcion" name="descripcion">{$descripcionValor}</textarea>
+                <textarea id="descripcion" name="descripcion">{$datos['descripcion']}</textarea>
                 {$erroresCampos['descripcion']}
             </div>
 
             <div class="campo-formulario">
                 <label for="fecha_inicio">Fecha de inicio:</label>
                 <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" required
-                       value="{$fechaValor}">
+                       value="{$datos['fecha_inicio']}">
                 {$erroresCampos['fecha_inicio']}
             </div>
 
             <div class="campo-formulario">
                 <label for="ubicacion">Ubicación:</label>
                 <input type="text" id="ubicacion" name="ubicacion" required
-                       value="{$ubicacionValor}">
+                       value="{$datos['ubicacion']}">
                 {$erroresCampos['ubicacion']}
             </div>
 
             <div class="campo-formulario">
                 <label for="organizador">Organizador:</label>
                 <input type="text" id="organizador" name="organizador" required
-                       value="{$organizadorValor}">
+                       value="{$datos['organizador']}">
                 {$erroresCampos['organizador']}
             </div>
 
             <div class="campo-formulario">
                 <label for="imagen">URL de la imagen:</label>
-                <input type="url" id="imagen" name="imagen" 
-                       value="{$imagenValor}">
+                <input type="src" id="imagen" name="imagen" 
+                       value="{$datos['imagen']}">
                 {$erroresCampos['imagen']}
             </div>
 
@@ -104,6 +106,13 @@ class FormularioEditarEvento extends Formulario{
 
     protected function procesaFormulario(&$datos) {
         // Validar datos
+
+        $id = filter_var($datos['id'] ?? $this->idEvento, FILTER_VALIDATE_INT);
+        if (!$id) {
+            $this->errores[] = 'ID de evento no válido';
+            return;
+        }
+
         $nombre = trim($datos['nombre'] ?? '');
         if (empty($nombre)) {
             $this->errores['nombre'] = 'El nombre es obligatorio';
@@ -140,7 +149,12 @@ class FormularioEditarEvento extends Formulario{
         
         // Actualizar el evento
         try {
-            $this->evento->editarEvento(
+            $evento = Evento::buscaPorId($id);
+            if (!$evento) {
+                throw new \Exception("No se encontró el evento con ID: $id");
+            }
+            
+            $resultado = $evento->editarEvento(
                 $nombre,
                 $precio,
                 $descripcion,
@@ -149,6 +163,14 @@ class FormularioEditarEvento extends Formulario{
                 $organizador,
                 $imagen
             );
+            
+            if (!$resultado) {
+                throw new \Exception("No se pudo actualizar el evento en la base de datos");
+            }
+            
+            // Si llegamos aquí, la actualización fue exitosa
+            return 'admin.php';
+            
         } catch (\Exception $e) {
             $this->errores[] = "Error al actualizar el evento: " . $e->getMessage();
         }
