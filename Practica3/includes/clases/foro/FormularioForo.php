@@ -25,7 +25,6 @@
                 $evento = 'General';
             }
             $autor = Aplicacion::getInstance()->nombreUsuario();
-            $esAnonimo = isset($datos['anonimo']) && $datos['anonimo'] === 'on';
 
             // Generamos los errores de campos si existen.
             $erroresCampos = self::generaErroresCampos(['titulo', 'mensaje'], $this->errores, 'span', ['class' => 'error']);
@@ -43,17 +42,12 @@
                         <input id="titulo" type="text" name="titulo" value="$titulo" required /><br>
                         {$erroresCampos['titulo']}
 
-                        <!-- Autor y Evento, ocultos o editables según si es anónimo -->
+                        <!-- Autor y Evento, ocultos -->
                         <input type="hidden" name="autor" value="$autor">
                         <input type="hidden" name="evento" value="$evento">
 
                         <p>Publicando como: <strong> $autor </strong></p>
                         <p>Evento: <strong> $evento </strong></p>
-
-                        <!-- TODO: Opción de enviar como anónimo -->
-                        <label for="anonimo">Publicar como anónimo:</label>
-                        <input type="checkbox" name="anonimo" id="anonimo" $esAnonimo>
-                        <br>
 
                         <label for="mensaje">Mensaje:</label>
                         <textarea id="mensaje" name="mensaje" rows="4" required>$mensaje</textarea>

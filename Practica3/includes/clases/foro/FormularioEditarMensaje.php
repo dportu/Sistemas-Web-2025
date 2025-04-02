@@ -1,6 +1,7 @@
 <?php
     namespace es\ucm\fdi\aw\foro;
 
+    use es\ucm\fdi\aw\eventos\Evento;
     use es\ucm\fdi\aw\Formulario;
     use es\ucm\fdi\aw\Aplicacion;
 
@@ -20,21 +21,29 @@
                 return '<p class="error">El mensaje no existe o no tienes permiso para editarlo.</p>';
             }
 
-            $titulo = $mensaje->getTitulo();
-            $contenido = $mensaje->getMensaje();
-            $evento = $mensaje->getEvento() ?? '';
+            $titulo = $mensaje->titulo;
+            $contenido = $mensaje->mensaje;
+            $autor = $mensaje->autor;
+            $id_evento = $mensaje->evento;
+            $nombreEvento = $id_evento ? Evento::buscaPorId($id_evento) : 'General';
 
             return <<<EOS
-                <label for="titulo">Título:</label>
-                <input type="text" name="titulo" value="{$titulo}" required>
+                <form id="editar-mensaje" action="editar_mensaje.php?id={$this->idMensaje}" method="post">
+                    <label for="titulo">Título:</label>
+                    <input type="text" name="titulo" id="titulo" value="{$titulo}" required><br><br>
 
-                <label for="mensaje">Mensaje:</label>
-                <textarea name="mensaje" rows="4" required>{$contenido}</textarea>
+                    <p>Autor: <strong>{$autor}</strong></p>
+                    
+                    <p>Evento: <strong>{$nombreEvento}</strong></p>
 
-                <input type="hidden" name="idMensaje" value="{$this->idMensaje}">
+                    <label for="mensaje">Mensaje:</label>
+                    <textarea name="mensaje" id="mensaje" rows="4" required>{$contenido}</textarea>
 
-                <input type="submit" value="Guardar Cambios">
-                <a href="foro.php">Cancelar</a>
+                    <input type="hidden" name="idMensaje" value="{$this->idMensaje}">
+
+                    <input type="submit" value="Guardar Cambios">
+                    <a href="foro.php" style="margin-left: 10px;">Cancelar</a>
+                </form>
             EOS;
         }
 
@@ -46,8 +55,8 @@
             $mensaje = trim($datos['mensaje'] ?? '');
             $evento = trim($datos['evento'] ?? null);
 
-            if (empty($titulo) || empty($mensaje)) {
-                $this->errores[] = "El título y el mensaje no pueden estar vacíos.";
+            if (empty($mensaje)) {
+                $this->errores[] = "El mensaje no pueden estar vacíos.";
                 return;
             }
 
