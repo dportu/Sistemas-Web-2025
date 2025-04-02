@@ -45,30 +45,35 @@ function mostrarEvento($id, &$contenidoPrincipal) {
         // Mostrar detalles de un evento específico
         $evento = Evento::buscaPorId($id);
         if ($evento) {
-            $imagen = htmlspecialchars($evento->getImagen());
-            $nombre = htmlspecialchars($evento->getNombre());
+            $imagen = htmlspecialchars($evento->getImagen()); //no es null por defecto
+            $nombre = htmlspecialchars($evento->getNombre()); //no puede ser null
             $precio = $evento->getPrecio();
             $fecha = date('d/m/Y H:i', strtotime($evento->getFecha()));
-            $ubicacion = htmlspecialchars($evento->getUbicacion());
-            $organizador = htmlspecialchars($evento->getOrganizador());
-            $descripcion = htmlspecialchars($evento->getDescripcion());
+
+            //ifs para evitar htmlspacialchars(null)
+            if($evento->getUbicacion() != null) { 
+                $ubicacion = htmlspecialchars($evento->getUbicacion());
+            }
+            else {
+                $ubicacion = "";
+            }
+            if($evento->getOrganizador() != null) {
+                $organizador = htmlspecialchars($evento->getOrganizador());
+            }
+            else {
+                $organizador = "";
+            }
+            if($evento->getDescripcion() != null) {
+                $descripcion = htmlspecialchars($evento->getDescripcion());
+            }
+            else {
+                $descripcion = "";
+            }
             
-            // Obtener información del usuario actual
-            $usuarioActual = $app->nombreUsuario();
-            $esAdmin = $app->tieneRol(Usuario::ADMIN_ROLE);
-            $esPromotor = $app->tieneRol('promotor');
-            $esOrganizador = ($organizador === $usuarioActual);
-            
-            // Botón de edición para admins o promotores que son organizadores
+            // Botón de edición solo para admins
             $botonEditar = '';
-            if ($app->usuarioLogueado() && ($esAdmin || ($esPromotor && $esOrganizador))) {
-                $urlEditar = $app->resuelve('/editar_evento.php?id='.$id);
-                $botonEditar = <<<EOS
-                    <form action="{$urlEditar}" method="get">
-                        <input type="hidden" name="id" value="{$id}">
-                        <button type="submit" class="boton-editar">✏️ Editar Evento</button>
-                    </form>
-                EOS;
+            if ($app->usuarioLogueado() && $app->tieneRol(Usuario::ADMIN_ROLE)) {
+                $botonEditar = "<a href='editar_evento.php?id={$id}' class='boton-editar'>✏️ Editar</a>";
             }
             
             $contenidoPrincipal .= <<<EOS
