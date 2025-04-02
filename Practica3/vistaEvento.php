@@ -1,73 +1,83 @@
-<?php 
-    namespace es\ucm\fdi\aw;
-	use es\ucm\fdi\aw\eventos\Evento;
+<?php
+namespace es\ucm\fdi\aw;
 
-    require_once __DIR__.'/includes/config.php';
+use es\ucm\fdi\aw\eventos\Evento;
+use es\ucm\fdi\aw\usuarios\Usuario;
+use es\ucm\fdi\aw\Aplicacion;
 
-	$tituloPagina = 'Eventos';
+require_once __DIR__.'/includes/config.php';
 
-    $contenidoPrincipal = '';
-    mostrarEvento(null, $contenidoPrincipal);
+$app = Aplicacion::getInstance();
+$tituloPagina = 'Eventos';
+$contenidoPrincipal = '';
 
-    $usuarioAutenticado = isset($_SESSION["login"]) && $_SESSION["login"];
-    $id_evento = $_GET['id'];
+// Obtener ID del evento si existe
+$id_evento = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
-    function mostrarInfoEvento() {
-        global $id_evento;
-        $evento = Evento::buscaPorId($id_evento);
+// Mostrar listado o detalle según el ID
+mostrarEvento($id_evento, $contenidoPrincipal);
 
-        echo "<h2>[ " . htmlspecialchars($evento['nombre']) . " ]</h2>";
-
-        echo "<img src='" . htmlspecialchars($evento['imagen']) . "' alt='Imagen del evento'>";
-        echo "<p><strong>Precio:</strong> " . $evento['precio'] . " €</p>";
-        echo "<p><strong>Fecha:</strong> " . $evento['fecha_inicio'] . "</p>";
-
-        echo !empty($evento['ubicacion']) ? "<p><strong>Ubicacion:</strong> " . htmlspecialchars($evento['ubicacion']) . "</p>" : "";
-        echo !empty($evento['organizador']) ? "<p><strong>Organizador:</strong> " . htmlspecialchars($evento['organizador']) . "</p>" : "";
-        echo !empty($evento['descripcion']) ? "<p><strong>Descripción:</strong> " . htmlspecialchars($evento['descripcion']) . "</p>" : "";
-    }
-
-    function mostrarEvento($id, &$contenidoPrincipal) {
-        if($id == null) {
-            $eventos = Evento::getEventos();
-            for ($i = 0; $i < count($eventos); $i++) {
-                $id = $eventos[$i]->id;
-                $imagen = $eventos[$i]->imagen;
-                $nombre = $eventos[$i]->nombre;
-                $precio = $eventos[$i]->precio;
-                $fecha = $eventos[$i]->fecha;
-
-                $contenidoPrincipal .= <<<EOS
-                    <a href="vistaEvento.php?id={$id}" class="evento-card">
-                        <img src="{$imagen}" alt="Imagen de {$nombre}" class="evento-imagen">
-                        <h3>[ {$nombre} ]</h3>
-                        <p> {$precio} € </p>
-                        <p> {$fecha} </p>
-                    </a>
-                EOS;
-            }
-        }
-
-        else {
-            $evento = Evento::buscaPorId($id);
-
-            $imagen = $evento->imagen;
-            $nombre = $evento->nombre;
-            $precio = $evento->precio;
-            $fecha = $evento->fecha;
-
+// Función para mostrar eventos
+function mostrarEvento($id, &$contenidoPrincipal) {
+    $app = Aplicacion::getInstance();
+    
+    if ($id === null) {
+        // Mostrar todos los eventos
+        $eventos = Evento::getEventos();
+        foreach ($eventos as $evento) {
+            $imagen = htmlspecialchars($evento->getImagen());
+            $nombre = htmlspecialchars($evento->getNombre());
+            $precio = $evento->getPrecio();
+            $fecha = date('d/m/Y H:i', strtotime($evento->getFecha()));
+            
             $contenidoPrincipal .= <<<EOS
-                    <a href="vistaEvento.php?id={$id}" class="evento-card">
-                        <img src="{$imagen}" alt="Imagen de {$nombre}" class="evento-imagen">
-                        <h3>[ {$nombre} ]</h3>
-                        <p> {$precio} € </p>
-                        <p> {$fecha} </p>
+                <div class="evento-card">
+                    <a href="vistaEvento.php?id={$evento->getId()}">
+                        <img src="{$imagen}" alt="{$nombre}" class="evento-imagen">
+                        <h3>{$nombre}</h3>
+                        <p>{$precio} €</p>
+                        <p>{$fecha}</p>
                     </a>
-                EOS;
+                </div>
+            EOS;
         }
-        
+    } else {
+        // Mostrar detalles de un evento específico
+        $evento = Evento::buscaPorId($id);
+        if ($evento) {
+            $imagen = htmlspecialchars($evento->getImagen());
+            $nombre = htmlspecialchars($evento->getNombre());
+            $precio = $evento->getPrecio();
+            $fecha = date('d/m/Y H:i', strtotime($evento->getFecha()));
+            $ubicacion = htmlspecialchars($evento->getUbicacion());
+            $organizador = htmlspecialchars($evento->getOrganizador());
+            $descripcion = htmlspecialchars($evento->getDescripcion());
+            
+            // Botón de edición solo para admins
+            $botonEditar = '';
+            if ($app->usuarioLogueado() && $app->tieneRol(Usuario::ADMIN_ROLE)) {
+                $botonEditar = "<a href='editar_evento.php?id={$id}' class='boton-editar'>✏️ Editar</a>";
+            }
+            
+            $contenidoPrincipal .= <<<EOS
+                <div class="evento-detalle">
+                    <img src="{$imagen}" alt="{$nombre}" class="evento-imagen-detalle">
+                    <div class="info-evento">
+                        <h2>{$nombre}</h2>
+                        {$botonEditar}
+                        <p><strong>Precio:</strong> {$precio} €</p>
+                        <p><strong>Fecha:</strong> {$fecha}</p>
+                        <p><strong>Ubicación:</strong> {$ubicacion}</p>
+                        <p><strong>Organizador:</strong> {$organizador}</p>
+                        <p><strong>Descripción:</strong> {$descripcion}</p>
+                    </div>
+                </div>
+            EOS;
+        } else {
+            $contenidoPrincipal .= "<p class='error'>Evento no encontrado</p>";
+        }
     }
-	
-	require __DIR__.'/includes/vistas/plantillas/plantilla.php';
-  
+}
+
+require __DIR__.'/includes/vistas/plantillas/plantilla.php';
 ?>
