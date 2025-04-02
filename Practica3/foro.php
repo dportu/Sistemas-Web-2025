@@ -19,9 +19,11 @@
     }
 
 	for ($i = 0; $i < count($mensajes); $i++) {
-        $titulo = $mensajes[$i]->getTitulo();
-        $autor = $mensajes[$i]->getAutor();
+        $titulo = $mensajes[$i]->titulo;
+        $autor = $mensajes[$i]->autor;
         $$id_evento = $mensajes[$i]->evento;
+        $mensajeId = $mensajes[$i]->id;
+
         if (!$id_evento) {
             $nombre_evento = 'General';
         }
@@ -33,22 +35,27 @@
 
         $aplicacion = Aplicacion::getInstance();
         $modificarMensaje = '';
+
+        $urlEdicion = "editar_mensaje.php";
+        if ($mensajeId) {
+            $urlEdicion = "editar_mensaje.php?id=$mensajeId";
+        }
+
         // Si el usuario está logueado y es el autor del mensaje, mostrar opciones de edición y eliminación
         if ($aplicacion->usuarioLogueado() && $aplicacion->nombreUsuario() === $autor) {
-            $mensajeId = $mensajes[$i]->id;
             $modificarMensaje .= 
-                "<form action='editar_mensaje' method='POST' style='display:inline;'>
-                    <button type='submit'>Editar</button>
-                </form>
+                "<a href='$urlEdicion'>
+                    <button type='button'>Editar</button>
+                </a>
                 <form action='' method='POST' style='display:inline;'>
-                    <input type='hidden' name='mensaje_id' value='$mensajeId'>
+                    <input type='hidden' name='mensaje_id'>
                     <button type='submit' name='accion' value='eliminar' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este mensaje?\")'>Eliminar</button>
                 </form>";
         }
 
+        // Eliminar mensaje
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Obtener los valores enviados
-            $mensajeId = $_POST['mensaje_id'] ?? null;
             $accion = $_POST['accion'] ?? null;
         
             if ($accion) {

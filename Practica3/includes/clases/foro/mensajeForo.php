@@ -93,40 +93,45 @@
         // Editar un mensaje existente
         public static function editarMensaje($id_mensaje, $titulo, $mensaje, $evento, $autor) {
             $conexion = Aplicacion::getInstance()->getConexionBd();
-
+        
             $titulo = $conexion->real_escape_string($titulo);
             $mensaje = $conexion->real_escape_string($mensaje);
             $autor = $conexion->real_escape_string($autor);
-            $evento = $conexion->real_escape_string($evento);
-
-            $sql = "UPDATE foro SET titulo = ?, mensaje = ?, evento = ? WHERE id = ? AND autor = ?";
-            
-            $stmt = $conexion->prepare($sql);
+        
+            if ($evento === "") { 
+                $evento = null;
+            }
+        
+            if ($evento === null) {
+                $sql = "UPDATE foro SET titulo = ?, mensaje = ?, evento = NULL WHERE id = ? AND autor = ?";
+                $stmt = $conexion->prepare($sql);
+                $stmt->bind_param("ssis", $titulo, $mensaje, $id_mensaje, $autor);
+            } else {
+                $evento = $conexion->real_escape_string($evento);
+                $sql = "UPDATE foro SET titulo = ?, mensaje = ?, evento = ? WHERE id = ? AND autor = ?";
+                $stmt = $conexion->prepare($sql);
+                $stmt->bind_param("ssisi", $titulo, $mensaje, $evento, $id_mensaje, $autor);
+            }
+        
             if (!$stmt) {
                 die("Error en la preparación de la consulta: " . $conexion->error);
             }
-
-            if (empty($evento)) {
-                $evento = null;
-            }
-
-            $stmt->bind_param("ssiis", $titulo, $mensaje, $evento, $id_mensaje, $autor);
+        
             if (!$stmt->execute()) {
                 die("Error al editar el mensaje: " . $stmt->error);
             }
-
+        
             $stmt->close();
-
-            $resultado = $conexion->query($sql);
-
-            // Si la consulta afectó alguna fila, es porque se editó correctamente
-            if ($resultado && $conexion->affected_rows > 0) {
-                return true;
-            } 
-            else {
-                return false;
+        
+            if ($conexion->affected_rows > 0) {
+                // Redirigir al foro después de la edición
+                header("Location: foro.php" . ($evento ? "?id=" . $evento : ""));
+                exit();
             }
+        
+            return false;
         }
+           
 
         // Eliminar un mensaje (solo si el usuario es el autor)
         public static function eliminarMensaje($id_mensaje) {
@@ -148,6 +153,27 @@
             return true; // Se eliminó correctamente
         }
 
+        // Obtener un mensaje por su ID
+        public static function getMensajePorId($id_mensaje) {
+            $conexion = Aplicacion::getInstance()->getConexionBd();
+            
+            $stmt = $conexion->prepare("SELECT f.*, e.nombre AS nombre_evento FROM foro f LEFT JOIN eventos e ON f.evento = e.id WHERE f.id = ?");
+            $stmt->bind_param("i", $id_mensaje);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+        
+            $result = null;
+        
+            if ($resultado->num_rows === 1) {
+                $fila = $resultado->fetch_assoc();
+                $result = new mensajeForo($id_mensaje, $fila['titulo'], $fila['autor'], $fila['mensaje'], $fila['evento'], $fila['fecha_publicacion']);
+            } else {
+                error_log("Error BD ({$conexion->errno}): {$conexion->error}");
+            }
+        
+            $stmt->close();
+            return $result;
+        }
 
         public function getConexion() {
             return $this->conn;
