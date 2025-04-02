@@ -146,16 +146,15 @@ class Evento {
         $this->ubicacion = $ubicacion;
         $this->organizador = $organizador;
         $this->imagen = $imagen;
-
+    
         $sql = "UPDATE eventos SET nombre=?, precio=?, descripcion=?, fecha_inicio=?, ubicacion=?, organizador=?, imagen=? WHERE id=?";
-
-        //preparamos la insercion
+    
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) {
-            die("Error en la preparación de la consulta: " . $this->conn->error);
+            error_log("Error en preparación: " . $this->conn->error);
+            return false;
         }
-
-        //vinculamos los parametros
+    
         $stmt->bind_param("sdsssssi",
             $this->nombre, 
             $this->precio, 
@@ -166,12 +165,11 @@ class Evento {
             $this->imagen,
             $this->id
         );
-
-        if (!$stmt->execute()) {
-            die("Error al modificar evento: " . $stmt->error);
-        }
-        
-        $stmt->close(); //hay que cerrar ?
+    
+        $result = $stmt->execute();
+        $stmt->close();
+    
+        return $result; // Retorna true/false según éxito
     }
 
     public function eliminarEvento() {
