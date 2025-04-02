@@ -53,10 +53,22 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             $organizador = htmlspecialchars($evento->getOrganizador());
             $descripcion = htmlspecialchars($evento->getDescripcion());
             
-            // Botón de edición solo para admins
+            // Obtener información del usuario actual
+            $usuarioActual = $app->nombreUsuario();
+            $esAdmin = $app->tieneRol(Usuario::ADMIN_ROLE);
+            $esPromotor = $app->tieneRol('promotor');
+            $esOrganizador = ($organizador === $usuarioActual);
+            
+            // Botón de edición para admins o promotores que son organizadores
             $botonEditar = '';
-            if ($app->usuarioLogueado() && $app->tieneRol(Usuario::ADMIN_ROLE)) {
-                $botonEditar = "<a href='editar_evento.php?id={$id}' class='boton-editar'>✏️ Editar</a>";
+            if ($app->usuarioLogueado() && ($esAdmin || ($esPromotor && $esOrganizador))) {
+                $urlEditar = $app->resuelve('/editar_evento.php?id='.$id);
+                $botonEditar = <<<EOS
+                    <form action="{$urlEditar}" method="get">
+                        <input type="hidden" name="id" value="{$id}">
+                        <button type="submit" class="boton-editar">✏️ Editar Evento</button>
+                    </form>
+                EOS;
             }
             
             $contenidoPrincipal .= <<<EOS
