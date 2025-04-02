@@ -1,0 +1,55 @@
+/* Importar la fuente */
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Glitch&family=Rubik+Iso&family=Syne+Mono&display=swap');
+
+
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Tipografías */
+.syne-mono {
+    font-family: 'Syne Mono', monospace;
+    /*font-weight: 400;
+    font-style: normal;*/
+}
+
+.rubik-glitch {
+    font-family: 'Rubik Glitch', cursive;
+    /*font-weight: 400;
+    font-style: normal;*/
+}
+
+.rubik-iso {
+    font-family: 'Rubik Iso', cursive;
+    /*font-weight: 400;
+    font-style: normal;*/
+}
+
+/* Contenedor principal */
+#contenedor {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr; /* Se aumentó la proporción del main */
+    grid-template-areas: 
+        "cabecera cabecera cabecera" /* 4? */
+        "izquierda main derecha"
+        "pie pie pie";
+    gap: 20px;
+    padding: 20px 0;
+}
+
+/* Cabecera */
+header {
+    grid-area: cabecera;
+    background-color: #071838;
+    color: rgb(231, 215, 215);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: "Handjet", sans-serif; /* Aquí aplicamos la fuente */
+}
