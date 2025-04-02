@@ -42,7 +42,7 @@
                     <input type="hidden" name="idMensaje" value="{$this->idMensaje}">
 
                     <input type="submit" value="Guardar Cambios">
-                    <a href="foro.php" style="margin-left: 10px;">Cancelar</a>
+                    <a href="foro.php">Cancelar</a>
                 </form>
             EOS;
         }
@@ -63,6 +63,11 @@
             if (!mensajeForo::editarMensaje($this->idMensaje, $titulo, $mensaje, $evento, $usuarioActual)) {
                 $this->errores[] = "No se pudo actualizar el mensaje.";
             }
+
+            // Redirigir al foro del evento o al foro general
+            $urlRedireccion = $evento ? "foro.php?id={$evento}" : "foro.php";
+            header("Location: $urlRedireccion");
+            exit(); 
         }
     }
 ?>
