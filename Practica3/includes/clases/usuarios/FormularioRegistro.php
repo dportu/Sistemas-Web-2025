@@ -1,7 +1,6 @@
 <?php
 namespace es\ucm\fdi\aw\usuarios;
 
-use es\ucm\fdi\aw\Aplicacion;
 use es\ucm\fdi\aw\Formulario;
 
 class FormularioRegistro extends Formulario {
@@ -72,18 +71,22 @@ class FormularioRegistro extends Formulario {
         }
 
         if (count($this->errores) === 0) {
-            $usuario = Usuario::crea($username, $password, $email, 'cliente' );
-            if ($usuario) {
-                $_SESSION['login'] = true;
-                $_SESSION['username'] = $username;
-                $_SESSION['usuario_rol'] = 'cliente';
-               
-                
-                
-                header('Location: index.php');
-                exit();
-            } else {
-                $this->errores[] = 'Error al registrar el usuario';
+            if(!Usuario::buscaUsuario($username)) { //sirve asi?
+                $usuario = Usuario::crea($username, $password, $email, 'cliente' );
+
+                if ($usuario) {
+                    $_SESSION['login'] = true;
+                    $_SESSION['username'] = $username;
+                    $_SESSION['rol'] = 'cliente';
+                    
+                    header('Location: index.php');
+                    exit();
+                } else {
+                    $this->errores[] = 'Error al registrar el usuario';
+                }
+            }
+            else {
+                $this->errores[] = 'Error, el usuario ya existe';
             }
         }
     }
