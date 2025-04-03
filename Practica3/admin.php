@@ -21,10 +21,11 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
         $tablaEventos .= <<<EOS
         <tr>
             <td>{$evento->getNombre()}</td>
+            <td>{$evento->getPrecio()}</td>
             <td>{$evento->getFecha()}</td>
             <td>{$evento->getUbicacion()}</td>
             <td>
-                <a href="includes\clases\eventos\editar_evento.php?id={$evento->getId()}" class="boton-editar">Editar</a>
+                <a href="editar_evento.php?id={$evento->getId()}" class="boton-editar">Editar</a>
                 <a href="eliminar_evento.php?id={$evento->getId()}" class="boton-eliminar">Eliminar</a>
             </td>
         </tr>

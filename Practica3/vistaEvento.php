@@ -69,10 +69,15 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             else {
                 $descripcion = "";
             }
-            
+
+            $usuario = $app->nombreUsuario();
+            $esAdmin = $app->tieneRol(Usuario::ADMIN_ROLE);
+            $esPromotor = $app->tieneRol(Usuario::PROMOTOR_ROLE);
+            $esOrganizador = ($organizador === $usuario);
+
             // Botón de edición solo para admins
             $botonEditar = '';
-            if ($app->usuarioLogueado() && $app->tieneRol(Usuario::ADMIN_ROLE)) {
+            if (($app->usuarioLogueado()) && ($esAdmin) ||($esPromotor && $esOrganizador)) {
                 $botonEditar = "<a href='editar_evento.php?id={$id}' class='boton-editar'>✏️ Editar</a>";
             }
             

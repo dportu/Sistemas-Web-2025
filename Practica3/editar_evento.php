@@ -8,10 +8,7 @@ use es\ucm\fdi\aw\Aplicacion;
 $app = Aplicacion::getInstance();
 
 // Verificar permisos
-if (!$app->usuarioLogueado() || !$app->tieneRol(Usuario::ADMIN_ROLE)) {
-    header("Location: index.php");
-    exit();
-}
+
 
 // Obtener ID del evento
 $idEvento = isset($_GET['id']) ? (int)$_GET['id'] : 0;
