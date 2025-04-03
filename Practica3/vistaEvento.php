@@ -4,6 +4,7 @@ namespace es\ucm\fdi\aw;
 use es\ucm\fdi\aw\eventos\Evento;
 use es\ucm\fdi\aw\usuarios\Usuario;
 use es\ucm\fdi\aw\Aplicacion;
+use es\ucm\fdi\aw\valoraciones\Valoracion; 
 
 require_once __DIR__.'/includes/config.php';
 
@@ -74,8 +75,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             $esAdmin = $app->tieneRol(Usuario::ADMIN_ROLE);
             $esPromotor = $app->tieneRol(Usuario::PROMOTOR_ROLE);
             $esOrganizador = ($organizador === $usuario);
-
-
+          
             // Botón de edición y de eliminar solo para admins y para los promotores de esos eventos 
             $botonEditar = '';   // Para que no de errores 
             $botonEliminar = '';
@@ -103,12 +103,15 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             EOS;
                 
             }
-            
+
+            $evento = Evento::buscaPorId($id);
+            $valoracionMedia = Valoracion::notaMedia($evento);
+            $valoracionHTML = $valoracionMedia ? "<span class='valoracion-media'>(".number_format($valoracionMedia, 1)." ★)</span>" : "<span class='valoracion-media'>(Sin valoraciones)</span>";
             $contenidoPrincipal .= <<<EOS
-                <div class="evento-detalle">
-                    <img src="{$imagen}" alt="{$nombre}" class="evento-imagen-detalle">
-                    <div class="info-evento">
-                        <h2>{$nombre}</h2>
+            <div class="evento-detalle">
+                <img src="{$imagen}" alt="{$nombre}" class="evento-imagen-detalle">
+                <div class="info-evento">
+                    <h2>{$nombre} {$valoracionHTML}</h2>
                         {$botonEditar}
                         {$botonEliminar}
                         {$botonCompra}
@@ -120,11 +123,43 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                     </div>
                 </div>
             EOS;
+
+             // Mostrar valoraciones de los usuarios
+            $valoraciones = Valoracion::getValoraciones(Evento::buscaPorId($id));
+            $contenidoPrincipal .= "<div class='valoraciones'><h3>Valoraciones de los usuarios:</h3>";
+
+            if (empty($valoraciones)) {
+                $contenidoPrincipal .= "<p>No hay valoraciones todavía.</p>";
+            } else {
+                foreach ($valoraciones as $valoracion) {
+                    $usuarioNombre = htmlspecialchars($valoracion->getUsername());
+                    $puntuacion = htmlspecialchars($valoracion->getNota());
+                    $comentario = $valoracion->getComentario();
+                    $fecha = htmlspecialchars($valoracion->getFecha());
+
+                    $comentarioHTML = !empty($comentario) ? "<p><strong>Comentario:</strong> ".htmlspecialchars($comentario)."</p>" : '';
+
+                    $contenidoPrincipal .= <<<EOS
+                        <div class="valoracion">
+                            <p><strong>Usuario:</strong> $usuarioNombre</p>
+                            <p><strong>Puntuación:</strong> $puntuacion/5</p>
+                            $comentarioHTML
+                            <p><strong>Fecha:</strong> $fecha</p>
+                        </div>
+                    EOS;
+                }
+            }
+
+            $contenidoPrincipal .= "</div>"; // Cierre de .valoraciones
         } else {
             $contenidoPrincipal .= "<p class='error'>Evento no encontrado</p>";
         }
+        
     }
+
+   
 }
+
 
 require __DIR__.'/includes/vistas/plantillas/plantilla.php';
 ?>
