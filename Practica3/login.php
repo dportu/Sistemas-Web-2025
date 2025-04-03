@@ -9,7 +9,7 @@
   $tituloPagina = 'Login';
 
   $contenidoPrincipal = <<<EOS
-    <h1>Iniciar sesión </h1>
+    <h3>Iniciar sesión </h3>
     $htmlFormLogin
     <div class="enlace-registro">
         <a href="registro.php">¿No tienes cuenta? Regístrate aquí</a>

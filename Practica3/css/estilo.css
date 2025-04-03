@@ -1,52 +1,26 @@
-/* import: Fuentes */
-@import url('https://fonts.googleapis.com/css2?family=Rubik+Glitch&family=Rubik+Iso&family=Syne+Mono&display=swap');
-/* import: Símbolos */
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
-
-/*morado: #aa0fe7;*/
-
+/* Importar la fuente */
+@import url('https://fonts.googleapis.com/css2?family=Handjet:wght@100..900&display=swap');
 /* Estilos generales */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
-
-/* Tipografías */
-.syne-mono {
-    font-family: 'Syne Mono', monospace;
-    /*font-weight: 400;
-    font-style: normal;*/
-}
-
-.rubik-glitch {
-    font-family: 'Rubik Glitch', cursive;
-    /*font-weight: 400;
-    font-style: normal;*/
-}
-
-.rubik-iso {
-    font-family: 'Rubik Iso', cursive;
-    /*font-weight: 400;
-    font-style: normal;*/
-}
-
 .fascinate-inline-regular {
     font-family: "Fascinate Inline", system-ui;
     font-weight: 400;
     font-style: normal;
-}
-
-
+  }
+  
 /* Cambiar color enlaces :) */
 a {
-    color: rgb(218, 36, 255);
-    text-decoration: none; /* quita el subrayado */
+    color: rgb(212, 0, 255); /* Cambia "blue" por el color que quieras */
+    text-decoration: none; /* Quita el subrayado */
 }
 
 a:hover {
-    color: rgb(109, 1, 134); /* Color cuando pasas el mouse por encima */
+    color: rgb(139, 0, 7); /* Color cuando pasas el mouse por encima */
     text-decoration: underline; /* Opcional: subrayado al pasar el mouse */
 }
 
@@ -65,63 +39,43 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 5fr 1fr;
+    grid-template-columns: 1fr 4fr 1fr; /* Se aumentó la proporción del main */
     grid-template-areas: 
-        "header header"
-        "main sidebar"
-        "footer footer";
+        "cabecera cabecera cabecera"
+        "izquierda main derecha"
+        "pie pie pie";
     gap: 20px;
     padding: 20px 0;
 }
 
 /* Cabecera */
-header { 
-    grid-area: header;
-    /* 
-    background-color: #fceb00; */
-    background-color: black;
-    color: #fceb00;
+
+
+/* Aplicar la fuente en el header */
+header {
+    grid-area: cabecera;
+    background-color: #071838;
+    color: rgb(231, 215, 215);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(101, 90, 118, 0.1);
-    font-family: "Rubik Glitch", sans-serif;
-    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: "Handjet", sans-serif; /* Aquí aplicamos la fuente */
 }
 
+/* Aplicar la fuente con tamaño al h1 */
 header h1 {
     font-size: 7em;
     margin-bottom: 10px;
-    font-weight: 440;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    cursor: pointer;
+    font-weight: 440; /* Puedes ajustar entre 100 y 900 */
 }
 
-header h1::before,
-header h1::after {
-    content: "star"; /* nombre icono */
-    font-family: "Material Symbols Outlined";
-    font-size: 0.6em;
-    vertical-align: middle;
-}
 
-.saludo {
-    text-align: right; /* Alinea el texto a la derecha */
-    font-family: "Syne Mono", sans-serif; /* Cambia la tipografía */
-    font-size: 1em; /* Ajusta el tamaño de la fuente si es necesario */
-}
-
+/* Navegación */
 nav {
-    grid-area: sidebar;
-    background-color: #fceb00;
-    padding: 20px 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column; /* Se colocan los enlaces en lista vertical */
     align-items: start;
+    padding: 10px 0;
 }
 
 nav ul {
@@ -135,20 +89,20 @@ nav ul li {
 }
 
 nav a {
-    color: black;
+    color: #2f64d8; /* Azul */
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s;
 }
 
 nav a:hover {
-    color: #719eff;
+    color: #78a3ff;
 }
 
 /* Contenido principal más grande */
 main {
     grid-area: main;
-    background-color: black;
+    background-color: white;
     padding: 40px; /* Se aumentó el padding */
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
@@ -156,7 +110,7 @@ main {
 }
 
 main h1 {
-    color: rgb(218, 36, 255);
+    color: #1a3a6c;
     font-size: 2.2em; /* Tamaño más grande */
     margin-bottom: 20px;
     border-bottom: 2px solid #78a3ff;
@@ -173,16 +127,17 @@ main p {
     #contenedor {
         grid-template-columns: 1fr;
         grid-template-areas: 
-            "header"
+            "cabecera"
+            "izquierda"
             "main"
-            "sidebar"
-            "footer";
+            "derecha"
+            "pie";
     }
 }
 
 /* Estilo general */
 body {
-    background-color: #403f42;
+    background-color: #f4f4f4;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -207,12 +162,12 @@ body {
 
 .enlaces a {
     text-decoration: none;
-    color: rgb(218, 36, 255);
+    color: #007bff;
     font-weight: bold;
 }
 
 .enlaces a:hover {
-    color: rgb(109, 1, 134);
+    color: #0056b3;
 }
 
 /* Estilo para los mensajes */
@@ -263,7 +218,7 @@ body {
 
 #nuevo-mensaje input[type="submit"] {
     margin-top: 10px;
-    background: rgb(218, 36, 255);
+    background: #007bff;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -273,7 +228,7 @@ body {
 }
 
 #nuevo-mensaje input[type="submit"]:hover {
-    background: rgb(218, 36, 255);
+    background: #0056b3;
 }
 
 /* Estilos para la cabecera del foro */
@@ -287,16 +242,16 @@ body {
 }
 
 .logo-eventia-box {
-    background-color: rgb(218, 36, 255);
+    background-color: #007bff;
     padding: 8px 15px;
     border-radius: 5px;
-    border: 2px solid rgb(218, 36, 255);
+    border: 2px solid #0056b3;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
 }
 
 .logo-eventia-box:hover {
-    background-color: rgb(109, 1, 134);
+    background-color: #0056b3;
     transform: scale(1.05);
 }
 
@@ -313,12 +268,12 @@ body {
 }
 
 .user-info a {
-    color: rgb(218, 36, 255);
+    color: #007bff;
     text-decoration: none;
     margin-left: 5px;
 }
 
 .user-info a:hover {
-    color: rgb(109, 1, 134);
+    color: #0056b3;
     text-decoration: underline;
 }

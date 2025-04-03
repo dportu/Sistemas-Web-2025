@@ -18,7 +18,7 @@ class FormularioRegistro extends Formulario {
         $html = <<<EOS
         
         $errorGlobal
-        <form method="POST">
+        
             <fieldset>
                 <legend>Datos para el registro</legend>
                 <div>
@@ -45,7 +45,7 @@ class FormularioRegistro extends Formulario {
                     <button type="submit" name="registro">Registrar</button>
                 </div>
             </fieldset>
-        </form>
+        
         EOS;
         return $html;
     }
@@ -72,7 +72,7 @@ class FormularioRegistro extends Formulario {
 
         if (count($this->errores) === 0) {
             if(!Usuario::buscaUsuario($username)) { //sirve asi?
-                $usuario = Usuario::crea($username, $password, $email, 'cliente' );
+                $usuario = Usuario::crea($username, $password, $email, 'cliente' , 0);
 
                 if ($usuario) {
                     $_SESSION['login'] = true;

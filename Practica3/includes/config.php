@@ -3,11 +3,11 @@
 /**
  * Parámetros de conexión a la BD
  */
-// define('BD_HOST', 'localhost');
-//define('BD_HOST', '172.17.0.2');
-//define('BD_NAME', 'proyectoaw');
-//define('BD_USER', 'proyectoaw');
-//define('BD_PASS', 'proyectoaw');
+
+//define('BD_HOST', '192.168.2.55');
+//define('BD_NAME', 'eventia_db');
+//define('BD_USER', 'eventia_db');
+//define('BD_PASS', 'eventia');
 
 define('BD_HOST', 'localhost');
 define('BD_NAME', 'eventia_db');

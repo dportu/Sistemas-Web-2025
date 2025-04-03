@@ -1,11 +1,6 @@
-/* import: Fuentes */
+/* Importar la fuente */
 @import url('https://fonts.googleapis.com/css2?family=Rubik+Glitch&family=Rubik+Iso&family=Syne+Mono&display=swap');
-/* import: Símbolos */
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 
-
-/* icono foro: https://fonts.google.com/icons?categoryFilters=Appearance:%2FTheme%2FTechno&selected=Material+Symbols+Outlined:partner_exchange:FILL@0;wght@400;GRAD@0;opsz@24&icon.size=24&icon.color=%23000000
-, modificadas: perfil.php, plantilla.php, cabecera->header, pie->footer, sidebarS->sidebar */
 
 /* Estilos generales */
 * {
@@ -13,7 +8,6 @@
     padding: 0;
     box-sizing: border-box;
 }
-
 
 /* Tipografías */
 .syne-mono {
@@ -34,36 +28,28 @@
     font-style: normal;*/
 }
 
-
 /* Contenedor principal */
 #contenedor {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 5fr 1fr;
+    grid-template-columns: 1fr 4fr 1fr; /* Se aumentó la proporción del main */
     grid-template-areas: 
-        "header header"
-        "main sidebar"
-        "footer footer";
+        "cabecera cabecera cabecera" /* 4? */
+        "izquierda main derecha"
+        "pie pie pie";
     gap: 20px;
     padding: 20px 0;
 }
 
-
 /* Cabecera */
 header {
-    grid-area: header;
-    background-color: #fceb00;
-    color: black;
+    grid-area: cabecera;
+    background-color: #071838;
+    color: rgb(231, 215, 215);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(101, 90, 118, 0.1);
-    font-family: "Rubik Glitch", sans-serif;
-}
-
-header h1 {
-    font-size: 7em;
-    margin-bottom: 10px;
-    font-weight: 440; /* { 100 , 900 } */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: "Handjet", sans-serif; /* Aquí aplicamos la fuente */
 }

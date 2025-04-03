@@ -51,8 +51,9 @@
 <body>
     <div id="contenedor">
 
-    <?php require("includes/vistas/comun/header.php"); ?>
+    <?php require("includes/vistas/comun/cabecera.php"); ?>
 
+    <?php require("includes/vistas/comun/sidebarIzq.php"); ?>
     <main>
     <h1>Bienvenido, <?php echo htmlspecialchars($usuario_nombre); ?>!</h1>
     <p>Email: <?php echo htmlspecialchars($usuario_email); ?></p>
@@ -75,8 +76,8 @@
     
     <a href="logout.php">Cerrar sesión</a>
     </main>
-    <?php require("includes/vistas/comun/sidebar.php"); ?>
-    <?php require("includes/vistas/comun/footer.php"); ?>
+    <?php require("includes/vistas/comun/sidebarDer.php"); ?>
+    <?php require("includes/vistas/comun/pie.php"); ?>
     
     </div>
 </body>

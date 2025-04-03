@@ -1,6 +1,5 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Handjet:wght@100..900&display=swap" rel="stylesheet">
+
+
 <?php 
 	use es\ucm\fdi\aw\eventos\Evento;
 	require_once __DIR__.'/includes/config.php';
