@@ -75,6 +75,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             $esPromotor = $app->tieneRol(Usuario::PROMOTOR_ROLE);
             $esOrganizador = ($organizador === $usuario);
 
+
             // Botón de edición y de eliminar solo para admins y para los promotores de esos eventos 
             $botonEditar = '';   // Para que no de errores 
             $botonEliminar = '';
@@ -89,6 +90,19 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                 $botonEditar = "<a href='editar_evento.php?id={$id}' class='boton-accion editar'> Editar</a>";
                 
             }
+
+            //  Boton de compra provisional
+            $botonCompra = '';
+
+            if ($app->usuarioLogueado()) {
+                $botonCompra = <<<EOS
+                <form action="compraEvento.php?id={$evento->getId()}" method="POST" onsubmit="return confirm('Confirma la compra');">
+                    <input type="hidden" name="id" value="{$id}">
+                    <button type="submit" class="boton-accion comprar"> Comprar</button>
+                </form>
+            EOS;
+                
+            }
             
             $contenidoPrincipal .= <<<EOS
                 <div class="evento-detalle">
@@ -97,6 +111,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                         <h2>{$nombre}</h2>
                         {$botonEditar}
                         {$botonEliminar}
+                        {$botonCompra}
                         <p><strong>Precio:</strong> {$precio} €</p>
                         <p><strong>Fecha:</strong> {$fecha}</p>
                         <p><strong>Ubicación:</strong> {$ubicacion}</p>

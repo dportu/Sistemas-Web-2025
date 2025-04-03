@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__.'/includes/config.php';
-use es\ucm\fdi\aw\eventos\Evento;
 use es\ucm\fdi\aw\eventos\FormularioEditarEvento;
-use es\ucm\fdi\aw\usuarios\Usuario;
 use es\ucm\fdi\aw\Aplicacion;
 
 $app = Aplicacion::getInstance();
