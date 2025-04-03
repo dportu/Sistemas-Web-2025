@@ -75,10 +75,19 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             $esPromotor = $app->tieneRol(Usuario::PROMOTOR_ROLE);
             $esOrganizador = ($organizador === $usuario);
 
-            // Botón de edición solo para admins
-            $botonEditar = '';
+            // Botón de edición y de eliminar solo para admins y para los promotores de esos eventos 
+            $botonEditar = '';   // Para que no de errores 
+            $botonEliminar = '';
+
             if (($app->usuarioLogueado()) && ($esAdmin) ||($esPromotor && $esOrganizador)) {
-                $botonEditar = "<a href='editar_evento.php?id={$id}' class='boton-editar'>✏️ Editar</a>";
+                $botonEliminar = <<<EOS
+                <form action="eliminar_evento.php" method="POST" onsubmit="return confirm('¿Estás seguro de querer eliminar este evento?');">
+                    <input type="hidden" name="id" value="{$id}">
+                    <button type="submit" class="boton-accion eliminar">🗑️ Eliminar</button>
+                </form>
+            EOS;
+                $botonEditar = "<a href='editar_evento.php?id={$id}' class='boton-accion editar'> Editar</a>";
+                
             }
             
             $contenidoPrincipal .= <<<EOS
@@ -87,6 +96,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                     <div class="info-evento">
                         <h2>{$nombre}</h2>
                         {$botonEditar}
+                        {$botonEliminar}
                         <p><strong>Precio:</strong> {$precio} €</p>
                         <p><strong>Fecha:</strong> {$fecha}</p>
                         <p><strong>Ubicación:</strong> {$ubicacion}</p>
