@@ -3,6 +3,7 @@ namespace es\ucm\fdi\aw\eventos;
 
 use es\ucm\fdi\aw\MagicProperties;
 use es\ucm\fdi\aw\Aplicacion; //import de aplicacion?
+use es\ucm\fdi\aw\usuarios\Usuario;
 
 class Evento {
     use MagicProperties;
@@ -123,17 +124,16 @@ class Evento {
         return $result;
     }
 
-    public static function compra($evento, $usuario, $precio, $cantidad) { //parametros de entrada provisionales
-        $id = Evento::buscaPorNombre($evento); //se podria simplificar a busqueda solo por nombre
-        if (Evento::buscaPorId($id)) { //comprobar tambien que queden entradas y reducirlas?
-            //$usuario->addPuntos($precio / 4); se añadiria los puntos desde usuario?
+    public static function compra($id_evento, $usuario, $precio, $cantidad) { //parametros de entrada provisionales
+        if (Evento::buscaPorId($id_evento)) { //comprobar tambien que queden entradas y reducirlas?
             $ret = true;
         }
         else {
             $ret = false;
         }
 
-        
+        Usuario::actualiza($usuario);
+
         return $ret; //devolvemos booleano de exito o error
     }
 
@@ -154,7 +154,7 @@ class Evento {
             error_log("Error en preparación: " . $this->conn->error);
             return false;
         }
-    
+        
         $stmt->bind_param("sdsssssi",
             $this->nombre, 
             $this->precio, 
