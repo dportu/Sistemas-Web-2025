@@ -1,5 +1,10 @@
 <?php
+    use es\ucm\fdi\aw\Aplicacion;
+    use es\ucm\fdi\aw\usuarios\Usuario;
+
+
     require_once __DIR__.'/includes/config.php';
+    
 
     // Verificar si el usuario ha iniciado sesión
     if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
@@ -7,9 +12,16 @@
         exit();
     }
 
-    $usuario_nombre = $_SESSION['username'];
-    $usuario_email = $_SESSION['email'];
-    $usuario_rol = $_SESSION['rol'];
+    $app = Aplicacion::getInstance();
+
+    $usuario_nombre = $app->nombreUsuario();
+    $usuario = Usuario::buscaUsuario($usuario_nombre);
+
+    
+
+    
+    $usuario_email = $usuario->getEmail();
+    $usuario_rol = $usuario->getRol();
 
     $tituloPagina = 'Login';
 
