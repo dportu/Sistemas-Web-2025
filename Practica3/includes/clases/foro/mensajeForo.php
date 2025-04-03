@@ -98,7 +98,7 @@
             $mensaje = $conexion->real_escape_string($mensaje);
             $autor = $conexion->real_escape_string($autor);
         
-            if ($evento === "") { 
+            if ($evento === 'General') { 
                 $evento = null;
             }
         

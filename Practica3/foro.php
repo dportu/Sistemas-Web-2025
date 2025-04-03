@@ -43,14 +43,15 @@
 
         // Si el usuario está logueado y es el autor del mensaje, mostrar opciones de edición y eliminación
         if ($aplicacion->usuarioLogueado() && $aplicacion->nombreUsuario() === $autor) {
-            $modificarMensaje .= 
-                "<a href='$urlEdicion'>
+            $modificarMensaje .= "
+                <a href='$urlEdicion'>
                     <button type='button'>Editar</button>
                 </a>
                 <form action='' method='POST' style='display:inline;'>
                     <input type='hidden' name='mensaje_id'>
                     <button type='submit' name='accion' value='eliminar' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este mensaje?\")'>Eliminar</button>
-                </form>";
+                </form>
+                ";
         }
 
         // Eliminar mensaje

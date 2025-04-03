@@ -34,7 +34,7 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
 
     $contenidoPrincipal = <<<EOS
     <div class="admin-panel">
-        <h1>Consola de Administración</h1>
+        <h2>Consola de Administración</h2>
         
         <div class="admin-section">
             <h2>Gestión de Eventos</h2>
@@ -66,7 +66,7 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
 } else {
     $contenidoPrincipal = <<<EOS
     <div class="acceso-denegado">
-        <h1>Acceso Denegado!</h1>
+        <h2>Acceso Denegado!</h2>
         <p>No tienes permisos suficientes para acceder a esta sección.</p>
         <a href="index.php" class="boton-volver">Volver al Inicio</a>
     </div>

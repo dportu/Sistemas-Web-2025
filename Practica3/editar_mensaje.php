@@ -11,7 +11,7 @@
     $htmlForm = $form->gestiona();
 
     $contenidoPrincipal = <<<EOS
-        <h1>Editar Mensaje</h1>
+        <h2>Editar mensaje</h2>
         $htmlForm
     EOS;
 

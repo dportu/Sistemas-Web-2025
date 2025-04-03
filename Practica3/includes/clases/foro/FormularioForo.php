@@ -34,12 +34,10 @@
             if (Aplicacion::getInstance()->usuarioLogueado()){
                 $html = <<<EOF
                 $htmlErroresGlobales
-                    <form id="nuevo-mensaje" action="procesar_foro.php" method="post">
-                        
                         <h3>Escribe tu mensaje</h3>
 
                         <label for="titulo">Título:</label>
-                        <input id="titulo" type="text" name="titulo" value="$titulo" required /><br>
+                        <input id="titulo" type="text" name="titulo" value="$titulo" required ><br>
                         {$erroresCampos['titulo']}
 
                         <!-- Autor y Evento, ocultos -->
@@ -56,8 +54,6 @@
                         <input type="hidden" name="evento" value="{$this->idEvento}">
                         
                         <button type="submit" name="enviar">Publicar mensaje</button>
-                            
-                    </form>
                 EOF;
             }
             else {

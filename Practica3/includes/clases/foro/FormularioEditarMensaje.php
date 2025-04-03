@@ -25,25 +25,24 @@
             $contenido = $mensaje->mensaje;
             $autor = $mensaje->autor;
             $id_evento = $mensaje->evento;
-            $nombreEvento = $id_evento ? Evento::buscaPorId($id_evento) : 'General';
+            $eventoObj = $id_evento ? Evento::buscaPorId($id_evento) : null;
+            $nombreEvento = $eventoObj ? $eventoObj->nombre : 'General';
 
             return <<<EOS
-                <form id="editar-mensaje" action="editar_mensaje.php?id={$this->idMensaje}" method="post">
-                    <label for="titulo">Título:</label>
-                    <input type="text" name="titulo" id="titulo" value="{$titulo}" required><br><br>
+                <label for="titulo">Título:</label>
+                <input type="text" name="titulo" id="titulo" value="{$titulo}" required><br><br>
 
-                    <p>Autor: <strong>{$autor}</strong></p>
-                    
-                    <p>Evento: <strong>{$nombreEvento}</strong></p>
+                <p>Autor: <strong>{$autor}</strong></p>
+                
+                <p>Evento: <strong>{$nombreEvento}</strong></p>
 
-                    <label for="mensaje">Mensaje:</label>
-                    <textarea name="mensaje" id="mensaje" rows="4" required>{$contenido}</textarea>
+                <label for="mensaje">Mensaje:</label>
+                <textarea name="mensaje" id="mensaje">{$contenido}</textarea>
 
-                    <input type="hidden" name="idMensaje" value="{$this->idMensaje}">
+                <input type="hidden" name="idMensaje" value="{$this->idMensaje}">
 
-                    <input type="submit" value="Guardar Cambios">
-                    <a href="foro.php">Cancelar</a>
-                </form>
+                <input type="submit" value="Guardar Cambios">
+                <a href="foro.php">Cancelar</a>
             EOS;
         }
 
@@ -53,19 +52,21 @@
 
             $titulo = trim($datos['titulo'] ?? '');
             $mensaje = trim($datos['mensaje'] ?? '');
-            $evento = trim($datos['evento'] ?? null);
 
             if (empty($mensaje)) {
                 $this->errores[] = "El mensaje no pueden estar vacíos.";
                 return;
             }
 
-            if (!mensajeForo::editarMensaje($this->idMensaje, $titulo, $mensaje, $evento, $usuarioActual)) {
+            $mensajeOriginal = mensajeForo::getMensajePorId($this->idMensaje);
+            $id_evento = $mensajeOriginal ? $mensajeOriginal->evento : null;
+
+            if (!mensajeForo::editarMensaje($this->idMensaje, $titulo, $mensaje, $id_evento, $usuarioActual)) {
                 $this->errores[] = "No se pudo actualizar el mensaje.";
             }
 
             // Redirigir al foro del evento o al foro general
-            $urlRedireccion = $evento ? "foro.php?id={$evento}" : "foro.php";
+            $urlRedireccion = $id_evento ? "foro.php?id={$id_evento}" : "foro.php";
             header("Location: $urlRedireccion");
             exit(); 
         }
