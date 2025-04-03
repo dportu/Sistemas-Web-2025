@@ -1,35 +1,58 @@
-/* Importar la fuente */
-@import url('https://fonts.googleapis.com/css2?family=Handjet:wght@100..900&display=swap');
-/* Estilos generales */
+/* import: Fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Glitch&family=Rubik+Iso&family=Syne+Mono&display=swap');
+/* import: Símbolos */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 
+
+/*morado: #aa0fe7;*/
+
+/* Estilos generales */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-.fascinate-inline-regular {
-    font-family: "Fascinate Inline", system-ui;
-    font-weight: 400;
-    font-style: normal;
-  }
-  
+
+
+/* Tipografías */
+.syne-mono {
+    font-family: 'Syne Mono', monospace;
+    /*font-weight: 400;
+    font-style: normal;*/
+}
+
+.rubik-glitch {
+    font-family: 'Rubik Glitch', cursive;
+    /*font-weight: 400;
+    font-style: normal;*/
+}
+
+.rubik-iso {
+    font-family: 'Rubik Iso', cursive;
+    /*font-weight: 400;
+    font-style: normal;*/
+}
+
+
 /* Cambiar color enlaces :) */
-a {
-    color: rgb(212, 0, 255); /* Cambia "blue" por el color que quieras */
-    text-decoration: none; /* Quita el subrayado */
+.enlaces {
+    color: rgb(188, 17, 255);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
 }
 
-a:hover {
-    color: rgb(139, 0, 7); /* Color cuando pasas el mouse por encima */
-    text-decoration: underline; /* Opcional: subrayado al pasar el mouse */
+.enlaces:hover {
+    color: rgb(164, 1, 201);
+    text-decoration: underline;
 }
 
-/* Fin cambiar color enlaces */
 
+/* Estilos principales */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f5ff;
-    color: #333;
+    font-family: Verdana, sans-serif;
+    background-color: rgb(96, 96, 104); /* moradete: 4e00b4*/
+    color: black;
     line-height: 1.6;
 }
 
@@ -39,70 +62,60 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 4fr 1fr; /* Se aumentó la proporción del main */
+    grid-template-columns: 5fr 1fr;
     grid-template-areas: 
-        "cabecera cabecera cabecera"
-        "izquierda main derecha"
-        "pie pie pie";
+        "header header"
+        "main sidebar"
+        "footer footer";
     gap: 20px;
     padding: 20px 0;
 }
 
+
 /* Cabecera */
-
-
-/* Aplicar la fuente en el header */
-header {
-    grid-area: cabecera;
-    background-color: #071838;
-    color: rgb(231, 215, 215);
+header { 
+    grid-area: header;
+    /* 
+    background-color: #fceb00; */
+    background-color: black;
+    color: #fceb00;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: "Handjet", sans-serif; /* Aquí aplicamos la fuente */
+    box-shadow: 0 4px 8px rgba(101, 90, 118, 0.1);
+    font-family: "Rubik Glitch", sans-serif;
+    text-align: center;
 }
 
-/* Aplicar la fuente con tamaño al h1 */
 header h1 {
     font-size: 7em;
     margin-bottom: 10px;
-    font-weight: 440; /* Puedes ajustar entre 100 y 900 */
-}
-
-
-/* Navegación */
-nav {
+    font-weight: 440;
     display: flex;
-    flex-direction: column; /* Se colocan los enlaces en lista vertical */
-    align-items: start;
-    padding: 10px 0;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    cursor: pointer;
 }
 
-nav ul {
-    display: flex;
-    flex-direction: column;
-    list-style: none;
+header h1::before,
+header h1::after {
+    content: "star"; /* nombre icono */
+    font-family: "Material Symbols Outlined";
+    font-size: 0.6em;
+    vertical-align: middle;
 }
 
-nav ul li {
-    margin-bottom: 10px;
+.saludo {
+    text-align: right; /* Alinea el texto a la derecha */
+    font-family: Verdana, sans-serif; /* Cambia la tipografía */
+    font-size: 1em; /* Ajusta el tamaño de la fuente si es necesario */
 }
 
-nav a {
-    color: #2f64d8; /* Azul */
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-}
 
-nav a:hover {
-    color: #78a3ff;
-}
-
-/* Contenido principal más grande */
+/* Main area */
 main {
     grid-area: main;
-    background-color: white;
+    background-color: #5507d3;
     padding: 40px; /* Se aumentó el padding */
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
@@ -110,7 +123,7 @@ main {
 }
 
 main h1 {
-    color: #1a3a6c;
+    color: rgb(218, 36, 255);
     font-size: 2.2em; /* Tamaño más grande */
     margin-bottom: 20px;
     border-bottom: 2px solid #78a3ff;
@@ -122,158 +135,58 @@ main p {
     text-align: justify;
 }
 
+#contenedor-eventos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 20px;
+}
+
+.evento {
+    background-color: black;
+    padding: 15px;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation area */
+nav {
+    grid-area: sidebar;
+    background-color: black;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+nav h1 {
+    color: rgb(96, 96, 104);
+}
+
+nav ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+nav ul li {
+    margin-bottom: 20px;
+}
+
+    
+
+
+
 /* Ajustes de adaptabilidad para móviles */
 @media (max-width: 768px) {
     #contenedor {
         grid-template-columns: 1fr;
         grid-template-areas: 
-            "cabecera"
-            "izquierda"
+            "header"
             "main"
-            "derecha"
-            "pie";
+            "sidebar"
+            "footer";
     }
-}
-
-/* Estilo general */
-body {
-    background-color: #f4f4f4;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-/* Contenedor principal */
-#foro-contenedor {
-    width: 80%;
-    max-width: 800px;
-    margin: 30px auto;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Estilo para los enlaces de navegación */
-.enlaces {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.enlaces a {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-}
-
-.enlaces a:hover {
-    color: #0056b3;
-}
-
-/* Estilo para los mensajes */
-.mensaje {
-    background: #ffffff;
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.mensaje .consulta {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #555;
-}
-
-.mensaje small {
-    color: gray;
-    display: block;
-    margin-top: 5px;
-}
-
-/* Cuadro de texto para escribir nuevos mensajes */
-#nuevo-mensaje {
-    background: #f9f9f9;
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 5px;
-    margin-top: 20px;
-}
-
-#nuevo-mensaje label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
-}
-
-#nuevo-mensaje textarea,
-#nuevo-mensaje select {
-    width: 100%;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #bbb;
-    font-size: 14px;
-}
-
-#nuevo-mensaje input[type="submit"] {
-    margin-top: 10px;
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-#nuevo-mensaje input[type="submit"]:hover {
-    background: #0056b3;
-}
-
-/* Estilos para la cabecera del foro */
-.foro-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ddd;
-}
-
-.logo-eventia-box {
-    background-color: #007bff;
-    padding: 8px 15px;
-    border-radius: 5px;
-    border: 2px solid #0056b3;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-}
-
-.logo-eventia-box:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-}
-
-.logo-eventia-box a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 18px;
-    display: block;
-}
-
-.user-info {
-    font-size: 14px;
-}
-
-.user-info a {
-    color: #007bff;
-    text-decoration: none;
-    margin-left: 5px;
-}
-
-.user-info a:hover {
-    color: #0056b3;
-    text-decoration: underline;
 }
