@@ -28,3 +28,15 @@ INSERT INTO valoraciones (id_evento, username, nota, comentario, fecha) VALUES
 (1, 'admin', 5, 'Tercio gratis para aquellos que lleguéis antes de las 19:00!!! No te lo pierdas ;)', '2025-03-13'),
 (2, 'user', 5, 'guapísimo', '2025-03-17'),
 (3, 'user', 4, 'aunque me decepcionó un poco que no se rompiera la camiseta al terminar el conci :(', '2025-03-17');
+
+
+-- Insertar el usuario promotor
+INSERT INTO usuarios (username, email, password, rol, puntos) VALUES
+('promotor1', 'promotor1@eventia.es', '$2y$10$nx7sPLOeZyLFfQ5wHYDSnea7eJOtf5XGhEKDK7YJpe8Bmp8wk5dkG', 'promotor', 0);
+
+-- Insertar un nuevo evento asignado a este promotor
+INSERT INTO eventos (nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen) VALUES
+('Festival Indie 2025', 35.50, 'Festival de música indie con las mejores bandas emergentes', '2025-06-20 20:00:00', 'Parque de la Ciudad', 'promotor1', 'img/indie-fest.jpg');
+
+-- Actualizar un evento existente para asignarlo al promotor (opcional)
+UPDATE eventos SET organizador = 'promotor1' WHERE id = 2;
