@@ -92,7 +92,7 @@ class Usuario
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf(
-            "INSERT INTO usuarios (username, password, email, rol) VALUES ('%s', '%s', '%s', '%s', '%d')",
+            "INSERT INTO usuarios (username, password, email, rol, puntos) VALUES ('%s', '%s', '%s', '%s', '%d')",
             $conn->real_escape_string($usuario->username),
             $conn->real_escape_string($usuario->password),
             $conn->real_escape_string($usuario->email),
