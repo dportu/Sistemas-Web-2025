@@ -58,7 +58,7 @@ class Valoracion {
         $valoraciones = Valoracion::valoracionesEvento($evento);
         $notaTotal = 0;
         for($i = 0; $i< count($valoraciones); $i++) {
-            $notaTotal += $valoraciones[$i];
+            $notaTotal += $valoraciones[$i]->getNota();
         }
 
         return $notaTotal / $i;
@@ -67,7 +67,7 @@ class Valoracion {
     public static function valoracionesEvento($evento) {
 
         $conexion = Aplicacion::getInstance()->getConexionBd();
-        $idEvento = $evento->getIdEvento(); // Get event ID
+        $idEvento = $evento->getId(); // Get event ID
         $query = "SELECT * FROM valoraciones WHERE id_evento = ?";
         $stmt = $conexion->prepare($query);
         $stmt->bind_param("i", $idEvento);
