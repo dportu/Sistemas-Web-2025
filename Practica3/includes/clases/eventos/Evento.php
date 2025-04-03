@@ -126,6 +126,7 @@ class Evento {
 
     public static function compra($id_evento, $usuario, $precio, $cantidad) { //parametros de entrada provisionales
         if (Evento::buscaPorId($id_evento)) { //comprobar tambien que queden entradas y reducirlas?
+            $usuario->addPuntos($precio/2);
             $ret = true;
         }
         else {

@@ -18,14 +18,14 @@ class Usuario
     private $puntos;
 
     //  CONSTRUCTOR
-    private function __construct($username, $password, $email, $rol) //pq no se consigue el id en el constructor?
+    private function __construct($username, $password, $email, $rol, $puntos) //pq no se consigue el id en el constructor?
     {
         //$this->id = $id;
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
         $this->rol = $rol;
-        $this->puntos = 0;
+        $this->puntos = $puntos;
     }
 
     
@@ -38,9 +38,9 @@ class Usuario
         return false;
     }
 
-    public static function crea($username, $password, $email, $rol = self::CLIENTE_ROLE)
+    public static function crea($username, $password, $email, $rol, $puntos)
     {
-        $user = new Usuario($username, self::hashPassword($password), $email, $rol);
+        $user = new Usuario($username, self::hashPassword($password), $email, $rol, $puntos);
         return $user->guarda();
     }
 
@@ -56,7 +56,6 @@ class Usuario
             $fila = $rs->fetch_assoc();
             if ($fila) {
                 $user = new Usuario($fila['username'], $fila['password'], $fila['email'], $fila['rol'], $fila['puntos']);
-                echo $fila['puntos'];
                 $rs->free();
                 return $user;
             }
@@ -75,7 +74,6 @@ class Usuario
             $fila = $rs->fetch_assoc();
             if ($fila) {
                 $user = new Usuario($fila['username'], $fila['password'], $fila['email'], $fila['rol'], $fila['puntos']);
-                echo $fila['puntos'];
                 $rs->free();
                 return $user;
             }
