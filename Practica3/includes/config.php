@@ -4,7 +4,7 @@
  * Parámetros de conexión a la BD
  */
 
-//define('BD_HOST', '192.168.2.55');
+//define('BD_HOST', 'vm006.db.swarm.test');
 //define('BD_NAME', 'eventia_db');
 //define('BD_USER', 'eventia_db');
 //define('BD_PASS', 'eventia');
@@ -18,6 +18,7 @@ define('BD_PASS', '');
  */
 define('RAIZ_APP', __DIR__);
 define('RUTA_APP', '/Practica3');
+// define('RUTA_APP', '');
 define('RUTA_IMGS', RUTA_APP.'img/');
 define('RUTA_CSS', RUTA_APP.'css/');
 define('RUTA_JS', RUTA_APP.'js/');
