@@ -93,12 +93,14 @@ function mostrarEvento($id, &$contenidoPrincipal) {
 
             //  Boton de compra provisional
             $botonCompra = '';
+            $url = 'foro.php?id='.$id;
 
             if ($app->usuarioLogueado()) {
                 $botonCompra = <<<EOS
                 <form action="compraEvento.php?id={$evento->getId()}" method="POST" onsubmit="return confirm('Confirma la compra');">
                     <input type="hidden" name="id" value="{$id}">
                     <button type="submit" class="boton-accion comprar"> Comprar</button>
+                    <a href='$url' class='boton-enlace'>Foro evento</a>
                 </form>
             EOS;
                 

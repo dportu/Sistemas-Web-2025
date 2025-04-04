@@ -3,7 +3,6 @@ use es\ucm\fdi\aw\Aplicacion;
 use es\ucm\fdi\aw\usuarios\Usuario;
 
 function mostrarSaludo() {
-	$rutaApp = RUTA_APP;
 	$html='';
 	
 	if (isset($_SESSION["login"]) && ($_SESSION["login"]===true)) {
@@ -13,8 +12,7 @@ function mostrarSaludo() {
 		//conseguimos el usuario
 		$usuario = Usuario::buscaUsuario($nombreUsuario);
 
-		$puntos = $usuario->getPuntos();
-		$html = "Bienvenido, {$_SESSION['username']} <a href='{$rutaApp}/logout.php'>(salir)</a> Puntos:{$puntos}";
+		$html = "Bienvenido, {$_SESSION['username']}";
 	} 
 	else {
 		$html = "Usuario desconocido. <a href='login.php'>Login</a>";
