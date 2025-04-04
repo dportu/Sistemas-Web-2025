@@ -1,95 +1,63 @@
 <?php
-    use es\ucm\fdi\aw\Aplicacion;
-    use es\ucm\fdi\aw\usuarios\Usuario;
+require_once __DIR__.'/includes/config.php';
+
+use es\ucm\fdi\aw\Aplicacion;
+use es\ucm\fdi\aw\usuarios\Usuario;
+
+$app = Aplicacion::getInstance();
+
+if (!$app->usuarioLogueado()) {
+    $app->redirige($app->buildUrl('login.php'));
+}
+
+$usuario = Usuario::buscaUsuario($app->nombreUsuario());
+$nombre = htmlspecialchars($usuario->getUsername());
+$email = htmlspecialchars($usuario->getEmail());
+$rol = htmlspecialchars($usuario->getRol());
+
+// Usamos la funcion build url , que nos venia en app , 
+$enlaceEditar = $app->buildUrl('editar_perfil.php');
+$enlaceLogout = $app->buildUrl('logout.php');
+$enlaceAdmin = $app->buildUrl('Admin.php');
+$enlaceCompras = $app->buildUrl('mis_compras.php');
 
 
-    require_once __DIR__.'/includes/config.php';
-    
-
-    // Verificar si el usuario ha iniciado sesión
-    if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
-        header("Location: login.php");
-        exit();
-    }
-
-    $app = Aplicacion::getInstance();
-
-    $usuario_nombre = $app->nombreUsuario();
-    $usuario = Usuario::buscaUsuario($usuario_nombre);
-
-    
-
-    
-    $usuario_email = $usuario->getEmail();
-    $usuario_rol = $usuario->getRol();
-
-    $tituloPagina = 'Login';
-
-    $contenidoPrincipal = <<<EOS
-        <h1>Perfil</h1>
-        <main>
-    <h1>Bienvenido, <?php echo htmlspecialchars($usuario_nombre); ?>!</h1>
-    <p>Email: <?php echo htmlspecialchars($usuario_email); ?></p>
-    <a href="editar_perfil.php">Editar Perfil</a>
-    
-    <?php if ($usuario_rol === 'administrador' || $usuario_rol === 'promotor') { ?>
+$opcionesEspecificas = '';
+if ($rol === 'administrador' || $rol === 'promotor') {
+    $opcionesEspecificas = <<<EOS
         <h2>Opciones de Administrador</h2>
         <ul>
-           <p> Pulsa para la consola de administrador</p>
-           < a href = "Admin.php"><Admin</a>
-
+            <li>Rol: $rol</li>
+            <li><a href="$enlaceAdmin" class="boton_admin">Consola de administración</a></li>
         </ul>
-    <?php } else { ?>
+    EOS;
+} else {
+    $opcionesEspecificas = <<<EOS
         <h2>Opciones de Usuario</h2>
         <ul>
-            <a href="mis_compras.php">Mis Compras</a>
-            <p> Aqui estarán los puntos del usuario. </p>
+            <a href="$enlaceCompras">Mis Compras</a>
+            <p>Puntos acumulados: [aquí irían los puntos]</p>
         </ul>
-    <?php } ?>
+    EOS;
+}
 
-   EOS;
-   
+$tituloPagina = "Perfil de $nombre";
+$contenidoPrincipal = <<<EOS
+    <article class="perfil-usuario">
+        <h1>Bienvenido, $nombre!</h1>
+        <div class="info-perfil">
+            <p><strong>Email:</strong> $email</p>
+            <a href="$enlaceEditar" class="boton-editar"> Editar perfil</a>
+        </div>
+        
+        <section class="opciones-perfil">
+            $opcionesEspecificas
+        </section>
+        
+        <div class="acciones-secundarias">
+            <a href="$enlaceLogout" class="boton-logout"> Cerrar sesión</a>
+        </div>
+    </article>
+EOS;
 
-?>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de <?php echo htmlspecialchars($usuario_nombre); ?></title>
-    <link id="estilo" rel="stylesheet" type="text/css" href="CSS/estilo.css"/> <!-- Asegúrate de tener un archivo CSS -->
-</head>
-<body>
-    <div id="contenedor">
-
-    <?php require("includes/vistas/comun/header.php"); ?>
-
-    <main>
-    <h1>Bienvenido, <?php echo htmlspecialchars($usuario_nombre); ?>!</h1>
-    <p>Email: <?php echo htmlspecialchars($usuario_email); ?></p>
-    <a href="editar_perfil.php">Editar Perfil</a>
-    
-    <?php if ($usuario_rol === 'administrador' || $usuario_rol === 'promotor') { ?>
-        <h2>Opciones de Administrador</h2>
-        <ul>
-            <p>Rol: <?php echo htmlspecialchars($usuario_rol); ?></p>
-            
-            <a href = "Admin.php" class="boton_admin">Pulsa para la consola de administrador</a>
-        </ul>
-    <?php } else { ?>
-        <h2>Opciones de Usuario</h2>
-        <ul>
-            <a href="mis_compras.php">Mis Compras</a>
-            <p> Aqui estarán los puntos del usuario. </p>
-        </ul>
-    <?php } ?>
-    
-    <a href="logout.php">Cerrar sesión</a>
-    </main>
-    <?php require("includes/vistas/comun/sidebar.php"); ?>
-     <?php require("includes/vistas/comun/footer.php"); ?>
-    
-    </div>
-</body>
-</html>
+require __DIR__.'/includes/vistas/plantillas/plantilla.php';

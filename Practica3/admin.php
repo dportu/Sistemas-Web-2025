@@ -10,12 +10,9 @@ $tituloPagina = 'Panel de Administración';
 $app = Aplicacion::getInstance();
 $rutaApp = RUTA_APP;
 
-// Verificación de permisos
 if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
-    // Obtener todos los eventos
-    $eventos = Evento::getEventos();
     
-    // Construir tabla de eventos
+    $eventos = Evento::getEventos();
     $tablaEventos = '';
     foreach ($eventos as $evento) {
         $tablaEventos .= <<<EOS
