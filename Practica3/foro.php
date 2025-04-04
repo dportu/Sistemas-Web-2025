@@ -73,12 +73,13 @@
         }
 
 		$contenidoPrincipal .= <<<EOS
-            <div class='mensaje'>
+            <div class='valoraciones'>
+            <p class='mensaje-contenido'>
                 <strong>Título:</strong> $titulo <br>
                 <strong>Autor:</strong> $autor <br>
                 <strong>Evento:</strong> $nombre_evento <br>
-                <p class='mensaje-contenido'>$mensaje</p>
-                <small><strong>Fecha:</strong> $fecha_publicacion</small>
+                <strong>Mensaje:</strong> $mensaje <br>
+                <strong>Fecha:</strong> $fecha_publicacion <br> </p>
                 $modificarMensaje
             </div>
         EOS;

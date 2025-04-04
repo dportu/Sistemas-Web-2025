@@ -30,7 +30,7 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
     }
 
     $contenidoPrincipal = <<<EOS
-    <div class="admin-panel">
+    <div class="enlace-registro">
         <h2>Consola de Administración</h2>
         
         <div class="admin-section">

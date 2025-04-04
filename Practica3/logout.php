@@ -17,8 +17,10 @@
 	$tituloPagina = 'Logout';
 
 	$contenidoPrincipal = <<<EOS
+	<div class="enlace-registro">
 		<h1>Sesión cerrada</h1>
 		<p> Gracias por visitar nuestra web. Hasta pronto. </p>
+	</div>
 	EOS;
 
 	require __DIR__.'/includes/vistas/plantillas/plantilla.php';

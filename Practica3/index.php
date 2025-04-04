@@ -11,6 +11,9 @@
 
 	function mostrarEventos(&$contenidoPrincipal) {
         $eventos = Evento::getEventos();
+
+        $contenidoPrincipal .= '<div id="contenedor-eventos">';
+
             for ($i = 0; $i < count($eventos); $i++) {
                 $id = $eventos[$i]->id;
                 $imagen = $eventos[$i]->imagen;
@@ -19,15 +22,15 @@
                 $fecha = $eventos[$i]->fecha;
 
                 $contenidoPrincipal .= <<<EOS
-                    <a href="vistaEvento.php?id={$id}" class="evento-card">
-                        <img src="{$imagen}" alt="Imagen de {$nombre}" class="evento-imagen">
+                    <a href="vistaEvento.php?id={$id}" class="evento">
+                        <img src="{$imagen}" alt="Imagen de {$nombre}" class="evento-icono">
                         <h3>[ {$nombre} ]</h3>
                         <p> {$precio} € </p>
                         <p> {$fecha} </p>
                     </a>
                 EOS;
             }
-        
+            $contenidoPrincipal .= '</div>';
     }
 	
 	require __DIR__.'/includes/vistas/plantillas/plantilla.php';

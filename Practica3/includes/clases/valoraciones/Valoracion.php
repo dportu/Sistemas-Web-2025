@@ -57,6 +57,11 @@ class Valoracion {
     public static function notaMedia($evento) {
         $valoraciones = Valoracion::valoracionesEvento($evento);
         $notaTotal = 0;
+
+        if (count($valoraciones) === 0) {
+            return 0; // O null, o mostrar un mensaje, según tu lógica
+        }
+
         for($i = 0; $i< count($valoraciones); $i++) {
             $notaTotal += $valoraciones[$i]->getNota();
         }

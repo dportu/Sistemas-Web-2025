@@ -9,11 +9,11 @@
   $tituloPagina = 'Login';
 
   $contenidoPrincipal = <<<EOS
+  <div class="enlace-registro">
     <h3>Iniciar sesión </h3>
     $htmlFormLogin
-    <div class="enlace-registro">
-        <a href="registro.php">¿No tienes cuenta? Regístrate aquí</a>
-    </div>
+    <a href="registro.php">¿No tienes cuenta? Regístrate aquí</a>
+  </div>
   EOS;
 
   require __DIR__.'/includes/vistas/plantillas/plantilla.php';

@@ -7,8 +7,10 @@ $htmlFormRegistro = $form->gestiona();
 
 $tituloPagina = 'Registro';
 $contenidoPrincipal = <<<EOS
-    <h4>Registro de usuario</h4>
-    $htmlFormRegistro
+    <div class="enlace-registro">
+        <h4>Registro de usuario</h4>
+        $htmlFormRegistro
+    </div>
 EOS;
 
 require __DIR__.'/includes/vistas/plantillas/plantilla.php';

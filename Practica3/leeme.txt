@@ -1,0 +1,14 @@
+En esta práctica está implementada: 
+- La funcionalidad de foro completa: 
+	Pueden enviar mensajes los usuarios registrados.
+	Cada usuario puede editar y eliminar sus mensajes.
+	Ver los mensajes de otros usuarios.
+	Está separado en: foro general y un foro por cada evento.
+- La funcionalidad de evento:
+	En la página principal se ven todos los eventos disponibles
+    Cuando clicas en cada uno se te muestra su información.
+- La funcionalidad de valoración:
+    Se muestran las valoraciones y su media de cada evento cuando cliclas en el evento
+- La funcionalidad de puntos:
+    Ya se ve visible en la página web y si clicas en compra se suman
+- La funcionalidad de administrador: se puede editar y eliminar el evento.
