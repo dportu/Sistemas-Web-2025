@@ -28,7 +28,7 @@ class FormularioAnyadirEvento extends Formulario {
 
         $app = Aplicacion::getInstance();
 
-        // Generar errores
+        
         $erroresCampos = self::generaErroresCampos(
             ['nombre', 'precio', 'descripcion', 'fecha_inicio', 'ubicacion', 'organizador', 'imagen'],
             $this->errores, 
@@ -126,12 +126,12 @@ class FormularioAnyadirEvento extends Formulario {
         
         $imagen = trim($datos['imagen'] ?? '');
 
-        // Si hay errores, detenemos el proceso
+ 
         if (count($this->errores) > 0) {
             return;
         }
 
-        // Crear el evento
+
         try {
             $resultado = Evento::altaEvento(
                 $nombre,
@@ -146,7 +146,7 @@ class FormularioAnyadirEvento extends Formulario {
             if (!$resultado[0]) {
                 $this->errores[] = $resultado[1];
             } else {
-                return 'admin.php'; // Redirigir si es exitoso
+                return 'admin.php'; 
             }
         } catch (\Exception $e) {
             $this->errores[] = "Error al crear el evento: " . $e->getMessage();

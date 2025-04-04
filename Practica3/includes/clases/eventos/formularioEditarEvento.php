@@ -18,11 +18,8 @@ class FormularioEditarEvento extends Formulario{
             throw new \Exception('El evento no existe');
         }
     }
-    
 
     protected function generaCamposFormulario(&$datos) {
-
-
         if (empty($datos)) {
             $datos = [
                 'id' => $this->evento->getId(),
@@ -104,9 +101,7 @@ class FormularioEditarEvento extends Formulario{
     }
 }
 
-    protected function procesaFormulario(&$datos) {
-        // Validar datos
-
+    protected function procesaFormulario(&$datos) {  // Si cambiamos a que no peudan estar vacios , habria que quitar los ifs 
         $id = filter_var($datos['id'] ?? $this->idEvento, FILTER_VALIDATE_INT);
         if (!$id) {
             $this->errores[] = 'ID de evento no válido';
@@ -141,13 +136,10 @@ class FormularioEditarEvento extends Formulario{
         }
         
         $imagen = trim($datos['imagen'] ?? '');
-        
-        // Si hay errores no continuamos
+
         if (count($this->errores) > 0) {
             return;
         }
-        
-        // Actualizar el evento
         try {
             $evento = Evento::buscaPorId($id);
             if (!$evento) {
@@ -168,7 +160,6 @@ class FormularioEditarEvento extends Formulario{
                 throw new \Exception("No se pudo actualizar el evento en la base de datos");
             }
             
-            // Si llegamos aquí, la actualización fue exitosa
             return 'admin.php';
             
         } catch (\Exception $e) {
