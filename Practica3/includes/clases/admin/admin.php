@@ -41,7 +41,7 @@ class Admin extends Usuario
     }
 
     /**
-     * Actualiza un evento existente
+     * Actualiza un evento 
      */
     public static function actualizarEvento($id_evento, $campos)
     {
@@ -57,7 +57,7 @@ class Admin extends Usuario
     }
 
     /**
-     * Elimina un evento y todos sus mensajes asociados
+     * Elimina un evento
      */
     public static function eliminarEvento($id_evento)
     {
@@ -66,14 +66,13 @@ class Admin extends Usuario
         // Eliminar mensajes asociados primero
         $conn->query("DELETE FROM foro WHERE evento = $id_evento");
         
-        // Eliminar el evento
+     
         return $conn->query("DELETE FROM eventos WHERE id = $id_evento");
     }
 
-    // ======================== MÉTODOS PARA MENSAJES ========================
     
     /**
-     * Edita cualquier mensaje del foro (admin puede editar todos)
+     * Edita cualquier mensaje del foro admin puede editar todos
      */
     public static function editarMensaje($id_mensaje, $nuevoContenido)
     {
@@ -88,16 +87,13 @@ class Admin extends Usuario
         return $conn->query($query);
     }
 
-    /**
-     * Elimina cualquier mensaje del foro
-     */
+
     public static function eliminarMensaje($id_mensaje)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
         return $conn->query("DELETE FROM foro WHERE id = $id_mensaje");
     }
 
-    // ======================== VERIFICACIÓN DE PERMISOS ========================
     
     public function puedeGestionarEventos()
     {
