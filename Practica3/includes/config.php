@@ -17,7 +17,7 @@ define('BD_PASS', '');
  * Parámetros de configuración utilizados para generar las URLs y las rutas a ficheros en la aplicación
  */
 define('RAIZ_APP', __DIR__);
-define('RUTA_APP', '/Sistemas-Web-2025/Practica3');
+define('RUTA_APP', '/Practica3');
 // define('RUTA_APP', '');
 define('RUTA_IMGS', RUTA_APP.'img/');
 define('RUTA_CSS', RUTA_APP.'css/');
