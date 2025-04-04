@@ -80,13 +80,10 @@
                 die("Error al insertar el mensaje: " . $stmt->error);
             }
         
-            // Obtener el ID del mensaje recién insertado
             $idMensaje = $conexion->insert_id;
         
-            // Cerrar la consulta
             $stmt->close();
         
-            // Crear y devolver el objeto mensajeForo
             return new mensajeForo($idMensaje, $titulo, $autor, $mensaje, $evento, date("Y-m-d H:i:s"));
         }
 
@@ -150,7 +147,7 @@
 
             $stmt->close();
 
-            return true; // Se eliminó correctamente
+            return true;
         }
 
         // Obtener un mensaje por su ID

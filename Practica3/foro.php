@@ -58,7 +58,6 @@
 
         // Eliminar mensaje
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Obtener los valores enviados
             $accion = $_POST['accion'] ?? null;
         
             if ($accion) {
