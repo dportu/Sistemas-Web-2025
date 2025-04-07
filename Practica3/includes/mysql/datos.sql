@@ -7,10 +7,9 @@ USE `eventia_db`;
 -- Insercion de datos en la tabla Eventos
 
 INSERT INTO eventos (id, nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen) VALUES
-(1, 'Concierto de Metallica', 20, NULL, '2025-03-15', NULL, NULL, 'metallica.jpg'),
-(2, 'Concierto Anuel AA', 3, NULL, '2025-03-31', NULL, NULL, 'anuel.jpg'),
-(3, 'Halloween en Fabrik', 100, 'Halloween en Fabrik!! No te lo pierdas', '2026-10-31', 'Fabrik', 'Eventia', 'halloween.jpg');
-('Festival Indie 2025', 35.50, 'Festival de música indie con las mejores bandas emergentes', '2025-06-20 20:00:00', 'Parque de la Ciudad', 'promotor1', 'indie-fest.jpg');
+(1, 'Concierto de Metallica', 20, NULL, '2025-03-15T10:00', NULL, NULL, 'img/metallica.jpg'),
+(2, 'Concierto Anuel AA', 3, NULL, '2025-03-15T20:00', NULL, NULL, 'img/anuel.jpg'),
+(3, 'Halloween en Fabrik', 100, 'Halloween en Fabrik!! No te lo pierdas', '2025-03-15T20:00', 'Fabrik', 'Eventia', 'img/halloween.jpg');
 
 -- Insercion de datos en la tabla Foro
 
@@ -34,6 +33,10 @@ INSERT INTO valoraciones (id_evento, username, nota, comentario, fecha) VALUES
 -- Insertar el usuario promotor
 INSERT INTO usuarios (username, email, password, rol, puntos) VALUES
 ('promotor1', 'promotor1@eventia.es', '$2y$10$nx7sPLOeZyLFfQ5wHYDSnea7eJOtf5XGhEKDK7YJpe8Bmp8wk5dkG', 'promotor', 0);
+
+-- Insertar un nuevo evento asignado a este promotor
+INSERT INTO eventos (nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen) VALUES
+('Festival Indie 2025', 35.50, 'Festival de música indie con las mejores bandas emergentes', '2025-06-20 20:00:00', 'Parque de la Ciudad', 'promotor1', 'img/indie-fest.jpg');
 
 -- Actualizar un evento existente para asignarlo al promotor (opcional)
 UPDATE eventos SET organizador = 'promotor1' WHERE id = 2;

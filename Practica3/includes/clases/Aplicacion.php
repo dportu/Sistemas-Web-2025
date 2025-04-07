@@ -281,7 +281,7 @@ class Aplicacion {
 
     public function esAdmin() {
         $this->compruebaInstanciaInicializada();
-        return $this->usuarioLogueado() && (array_search(Usuario::ADMIN_ROLE, $_SESSION['rol']) !== false);
+        return $this->usuarioLogueado() && ($_SESSION['rol'] === Usuario::ADMIN_ROLE);
     }
 
     public function tieneRol($rol) {

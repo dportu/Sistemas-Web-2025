@@ -114,6 +114,8 @@ class Valoracion {
             }
         }
 
+        $result->free();
+
         return $valoraciones; // devolvemos el array con todas las valoraciones
     }
 }

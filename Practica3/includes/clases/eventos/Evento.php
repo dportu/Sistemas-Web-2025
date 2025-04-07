@@ -110,7 +110,7 @@ class Evento {
         //modificacion sobre buscaPorId
         
         $conexion = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("SELECT * FROM eventos WHERE id=%d", $idEvento);
+        $query = sprintf("SELECT * FROM eventos WHERE id=%d", $conexion->real_escape_string($idEvento));
         $rs = $conexion->query($query);
         $result = false;
         if ($rs) {
@@ -200,7 +200,7 @@ class Evento {
         $conexion = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf("INSERT INTO eventos (nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen) VALUES ('%s', %d, '%s', '%s', '%s', '%s', '%s')",
             $conexion->real_escape_string($nombre),
-            $precio,
+            $conexion->real_escape_string($precio),
             $conexion->real_escape_string($descripcion),
             $conexion->real_escape_string($fecha_inicio),
             $conexion->real_escape_string($ubicacion),

@@ -51,7 +51,7 @@
         }
 
         // Si el usuario está logueado y es el autor del mensaje, mostrar opciones de edición y eliminación
-        if ($aplicacion->usuarioLogueado() && $aplicacion->nombreUsuario() === $autor) {
+        if ($aplicacion->usuarioLogueado() && ($aplicacion->nombreUsuario() === $autor || $aplicacion->esAdmin())) { // || que sea promotor del evento
             $modificarMensaje .= "
                 <a href='$urlEdicion' class='boton-enlace'>Editar</a> 
                 <form action='$urlForo' method='POST' style='display:inline;'>

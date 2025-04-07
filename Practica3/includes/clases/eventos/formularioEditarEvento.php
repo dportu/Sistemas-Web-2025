@@ -10,7 +10,7 @@ class FormularioEditarEvento extends Formulario{
     private $evento;
 
     public function __construct($idEvento){
-        parent::__construct('formEditarEvento', ['urlRedireccion' => 'admin.php', 'method' => 'POST', 'class' => 'form-Editar']);
+        parent::__construct('formEditarEvento', ['urlRedireccion' => 'adminVista.php', 'method' => 'POST', 'class' => 'form-Editar']);
         $this->idEvento = $idEvento;
         $this->evento = Evento::buscaPorId($idEvento);
         
@@ -40,7 +40,7 @@ class FormularioEditarEvento extends Formulario{
 
         $html .= <<<EOF
         <div class="editar-evento">
-            <h1>Editar Evento: {$this->evento->getNombre()}</h1>
+            <h2>Editar Evento: {$this->evento->getNombre()}</h2>
             
             <div class="campo-formulario">
                 <label for="nombre">Nombre del evento:</label>
@@ -51,7 +51,7 @@ class FormularioEditarEvento extends Formulario{
 
             <div class="campo-formulario">
                 <label for="precio">Precio (€):</label>
-                <input type="number" id="precio" name="precio"required
+                <input type="number" id="precio" name="precio" required
                        value="{$datos['precio']}">
                 {$erroresCampos['precio']}
             </div>
@@ -85,14 +85,13 @@ class FormularioEditarEvento extends Formulario{
 
             <div class="campo-formulario">
                 <label for="imagen">URL de la imagen:</label>
-                <input type="src" id="imagen" name="imagen" 
-                       value="{$datos['imagen']}">
+                <input type="text" id="imagen" name="imagen" value="{$datos['imagen']}">
                 {$erroresCampos['imagen']}
             </div>
 
             <div class="acciones">
                 <button type="submit" class="boton-guardar">Guardar cambios</button>
-                <a href="{$app->resuelve('admin.php')}" class="boton-cancelar">Cancelar</a>
+                <a href="{$app->resuelve('adminVista.php')}" class="boton-cancelar">Cancelar</a>
             </div>
         </div>
         EOF;
@@ -160,7 +159,7 @@ class FormularioEditarEvento extends Formulario{
                 throw new \Exception("No se pudo actualizar el evento en la base de datos");
             }
             
-            return 'admin.php';
+            return 'adminVista.php';
             
         } catch (\Exception $e) {
             $this->errores[] = "Error al actualizar el evento: " . $e->getMessage();

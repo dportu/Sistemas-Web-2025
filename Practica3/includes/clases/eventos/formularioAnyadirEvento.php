@@ -8,7 +8,7 @@ class FormularioAnyadirEvento extends Formulario {
 
     public function __construct() {
         parent::__construct('formAnyadirEvento', [
-            'urlRedireccion' => 'admin.php', 
+            'urlRedireccion' => 'adminVista.php', 
             'method' => 'POST', 
             'class' => 'form-Nuevo'
         ]);
@@ -40,7 +40,7 @@ class FormularioAnyadirEvento extends Formulario {
         
         $html = <<<EOF
         <div class="nuevo-evento">
-            <h1>Añadir Nuevo Evento</h1>
+            <h2>Añadir Nuevo Evento</h2>
             {$erroresGlobales}
             
             <div class="campo-formulario">
@@ -80,14 +80,13 @@ class FormularioAnyadirEvento extends Formulario {
             </div>
 
             <div class="campo-formulario">
-                <label for="imagen">URL de la imagen:</label>
-                <input type="src" id="imagen" name="imagen">
-                {$erroresCampos['imagen']}
+                <label for="imagen">Selecciona una imagen:</label>
+                 <input type="file" id="imagen" name="imagen" accept={$erroresCampos['imagen']}>
             </div>
 
             <div class="acciones">
                 <button type="submit" class="boton-guardar">Crear Evento</button>
-                <a href="{$app->resuelve('admin.php')}" class="boton-cancelar">Cancelar</a>
+                <a href="{$app->resuelve('adminVista.php')}" class="boton-cancelar">Cancelar</a>
             </div>
         </div>
         EOF;
@@ -146,7 +145,7 @@ class FormularioAnyadirEvento extends Formulario {
             if (!$resultado[0]) {
                 $this->errores[] = $resultado[1];
             } else {
-                return 'admin.php'; 
+                return 'adminVista.php'; 
             }
         } catch (\Exception $e) {
             $this->errores[] = "Error al crear el evento: " . $e->getMessage();

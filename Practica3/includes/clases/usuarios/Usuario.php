@@ -68,7 +68,7 @@ class Usuario
     public static function buscaPorId($idUsuario)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("SELECT * FROM usuarios WHERE id=%d", $idUsuario);
+        $query = sprintf("SELECT * FROM usuarios WHERE id=%d", $conn->real_escape_string($idUsuario));
         $rs = $conn->query($query);
         if ($rs) {
             $fila = $rs->fetch_assoc();
@@ -147,7 +147,7 @@ class Usuario
             return false;
         }
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("DELETE FROM usuarios WHERE id = %d", $idUsuario);
+        $query = sprintf("DELETE FROM usuarios WHERE id = %d", $conn->real_escape_string($idUsuario));
         if ($conn->query($query)) {
             return true;
         } else {

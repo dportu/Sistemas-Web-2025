@@ -33,7 +33,7 @@ CREATE TABLE `eventos` (
   `nombre` varchar(255) NOT NULL,
   `precio` varchar(255) NOT NULL,
   `descripcion` text DEFAULT NULL,
-  `fecha_inicio` date NOT NULL,
+  `fecha_inicio` datetime NOT NULL,
   `ubicacion` varchar(255) DEFAULT NULL,
   `organizador` varchar(100) DEFAULT NULL,
   `imagen` varchar(255) NOT NULL DEFAULT 'img/default.jpg'

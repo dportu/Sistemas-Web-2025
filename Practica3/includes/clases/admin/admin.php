@@ -51,6 +51,7 @@ class Admin extends Usuario
             $set[] = "$key = '" . $conn->real_escape_string($value) . "'";
         }
         
+        $id_evento = $conn->real_escape_string($id_evento);
         $query = "UPDATE eventos SET " . implode(', ', $set) . " WHERE id = $id_evento";
         return $conn->query($query);
     }
@@ -76,6 +77,7 @@ class Admin extends Usuario
     public static function eliminarMensaje($id_mensaje)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
+        $id_mensaje = $conn->real_escape_string($id_mensaje);
         return $conn->query("DELETE FROM foro WHERE id = $id_mensaje");
     }
 
