@@ -93,10 +93,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
 
             //  Boton de compra provisional
             $botonCompra = '';
-            $params = ['id' => $id];
-            $url = $app->buildUrl('foro.php', $params);
-
-            #$url = 'foro.php?id='.$id;
+            $url = 'foro.php?id='.$id;
 
             if ($app->usuarioLogueado()) {
                 $botonCompra = <<<EOS
@@ -130,7 +127,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             EOS;
 
              // Mostrar valoraciones de los usuarios
-            $valoraciones = Valoracion::getValoraciones(Evento::buscaPorId($id));
+            $valoraciones = Valoracion::valoracionesEvento(Evento::buscaPorId($id));
             $contenidoPrincipal .= "<div class='valoraciones'><h3>Valoraciones de los usuarios:</h3>";
 
             if (empty($valoraciones)) {
