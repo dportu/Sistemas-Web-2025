@@ -93,7 +93,10 @@ function mostrarEvento($id, &$contenidoPrincipal) {
 
             //  Boton de compra provisional
             $botonCompra = '';
-            $url = 'foro.php?id='.$id;
+            $params = ['id' => $id];
+            $url = $app->buildUrl('foro.php', $params);
+
+            #$url = 'foro.php?id='.$id;
 
             if ($app->usuarioLogueado()) {
                 $botonCompra = <<<EOS
