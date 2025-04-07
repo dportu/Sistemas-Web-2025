@@ -57,6 +57,7 @@
                         $row['fecha_publicacion']
                     );
                 }
+                $result->free();
             }
             return $mensajes;
         }     
