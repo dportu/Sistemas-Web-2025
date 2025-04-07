@@ -307,7 +307,7 @@ nav ul li {
         color: #de25ff;
         margin-bottom: 1.5rem;
         display: flex;
-        align-items: left;
+        text-align: left;
         gap: 0.8em;
     }
 
@@ -547,9 +547,6 @@ nav ul li {
     a:hover {
         text-decoration: underline;
     }
-
- */
-
 
 
 /* Foro */
