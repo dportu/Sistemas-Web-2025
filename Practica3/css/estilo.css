@@ -189,8 +189,7 @@ main p {
     margin: 10px auto;
     padding: 10px;
     text-align: center;
-    text-decoration: none;
-    margin: auto;
+    text-decoration: none;  
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     /* Bordes con gradiente */
     border: 5px solid rgba(0, 0, 0, 0.832);
