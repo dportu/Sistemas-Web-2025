@@ -7,9 +7,9 @@ USE `eventia_db`;
 -- Insercion de datos en la tabla Eventos
 
 INSERT INTO eventos (id, nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen) VALUES
-(1, 'Concierto de Metallica', 20, NULL, '2025-03-15', NULL, NULL, 'img/metallica.jpg'),
-(2, 'Concierto Anuel AA', 3, NULL, '2025-03-31', NULL, NULL, 'img/anuel.jpg'),
-(3, 'Halloween en Fabrik', 100, 'Halloween en Fabrik!! No te lo pierdas', '2026-10-31', 'Fabrik', 'Eventia', 'img/halloween.jpg');
+(1, 'Concierto de Metallica', 20, NULL, '2025-03-15', NULL, NULL, 'metallica.jpg'),
+(2, 'Concierto Anuel AA', 3, NULL, '2025-03-31', NULL, NULL, 'anuel.jpg'),
+(3, 'Halloween en Fabrik', 100, 'Halloween en Fabrik!! No te lo pierdas', '2026-10-31', 'Fabrik', 'Eventia', 'halloween.jpg');
 
 -- Insercion de datos en la tabla Foro
 
