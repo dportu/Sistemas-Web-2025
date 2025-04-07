@@ -35,14 +35,19 @@
 
         $aplicacion = Aplicacion::getInstance();
         $modificarMensaje = '';
-
-        $urlEdicion = "editar_mensaje.php";
+        #$urlEdicion = $aplicacion->buildUrl('editar_mensaje.php');
+        
         if ($mensajeId) {
-            $urlEdicion = "editar_mensaje.php?id=$mensajeId";
+            $params = ['id' => $mensajeId];
+            $urlEdicion = $aplicacion->buildUrl('editar_mensaje.php', $params);
+            
         }
-        $urlForo = 'foro.php';
+        $urlForo = $aplicacion->buildUrl('foro.php');
+        
+
         if ($id_evento) {
-            $urlForo = "foro.php?id=$id_evento";
+            $params = ['id' => $id_evento];
+            $urlForo = $aplicacion->buildUrl('foro.php', $params);
         }
 
         // Si el usuario está logueado y es el autor del mensaje, mostrar opciones de edición y eliminación

@@ -19,7 +19,7 @@
     // Usamos la funcion build url , que nos venia en app , 
     $enlaceEditar = $app->buildUrl('editar_perfil.php');
     $enlaceLogout = $app->buildUrl('logout.php');
-    $enlaceAdmin = $app->buildUrl('Admin.php');
+    $enlaceAdmin = $app->buildUrl('adminVista.php');
     $enlaceCompras = $app->buildUrl('mis_compras.php');
 
 
