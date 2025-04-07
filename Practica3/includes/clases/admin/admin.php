@@ -13,7 +13,6 @@ class Admin extends Usuario
         parent::__construct($username, $password, $email, $rol);
     }
 
-   
     /**
      * Crea un nuevo evento en la base de datos
      */
@@ -54,20 +53,6 @@ class Admin extends Usuario
         
         $query = "UPDATE eventos SET " . implode(', ', $set) . " WHERE id = $id_evento";
         return $conn->query($query);
-    }
-
-    /**
-     * Elimina un evento
-     */
-    public static function eliminarEvento($id_evento)
-    {
-        $conn = Aplicacion::getInstance()->getConexionBd();
-        
-        // Eliminar mensajes asociados primero
-        $conn->query("DELETE FROM foro WHERE evento = $id_evento");
-        
-     
-        return $conn->query("DELETE FROM eventos WHERE id = $id_evento");
     }
 
     
