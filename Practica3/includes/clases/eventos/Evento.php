@@ -81,6 +81,7 @@ class Evento {
                     $row['imagen']
                 );
             }
+            $result->free();
         }
 
         return $eventos; // devolvemos el array con todos los eventos
