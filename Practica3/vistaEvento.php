@@ -12,17 +12,18 @@ $app = Aplicacion::getInstance();
 $tituloPagina = 'Eventos';
 $contenidoPrincipal = '';
 
-// optenmos id de evenyto si existre
+// Obtener ID del evento si existe
 $id_evento = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
-// uestra detalles de evento
+// Mostrar listado o detalle según el ID
 mostrarEvento($id_evento, $contenidoPrincipal);
 
+// Función para mostrar eventos
 function mostrarEvento($id, &$contenidoPrincipal) {
     $app = Aplicacion::getInstance();
     
     if ($id === null) {
-        // si id fuese null muestra todos los eventos
+        // Mostrar todos los eventos
         $eventos = Evento::getEventos();
         foreach ($eventos as $evento) {
             $imagen = htmlspecialchars($evento->getImagen());
@@ -42,10 +43,10 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             EOS;
         }
     } else {
-        // evento especifico
+        // Mostrar detalles de un evento específico
         $evento = Evento::buscaPorId($id);
         if ($evento) {
-            $imagen = htmlspecialchars($evento->getImagen()); //no null por defecto
+            $imagen = htmlspecialchars($evento->getImagen()); //no es null por defecto
             $nombre = htmlspecialchars($evento->getNombre()); //no puede ser null
             $precio = $evento->getPrecio();
             $fecha = date('d/m/Y H:i', strtotime($evento->getFecha()));
@@ -75,8 +76,8 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             $esPromotor = $app->tieneRol(Usuario::PROMOTOR_ROLE);
             $esOrganizador = ($organizador === $usuario);
           
-            // boton de edicion y de eliminar solo para admins y para los promotores de esos eventos 
-            $botonEditar = '';   
+            // Botón de edición y de eliminar solo para admins y para los promotores de esos eventos 
+            $botonEditar = '';   // Para que no de errores 
             $botonEliminar = '';
 
             if (($app->usuarioLogueado()) && ($esAdmin) ||($esPromotor && $esOrganizador)) {
@@ -90,9 +91,12 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                 
             }
 
-            //  boton de compra provisional
+            //  Boton de compra provisional
             $botonCompra = '';
-            $url = 'foro.php?id='.$id;
+            $params = ['id' => $id];
+            $url = $app->buildUrl('foro.php', $params);
+
+            #$url = 'foro.php?id='.$id;
 
             if ($app->usuarioLogueado()) {
                 $botonCompra = <<<EOS
@@ -125,7 +129,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                 </div>
             EOS;
 
-             // mostrar valoraciones de los usuarios
+             // Mostrar valoraciones de los usuarios
             $valoraciones = Valoracion::getValoraciones(Evento::buscaPorId($id));
             $contenidoPrincipal .= "<div class='valoraciones'><h3>Valoraciones de los usuarios:</h3>";
 
@@ -151,7 +155,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                 }
             }
 
-            $contenidoPrincipal .= "</div>"; // cierre de .valoraciones
+            $contenidoPrincipal .= "</div>"; // Cierre de .valoraciones
         } else {
             $contenidoPrincipal .= "<p class='error'>Evento no encontrado</p>";
         }
