@@ -117,27 +117,3 @@ class Valoracion {
         return $valoraciones; // devolvemos el array con todas las valoraciones
     }
 }
-
-$eventos = Evento::getEventos();
-
-    $app = Aplicacion::getInstance();
-    $nombreUsuario = $app->nombreUsuario();
-    
-    // Construir tabla de eventos
-    $tablaEventos = '';
-    foreach ($eventos as $evento) {
-        if($evento->getOrganizador() === $nombreUsuario) {
-            $tablaEventos .= <<<EOS
-            <tr>
-                <td>{$evento->getNombre()}</td>
-                <td>{$evento->getPrecio()}</td>
-                <td>{$evento->getFecha()}</td>
-                <td>{$evento->getUbicacion()}</td>
-                <td>
-                    <a href="editar_evento.php?id={$evento->getId()}" class="boton-editar">Editar</a>
-                    <a href="eliminar_evento.php?id={$evento->getId()}" class="boton-eliminar">Eliminar</a>
-                </td>
-            </tr>
-            EOS;
-        }
-    }
