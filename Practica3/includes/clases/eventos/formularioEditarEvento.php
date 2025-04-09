@@ -1,5 +1,5 @@
 <?php
-namespace es\ucm\fdi\aw\Eventos;
+namespace es\ucm\fdi\aw\eventos;
 
 use es\ucm\fdi\aw\Aplicacion;
 use es\ucm\fdi\aw\Formulario;
