@@ -33,15 +33,6 @@ class Valoracion {
         return $this->fecha;
     }
 
-    /*
-        TODO: Añadir los métodos necesarios para gestionar las valoraciones de los eventos.
-        - Crear una valoración (insertar en la base de datos)
-        - Obtener una valoración (consultar en la base de datos)
-        - Actualizar una valoración (actualizar en la base de datos)
-        - Borrar una valoración (borrar en la base de datos)
-        - Obtener todas las valoraciones de un evento (consultar en la base de datos)
-    */
-
     //  CONSTRUCTOR
     function __construct($id_evento, $username, $nota, $comentario, $fecha) {
         $this->id_evento = $id_evento;
@@ -69,7 +60,6 @@ class Valoracion {
     }
 
     public static function valoracionesEvento($evento) {
-
         $conexion = Aplicacion::getInstance()->getConexionBd();
         $idEvento = $evento->getId(); // Get event ID
         $query = "SELECT * FROM valoraciones WHERE id_evento = ?";
@@ -93,28 +83,78 @@ class Valoracion {
 
         return $valoraciones; // devolvemos el array con todas las valoraciones
     }
-
-    public static function getValoraciones() {
+    
+    public static function getValoracionPorId($id) {
         $conexion = Aplicacion::getInstance()->getConexionBd();
-        $query = "SELECT * FROM valoraciones";
-        $result = $conexion->query($query);
+        $query = "SELECT * FROM valoraciones WHERE id = ?";
+        $stmt = $conexion->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        $valoraciones = [];
+        if ($result && $result->num_rows === 1) {
+            $row = $result->fetch_assoc();
+            return new Valoracion(
+                $row['id'], 
+                $row['id_evento'], 
+                $row['username'], 
+                $row['nota'], 
+                $row['comentario'], 
+                $row['fecha']
+            );
+        } 
+        return null;
+    }
 
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                $valoraciones[] = new Valoracion(
-                    $row['id_evento'], 
-                    $row['username'], 
-                    $row['nota'], 
-                    $row['comentario'], 
-                    $row['fecha']
-                );
-            }
+    public static function insertarValoracion($evento, $username, $nota, $comentario) {
+        $conexion = Aplicacion::getInstance()->getConexionBd();
+        $query = "INSERT INTO valoraciones (id_evento, username, nota, comentario, fecha) VALUES (?, ?, ?, ?, NOW())";
+        
+        $stmt = $conexion->prepare($query);
+        $stmt->bind_param("isis", $evento->getId(), $username, $nota, $comentario);
+        if (!$stmt) {
+            die("Error en la preparación de la consulta: " . $conexion->error);
+        }
+        if (!$stmt->execute()) {
+            die("Error al insertar valoracion: " . $stmt->error);
+        }
+        $stmt->close();
+        return true;
+    }
+
+    public static function editarValoracion($evento, $username, $nota, $comentario) {
+        $conexion = Aplicacion::getInstance()->getConexionBd();
+        
+        $query = "UPDATE valoraciones SET nota = ?, comentario = ?, fecha = NOW() WHERE id_evento = ? AND username = ?";
+    
+        $stmt = $conexion->prepare($query);
+        $stmt->bind_param("isis", $nota, $comentario, $evento->getId(), $username);
+        if (!$stmt) {
+            die("Error en la preparación de la consulta: " . $conexion->error);
+        }
+        if (!$stmt->execute()) {
+            die("Error al editar valoracion: " . $stmt->error);
+        }
+        $stmt->close();
+        return true;
+    }
+
+    public static function eliminarValoracion($id) {
+        $conexion = Aplicacion::getInstance()->getConexionBd();
+        $query = "DELETE FROM valoraciones WHERE id = ?";
+
+        $stmt = $conexion->prepare($query);
+        if (!$stmt) {
+            die("Error en la preparación de la consulta: " . $conexion->error);
         }
 
-        $result->free();
+        $stmt->bind_param("i", $id);
 
-        return $valoraciones; // devolvemos el array con todas las valoraciones
+        if (!$stmt->execute()) {
+            die("Error al eliminar la valoración: " . $stmt->error);
+        }
+
+        $stmt->close();
+        return true;
     }
 }

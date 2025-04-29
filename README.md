@@ -4,4 +4,4 @@ Práctica final:
 - Puntos: gestionar descuentos de puntos
 - Administrador: completar con las nuevas funcionalidades y corregir lo de añadir/eliminar imagenes
 - CSS: totalidad implementada 
- Se valora: sal y pimienta y aias. Hacer lo del ejercicio 4
+ Se valora: sal y pimienta y aias.

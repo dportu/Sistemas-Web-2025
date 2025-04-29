@@ -6,6 +6,7 @@ use es\ucm\fdi\aw\usuarios\Usuario;
 use es\ucm\fdi\aw\Aplicacion;
 use es\ucm\fdi\aw\valoraciones\Valoracion; 
 
+require_once __DIR__.'/includes/clases/valoraciones/vistaValoraciones.php';
 require_once __DIR__.'/includes/config.php';
 
 $app = Aplicacion::getInstance();
@@ -42,7 +43,8 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                 </div>
             EOS;
         }
-    } else {
+    } 
+    else {
         // Mostrar detalles de un evento específico
         $evento = Evento::buscaPorId($id);
         if ($evento) {
@@ -129,36 +131,13 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                 </div>
             EOS;
 
-             // Mostrar valoraciones de los usuarios
-            $valoraciones = Valoracion::valoracionesEvento(Evento::buscaPorId($id));
-            $contenidoPrincipal .= "<div class='valoraciones'><h3>Valoraciones de los usuarios:</h3>";
+            // Mostrar valoraciones de los usuarios
+            $contenidoPrincipal .= mostrarValoracionesEvento($evento);
 
-            if (empty($valoraciones)) {
-                $contenidoPrincipal .= "<p>No hay valoraciones todavía.</p>";
-            } else {
-                foreach ($valoraciones as $valoracion) {
-                    $usuarioNombre = htmlspecialchars($valoracion->getUsername());
-                    $puntuacion = htmlspecialchars($valoracion->getNota());
-                    $comentario = $valoracion->getComentario();
-                    $fecha = htmlspecialchars($valoracion->getFecha());
-
-                    $comentarioHTML = !empty($comentario) ? "<p><strong>Comentario:</strong> ".htmlspecialchars($comentario)."</p>" : '';
-
-                    $contenidoPrincipal .= <<<EOS
-                        <div class="valoracion">
-                            <p><strong>Usuario:</strong> $usuarioNombre</p>
-                            <p><strong>Puntuación:</strong> $puntuacion/5</p>
-                            $comentarioHTML
-                            <p><strong>Fecha:</strong> $fecha</p>
-                        </div>
-                    EOS;
-                }
-            }
-
-            $contenidoPrincipal .= "</div>"; // Cierre de .valoraciones
-        } else {
+    } 
+    else {
             $contenidoPrincipal .= "<p class='error'>Evento no encontrado</p>";
-        }
+    }
         
     }
 

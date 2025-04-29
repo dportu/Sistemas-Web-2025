@@ -85,7 +85,7 @@
         
             $stmt->close();
         
-            return new MensajeForo($idMensaje, $titulo, $autor, $mensaje, $evento, date("Y-m-d H:i:s"));
+            return true;
         }
 
         // Editar un mensaje existente
