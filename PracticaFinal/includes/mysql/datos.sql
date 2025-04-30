@@ -6,10 +6,11 @@ USE `eventia_db`;
 
 -- Insercion de datos en la tabla Eventos
 
-INSERT INTO eventos (id, nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen) VALUES
-(1, 'Concierto de Metallica', 20, NULL, '2025-03-15T10:00', NULL, NULL, 'img/metallica.jpg'),
-(2, 'Concierto Anuel AA', 3, NULL, '2025-03-15T20:00', NULL, NULL, 'img/anuel.jpg'),
-(3, 'Halloween en Fabrik', 100, 'Halloween en Fabrik!! No te lo pierdas', '2025-03-15T20:00', 'Fabrik', 'Eventia', 'img/halloween.jpg');
+INSERT INTO eventos (id, nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen, entradas) VALUES
+(1, 'Concierto de Metallica', 20.00, NULL, '2025-03-15 10:00:00', 'Palacio Vistalegre', 'Eventia', 'img/metallica.jpg', 100),
+(2, 'Concierto Anuel AA', 3.00, NULL, '2025-03-15 20:00:00', 'Wizink', 'UA', 'img/anuel.jpg', 50),
+(3, 'Halloween en Fabrik', 100.00, 'Halloween en Fabrik!! No te lo pierdas', '2025-03-15 20:00:00', 'Fabrik', 'Eventia', 'img/halloween.jpg', 200);
+
 
 -- Insercion de datos en la tabla Foro
 

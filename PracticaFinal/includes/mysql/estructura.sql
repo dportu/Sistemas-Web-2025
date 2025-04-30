@@ -36,7 +36,8 @@ CREATE TABLE `eventos` (
   `fecha_inicio` datetime NOT NULL,
   `ubicacion` varchar(255) DEFAULT NULL,
   `organizador` varchar(100) DEFAULT NULL,
-  `imagen` varchar(255) NOT NULL DEFAULT 'img/default.jpg'
+  `imagen` varchar(255) NOT NULL DEFAULT 'img/default.jpg',
+  `entradas` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
