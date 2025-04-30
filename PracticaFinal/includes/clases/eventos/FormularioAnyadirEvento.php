@@ -23,14 +23,15 @@ class FormularioAnyadirEvento extends Formulario {
             'fecha_inicio' => '',
             'ubicacion' => '',
             'organizador' => '',
-            'imagen' => ''
+            'imagen' => '',
+            'entradas_disponibles' => 0
         ];
 
         $app = Aplicacion::getInstance();
 
         
         $erroresCampos = self::generaErroresCampos(
-            ['nombre', 'precio', 'descripcion', 'fecha_inicio', 'ubicacion', 'organizador', 'imagen'],
+            ['nombre', 'precio', 'descripcion', 'fecha_inicio', 'ubicacion', 'organizador', 'imagen', 'entradas_disponibles'],
             $this->errores, 
             'span', 
             ['class' => 'error']
@@ -84,6 +85,14 @@ class FormularioAnyadirEvento extends Formulario {
                  <input type="file" id="imagen" name="imagen" accept={$erroresCampos['imagen']}>
             </div>
 
+            <div class="campo-formulario">
+                <label for="entradas">Entradas disponibles:</label>
+                <input type="number" id="entradas" name="entradas" 
+                    min="0" step="1" required value="{$datos['entradas_disponibles']}">
+                {$erroresCampos['entradas']}
+            </div>
+
+
             <div class="acciones">
                 <button type="submit" class="boton-guardar">Crear Evento</button>
                 <a href="{$app->resuelve('adminVista.php')}" class="boton-cancelar">Cancelar</a>
@@ -125,7 +134,11 @@ class FormularioAnyadirEvento extends Formulario {
         
         $imagen = trim($datos['imagen'] ?? '');
 
- 
+        $entradas = filter_var($datos['entradas'], FILTER_VALIDATE_INT);
+        if ($entradas === false || $entradas < 0) {
+            $this->errores['entradas'] = 'Número de entradas no válido';
+        }
+
         if (count($this->errores) > 0) {
             return;
         }
@@ -139,7 +152,8 @@ class FormularioAnyadirEvento extends Formulario {
                 $fecha_inicio,
                 $ubicacion,
                 $organizador,
-                $imagen
+                $imagen,
+                $entradas
             );
 
             if (!$resultado[0]) {

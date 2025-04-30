@@ -29,7 +29,8 @@ class FormularioEditarEvento extends Formulario{
                 'fecha_inicio' => $this->evento->getFecha(),
                 'ubicacion' => $this->evento->getUbicacion(),
                 'organizador' => $this->evento->getOrganizador(),
-                'imagen' => $this->evento->getImagen()
+                'imagen' => $this->evento->getImagen(),
+                'entradas_disponibles' => $this->evento->getEntradasDisponibles()
             ];
         
         $app = Aplicacion::getInstance();
@@ -89,6 +90,14 @@ class FormularioEditarEvento extends Formulario{
                 {$erroresCampos['imagen']}
             </div>
 
+            <div class="campo-formulario">
+                <label for="entradas">Entradas disponibles:</label>
+                <input type="number" id="entradas" name="entradas" 
+                    min="0" step="1" required 
+                    value="{$datos['entradas_disponibles']}">
+                {$erroresCampos['entradas']}
+            </div>
+
             <div class="acciones">
                 <button type="submit" class="boton-guardar">Guardar cambios</button>
                 <a href="{$app->resuelve('adminVista.php')}" class="boton-cancelar">Cancelar</a>
@@ -136,6 +145,11 @@ class FormularioEditarEvento extends Formulario{
         
         $imagen = trim($datos['imagen'] ?? '');
 
+        $entradas = filter_var($datos['entradas'] ?? 0, FILTER_VALIDATE_INT);
+        if ($entradas === false || $entradas < 0) {
+            $this->errores['entradas'] = 'Número de entradas no válido';
+        }
+
         if (count($this->errores) > 0) {
             return;
         }
@@ -152,7 +166,8 @@ class FormularioEditarEvento extends Formulario{
                 $fecha_inicio,
                 $ubicacion,
                 $organizador,
-                $imagen
+                $imagen,
+                $entradas
             );
             
             if (!$resultado) {

@@ -18,9 +18,10 @@ class Evento {
     private $ubicacion;
     private $organizador;
     private $imagen;
+    private $entradas;
 
     //  CONSTRUCTOR
-    private function __construct($id, $nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen) {
+    private function __construct($id, $nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen, $entradas) {
         $this->id = $id;
         $this->nombre = $nombre;
         $this->precio = $precio;
@@ -29,6 +30,7 @@ class Evento {
         $this->ubicacion = $ubicacion;
         $this->organizador = $organizador;
         $this->imagen = $imagen;
+        $this->entradas = $entradas;
 
         $this->conn = Aplicacion::getInstance()->getConexionBd();
     }
@@ -36,16 +38,16 @@ class Evento {
 
     //  METODOS PUBLICOS
     //  ESTATICOS
-    public static function altaEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen) {
+    public static function altaEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen, $entradas) {
         $evento = Evento::buscaPorNombre($nombre);
         if($evento != null) {
             $mensaje = "Ya existe un evento con ese nombre";
             $ret = false;
         }
         else {
-            $eventoId = Evento::insertarEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen);
+            $eventoId = Evento::insertarEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen, $entradas);
             if($eventoId != false) {
-                new Evento($eventoId, $nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen);
+                new Evento($eventoId, $nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen, $entradas);
                 $mensaje = "Evento dado de alta con éxito";
                 $ret = true;
             }
@@ -63,7 +65,7 @@ class Evento {
         //return: array con todos los eventos en la base de datos actualmente
 
         $conexion = Aplicacion::getInstance()->getConexionBd();
-        $query = "SELECT id, nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen FROM eventos";
+        $query = "SELECT id, nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen, entradas FROM eventos";
         $result = $conexion->query($query);
 
         $eventos = [];
@@ -78,7 +80,8 @@ class Evento {
                     $row['fecha_inicio'], 
                     $row['ubicacion'], 
                     $row['organizador'], 
-                    $row['imagen']
+                    $row['imagen'],
+                    $row['entradas']
                 );
             }
             $result->free();
@@ -116,7 +119,7 @@ class Evento {
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Evento($idEvento, $fila['nombre'], $fila['precio'], $fila['descripcion'], $fila['fecha_inicio'], $fila['ubicacion'], $fila['organizador'], $fila['imagen']);
+                $result = new Evento($idEvento, $fila['nombre'], $fila['precio'], $fila['descripcion'], $fila['fecha_inicio'], $fila['ubicacion'], $fila['organizador'], $fila['imagen'], $fila['entradas']);
             }
             $rs->free();
         } else {
@@ -125,22 +128,21 @@ class Evento {
         return $result;
     }
 
-    public static function compra($id_evento, $usuario, $precio, $cantidad) { //parametros de entrada provisionales
-        if (Evento::buscaPorId($id_evento)) { //comprobar tambien que queden entradas y reducirlas?
-            $usuario->addPuntos($precio/2);
-            $ret = true;
+    public static function compra($id_evento, $usuario, $precio, $cantidad) {
+        $evento = Evento::buscaPorId($id_evento);
+        
+        if ($evento && $evento->entradas >= $cantidad) {
+            $evento->actualizaEntradas($cantidad);
+            $puntos = ($precio * $cantidad) / 2;
+            $usuario->addPuntos($puntos);
+            Usuario::actualiza($usuario);
+            return true;
         }
-        else {
-            $ret = false;
-        }
-
-        Usuario::actualiza($usuario);
-
-        return $ret; //devolvemos booleano de exito o error
+        return false;
     }
 
     //  INSTANCIADOS
-    public function editarEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen) {
+    public function editarEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen, $entradas) {
         $this->nombre = $nombre;
         $this->precio = $precio;
         $this->descripcion = $descripcion;
@@ -148,8 +150,9 @@ class Evento {
         $this->ubicacion = $ubicacion;
         $this->organizador = $organizador;
         $this->imagen = $imagen;
+        $this->entradas = $entradas;
     
-        $sql = "UPDATE eventos SET nombre=?, precio=?, descripcion=?, fecha_inicio=?, ubicacion=?, organizador=?, imagen=? WHERE id=?";
+        $sql = "UPDATE eventos SET nombre=?, precio=?, descripcion=?, fecha_inicio=?, ubicacion=?, organizador=?, imagen=?, entradas=? WHERE id=?";
     
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) {
@@ -165,7 +168,8 @@ class Evento {
             $this->ubicacion, 
             $this->organizador, 
             $this->imagen,
-            $this->id
+            $this->id,
+            $this->entradas
         );
     
         $result = $stmt->execute();
@@ -192,20 +196,32 @@ class Evento {
         
         $stmt->close(); //hay que cerrar ?
     }
+
+
+    public function actualizaEntradas($cantidad) {
+        $sql = "UPDATE eventos SET entradas = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $nuevoStock = $this->entradas - $cantidad;
+        $stmt->bind_param("ii", $nuevoStock, $this->id);
+        return $stmt->execute();
+    }
+
     
     //METODOS PRIVADOS
 
     //solo puede ser usada en altaevento
     private static function insertarEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen) {
         $conexion = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("INSERT INTO eventos (nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen) VALUES ('%s', %d, '%s', '%s', '%s', '%s', '%s')",
+        $query = sprintf("INSERT INTO eventos (nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen, entradas) VALUES ('%s', %d, '%s', '%s', '%s', '%s', '%s')",
             $conexion->real_escape_string($nombre),
             $conexion->real_escape_string($precio),
             $conexion->real_escape_string($descripcion),
             $conexion->real_escape_string($fecha_inicio),
             $conexion->real_escape_string($ubicacion),
             $conexion->real_escape_string($organizador),
-            $conexion->real_escape_string($imagen)
+            $conexion->real_escape_string($imagen),
+            $conexion->real_escape_string($entradas)
+
         );
         if ($conexion->query($query)) {
             return $conexion->insert_id;
@@ -245,5 +261,9 @@ class Evento {
 
     public function getImagen() {
         return $this->imagen;
+    }
+
+    public function getEntradasDisponibles() {
+        return $this->entradas;
     }
 }
