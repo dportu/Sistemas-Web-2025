@@ -18,22 +18,28 @@
     $nombreUsuario = $app->nombreUsuario();
     //conseguimos el usuario
     $usuario = Usuario::buscaUsuario($nombreUsuario);
+
+
     $id_evento = isset($_GET['id']) ? (int)$_GET['id'] : null;
     $precio = Evento::buscaPorId($id_evento)->getPrecio();
+    $cantidad = isset($_POST['cantidad']) ? (int)$_POST['cantidad'] : 0;
 
-    $compraExitosa = Evento::compra($id_evento, $usuario, $precio, 0); //cantidad aun no implementada
+    $compraExitosa = Evento::compra($id_evento, $usuario, $precio, $cantidad ); //cantidad aun no implementada
 
     if ($compraExitosa) {
-        $str = "<p>Compra realizada con éxito. ¡Disfruta el evento!</p>";
+        $mensaje = "✅ Compra de $cantidad entradas realizada con éxito!";
+        $mensaje .= "<br>Puntos acumulados: +" . ($precio * $cantidad / 2);
     } else {
-        $str = "<p>Error al realizar la compra. Inténtalo de nuevo.</p>";
+        $mensaje = "❌ Error en la compra. Verifica la disponibilidad de entradas";
     }
-
 	$contenidoPrincipal = <<<EOS
-        <p> $str </p>
-        <p> <a href="vistaEvento.php?id=$id_evento">Volver al evento</a> </p>
+    <div class="resultado-compra">
+        <h2>Resultado de la compra</h2>
+        <p>$mensaje</p>
+        <a href="vistaEvento.php?id=$id_evento" class="boton-volver">Volver al evento</a>
+    </div>
     EOS;
-	
+        
 	require __DIR__.'/includes/vistas/plantillas/plantilla.php';
   
 ?>

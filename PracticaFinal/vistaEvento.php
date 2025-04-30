@@ -52,6 +52,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             $nombre = htmlspecialchars($evento->getNombre()); //no puede ser null
             $precio = $evento->getPrecio();
             $fecha = date('d/m/Y H:i', strtotime($evento->getFecha()));
+            $entradas = $evento->getEntradasDisponibles();
 
             //ifs para evitar htmlspacialchars(null)
             if($evento->getUbicacion() != null) { 
@@ -72,6 +73,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             else {
                 $descripcion = "";
             }
+
 
             $usuario = $app->nombreUsuario();
             $esAdmin = $app->tieneRol(Usuario::ADMIN_ROLE);
@@ -101,19 +103,37 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             #$url = 'foro.php?id='.$id;
 
             if ($app->usuarioLogueado()) {
-                $botonCompra = <<<EOS
-                <form action="compraEvento.php?id={$evento->getId()}" method="POST" onsubmit="return confirm('Confirma la compra');">
-                    <input type="hidden" name="id" value="{$id}">
-                    <button type="submit" class="boton-accion comprar"> Comprar</button>
-                    <a href='$url' class='boton-accion foro'>Foro evento</a>
-                </form>
-            EOS;
-                
+                if ($entradas > 0) {
+                    $botonCompra = <<<EOS
+                    <form action="compraEvento.php?id={$id}" method="POST" class="form-compra">
+                        <div class="selector-cantidad">
+                            <label>Cantidad: 
+                                <input type="number" 
+                                       name="cantidad" 
+                                       min="1" 
+                                       max="{$entradas}" 
+                                       value="1"
+                                       class="input-cantidad">
+                            </label>
+                            <button type="submit" class="boton-accion comprar">🎟️ Comprar entradas</button>
+                        </div>
+                    </form>
+                    EOS;
+                } else {
+                    $botonCompra = "<p class='aviso-agotado'>❌ No quedan entradas disponibles</p>";
+                    
+                }
+                $botonCompra .= "<a href='$url' class='boton-accion foro'>💬 Foro del evento</a>";
             }
+
 
             $evento = Evento::buscaPorId($id);
             $valoracionMedia = Valoracion::notaMedia($evento);
             $valoracionHTML = $valoracionMedia ? "<span class='valoracion-media'>(".number_format($valoracionMedia, 1)." ★)</span>" : "<span class='valoracion-media'>(Sin valoraciones)</span>";
+            $entradas = $evento->getEntradasDisponibles();
+            $info_entradas = $entradas > 0 ? "<p class='entradas-disponibles'>Entradas disponibles: $entradas</p>" : "<p class='agotado'>¡Agotado!</p>";
+            
+            
             $contenidoPrincipal .= <<<EOS
             <div class="evento-detalle">
                 <img src="{$imagen}" alt="{$nombre}" class="evento-imagen-detalle">
@@ -121,6 +141,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                     <h2>{$nombre} {$valoracionHTML}</h2>
                         {$botonEditar}
                         {$botonEliminar}
+                        {$info_entradas}
                         {$botonCompra}
                         <p><strong>Precio:</strong> {$precio} €</p>
                         <p><strong>Fecha:</strong> {$fecha}</p>
