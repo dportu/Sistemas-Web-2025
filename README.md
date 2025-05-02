@@ -1,7 +1,10 @@
 Práctica final:
 - Evento: añadir la compra y que se sumen los puntos bien
-- Valoraciones: añadir/eliminar/editar las valoraciones
+- Valoraciones: completo a falta de revisión (¿un usuario solo puede enviar una valoración una vez?)
+- Foro: completo
 - Puntos: gestionar descuentos de puntos
 - Administrador: completar con las nuevas funcionalidades y corregir lo de añadir/eliminar imagenes
 - CSS: totalidad implementada 
  Se valora: sal y pimienta y aias.
+
+ No son vista con plantilla para mover a otra carpeta: comprobarUsuario, eliminar_evento

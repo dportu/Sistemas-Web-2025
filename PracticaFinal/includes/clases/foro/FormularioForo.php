@@ -8,7 +8,7 @@
 
     class FormularioForo extends Formulario {
 
-        private $idEvento;  // Guardamos el ID del evento, si existe.
+        private $idEvento;
 
         public function __construct($idEvento) {
             $this->idEvento = $idEvento;
@@ -98,7 +98,7 @@
                 if (MensajeForo::agregarMensaje($titulo, $mensaje, $usuario, $evento)) {
                     // Redirección después de la inserción
                     $redirectUrl = 'foro.php' . ($evento ? "?id=$evento" : '');
-                    echo "<script>alert('Mensaje enviado con éxito'); window.location = '$redirectUrl';</script>";
+                    header("Location: $redirectUrl");
                     exit();
                 } 
                 else {

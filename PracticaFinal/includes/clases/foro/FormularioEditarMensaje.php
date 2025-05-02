@@ -10,7 +10,7 @@
         private $idMensaje;
 
         public function __construct($idMensaje) {
-            parent::__construct('formEditarMensaje', ['urlRedireccion' => "foro.php"]);
+            parent::__construct('formEditarMensaje');
             $this->idMensaje = $idMensaje;
         }
 
@@ -25,8 +25,8 @@
             $contenido = $mensaje->mensaje;
             $autor = $mensaje->autor;
             $id_evento = $mensaje->evento;
-            $eventoObj = $id_evento ? Evento::buscaPorId($id_evento) : null;
-            $nombreEvento = $eventoObj ? $eventoObj->nombre : 'General';
+            $evento = $id_evento ? Evento::buscaPorId($id_evento) : null;
+            $nombreEvento = $evento ? $evento->nombre : 'General';
 
             return <<<EOS
                 <label for="titulo">Título:</label>
@@ -47,21 +47,18 @@
         }
 
         protected function procesaFormulario(&$datos) {
-            $app = Aplicacion::getInstance();
-            $usuarioActual = $app->nombreUsuario();
-
             $titulo = trim($datos['titulo'] ?? '');
             $mensaje = trim($datos['mensaje'] ?? '');
 
             if (empty($mensaje)) {
-                $this->errores[] = "El mensaje no pueden estar vacíos.";
+                $this->errores[] = "El mensaje no puede estar vacío.";
                 return;
             }
 
             $mensajeOriginal = MensajeForo::getMensajePorId($this->idMensaje);
             $id_evento = $mensajeOriginal ? $mensajeOriginal->evento : null;
 
-            if (!MensajeForo::editarMensaje($this->idMensaje, $titulo, $mensaje, $id_evento, $usuarioActual)) {
+            if (!MensajeForo::editarMensaje($this->idMensaje, $titulo, $mensaje, $id_evento)) {
                 $this->errores[] = "No se pudo actualizar el mensaje.";
             }
 

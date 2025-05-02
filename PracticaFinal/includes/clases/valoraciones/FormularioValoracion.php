@@ -6,41 +6,52 @@ use es\ucm\fdi\aw\Aplicacion;
 
 class FormularioValoracion extends Formulario {
 
-    private $idEvento;
+    private $id_evento;
 
-    public function __construct($idEvento) {
+    public function __construct($id_evento) {
+        $this->id_evento = $id_evento;
         parent::__construct('formValoracion');
-        $this->idEvento = $idEvento;
     }
 
     protected function generaCamposFormulario(&$datos) {
         $nota = $datos['nota'] ?? '';
         $comentario = $datos['comentario'] ?? '';
+
         $erroresCampos = self::generaErroresCampos(['nota', 'comentario'], $this->errores, 'span', ['class' => 'error']);
+        $htmlErroresGlobales = self::generaListaErroresGlobales($this->errores);
 
-        return <<<HTML
-            <h3>Valora este evento</h3>
-            <label for="nota">Nota (1-5):</label>
-            <input type="number" id="nota" name="nota" min="1" max="5" value="$nota" required>
-            {$erroresCampos['nota']}
+        if (Aplicacion::getInstance()->usuarioLogueado()){
+            $html = <<<EOF
+                $htmlErroresGlobales
+                <h3>Valora este evento</h3>
+                <label for="nota">Nota (1-5):</label>
+                <input type="number" id="nota" name="nota" min="1" max="5" value="$nota" required>
+                {$erroresCampos['nota']}
 
-            <label for="comentario">Comentario:</label>
-            <textarea id="comentario" name="comentario" required>$comentario</textarea>
-            {$erroresCampos['comentario']}
+                <label for="comentario">Comentario:</label>
+                <textarea id="comentario" name="comentario" required>$comentario</textarea>
+                {$erroresCampos['comentario']}
 
-            <input type="submit" name="enviar" value="Enviar valoración">
-        HTML;
+                <input type="submit" name="enviar" value="Enviar valoración">
+            EOF;
+        }
+        else {
+            $html = <<<EOF
+                $htmlErroresGlobales
+                    <p>Para publicar una valoracion, debes <a href='login.php'> inicia sesión</a>.</p>
+                EOF;
+        }
+
+        return $html;
     }
 
     protected function procesaFormulario(&$datos) {
+        
         $nota = trim($datos['nota'] ?? '');
         $comentario = trim($datos['comentario'] ?? '');
 
         if (empty($nota) || $nota < 1 || $nota > 5) {
             $this->errores['nota'] = 'La nota debe estar entre 1 y 5.';
-        }
-        if (empty($comentario)) {
-            $this->errores['comentario'] = 'El comentario no puede estar vacío.';
         }
 
         $app = Aplicacion::getInstance();
@@ -52,13 +63,15 @@ class FormularioValoracion extends Formulario {
         $usuario = $app->nombreUsuario();
 
         if (count($this->errores) === 0) {
-            $conn = $app->getConexionBd();
-            $stmt = $conn->prepare("INSERT INTO valoraciones (id_evento, username, nota, comentario, fecha) VALUES (?, ?, ?, ?, NOW())");
-            $stmt->bind_param("isis", $this->idEvento, $usuario, $nota, $comentario);
-            if (!$stmt->execute()) {
-                $this->errores[] = "Error al insertar la valoración.";
+            if (Valoracion::insertarValoracion($this->id_evento, $usuario, $nota, $comentario)) {
+                // Redirección después de la inserción
+                $redirectUrl = 'vistaEvento.php?id=' . $this->id_evento;
+                header("Location: $redirectUrl");
+                exit();
+            } 
+            else {
+                $this->errores[] = 'Error al enviar valoracion.';
             }
-            $stmt->close();
         }
     }
 }

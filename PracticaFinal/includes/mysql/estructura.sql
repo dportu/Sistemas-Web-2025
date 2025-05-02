@@ -76,6 +76,7 @@ CREATE TABLE `usuarios` (
 --
 
 CREATE TABLE `valoraciones` (
+  `id` int(11) NOT NULL,
   `id_evento` int(11) NOT NULL,
   `username` varchar(10) DEFAULT NULL,
   `nota` int(1) NOT NULL CHECK (`nota` between 1 and 5),
@@ -109,7 +110,7 @@ ALTER TABLE `usuarios`
 -- Indices de la tabla `valoraciones`
 --
 ALTER TABLE `valoraciones`
-  ADD PRIMARY KEY (`id_evento`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `username` (`username`);
 
 --
@@ -126,6 +127,12 @@ ALTER TABLE `eventos`
 -- AUTO_INCREMENT de la tabla `foro`
 --
 ALTER TABLE `foro`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `valoraciones`
+--
+ALTER TABLE `valoraciones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

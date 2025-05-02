@@ -39,7 +39,7 @@
         
         if ($mensajeId) {
             $params = ['id' => $mensajeId];
-            $urlEdicion = $aplicacion->buildUrl('editar_mensaje.php', $params);
+            $urlEdicion = $aplicacion->buildUrl('editar_mensajeForo.php', $params);
             
         }
         $urlForo = $aplicacion->buildUrl('foro.php');

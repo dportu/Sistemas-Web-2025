@@ -128,7 +128,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
 
 
             $evento = Evento::buscaPorId($id);
-            $valoracionMedia = Valoracion::notaMedia($evento);
+            $valoracionMedia = Valoracion::notaMedia($id);
             $valoracionHTML = $valoracionMedia ? "<span class='valoracion-media'>(".number_format($valoracionMedia, 1)." ★)</span>" : "<span class='valoracion-media'>(Sin valoraciones)</span>";
             $entradas = $evento->getEntradasDisponibles();
             $info_entradas = $entradas > 0 ? "<p class='entradas-disponibles'>Entradas disponibles: $entradas</p>" : "<p class='agotado'>¡Agotado!</p>";
@@ -153,13 +153,12 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             EOS;
 
             // Mostrar valoraciones de los usuarios
-            $contenidoPrincipal .= mostrarValoracionesEvento($evento);
+            $contenidoPrincipal .= mostrarValoracionesEvento($id);
 
-    } 
-    else {
+        } 
+        else {
             $contenidoPrincipal .= "<p class='error'>Evento no encontrado</p>";
-    }
-        
+        }
     }
 
    

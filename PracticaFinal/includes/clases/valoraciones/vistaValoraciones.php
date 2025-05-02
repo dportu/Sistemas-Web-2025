@@ -1,5 +1,7 @@
 <?php
     use es\ucm\fdi\aw\valoraciones\Valoracion;
+    use es\ucm\fdi\aw\valoraciones\FormularioValoracion;
+    use es\ucm\fdi\aw\valoraciones\FormularioEditarValoracion;
     use es\ucm\fdi\aw\Aplicacion;
 
     function modificarValoracion($app, $valoracion, $id_evento) {
@@ -7,7 +9,7 @@
         if ($app->usuarioLogueado() && $app->nombreUsuario() === $valoracion->getUsername()) {
             // Si es el autor o administrador, puede editar/eliminar
             $urlEditar = $app->buildUrl('editar_valoracion.php', ['id' => $valoracion->getId()]);
-            $urlActual = $app->buildUrl('vistaValoraciones.php', ['id' => $id_evento]);
+            $urlActual = $app->buildUrl('vistaEvento.php', ['id' => $id_evento]);
 
             $acciones .= <<<EOS
             <a href="$urlEditar" class="boton-enlace">Editar</a>
@@ -20,14 +22,14 @@
         return $acciones;
     }
     
-    function mostrarValoracionesEvento($evento): string {
-        $html = "<div class='valoraciones'><h3>Valoraciones de los usuarios:</h3>";
+    function mostrarValoracionesEvento($id_evento) {
+        $contenido = "<div class='valoraciones'><h3>Valoraciones de los usuarios:</h3>";
 
-        $valoraciones = Valoracion::valoracionesEvento($evento);
+        $valoraciones = Valoracion::valoracionesEvento($id_evento);
         $app = Aplicacion::getInstance();
 
         if (empty($valoraciones)) {
-            $html .= "<p>No hay valoraciones todavía.</p>";
+            $contenido .= "<p>No hay valoraciones todavía.</p>";
         } else {
             foreach ($valoraciones as $valoracion) {
                 $usuarioNombre = htmlspecialchars($valoracion->getUsername());
@@ -37,10 +39,9 @@
 
                 $comentarioHTML = !empty($comentario) ? "<p><strong>Comentario:</strong> ".htmlspecialchars($comentario)."</p>" : '';
                 
-                $modificarValoracion = '';
-                // $modificarValoracion = modificarValoracion($app, $valoracion, $evento->getId());
+                $modificarValoracion = modificarValoracion($app, $valoracion, $id_evento);
 
-                $html .= <<<EOS
+                $contenido .= <<<EOS
                     <div class="valoracion">
                         <p><strong>Usuario:</strong> $usuarioNombre</p>
                         <p><strong>Puntuación:</strong> $puntuacion/5</p>
@@ -60,13 +61,24 @@
                 $valoracion = Valoracion::getValoracionPorId($valoracionId);
                 if ($valoracion && ($valoracion->getUsername() === $app->nombreUsuario() || $app->esAdmin())) {
                     Valoracion::eliminarValoracion($valoracionId);
-                    header("Location: vistaEvento.php?id=$evento");
+                    header("Location: vistaEvento.php?id=$id_evento");
                     exit;
                 }
             }
         }
 
-        $html .= "</div>"; // Cierre de .valoraciones
-        return $html;
+        $contenido .= "</div>"; // Cierre de valoraciones
+
+        // Formulario para añadir una nueva valoracion
+
+        $form = new FormularioValoracion($id_evento);
+        $formLogin = $form->gestiona();
+        $contenido .= <<<EOS
+            <div class="formulario-contenedor">
+                $formLogin
+            </div>
+        EOS;
+
+        return $contenido;
     }
 ?>

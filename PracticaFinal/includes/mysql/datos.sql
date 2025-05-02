@@ -25,10 +25,10 @@ INSERT INTO usuarios (username, email, password, rol, puntos) VALUES
 
 -- Insercion de datos en la tabla Valoraciones
 
-INSERT INTO valoraciones (id_evento, username, nota, comentario, fecha) VALUES
-(1, 'admin', 5, 'Tercio gratis para aquellos que lleguéis antes de las 19:00!!! No te lo pierdas ;)', '2025-03-13'),
-(2, 'user', 5, 'guapísimo', '2025-03-17'),
-(3, 'user', 4, 'aunque me decepcionó un poco que no se rompiera la camiseta al terminar el conci :(', '2025-03-17');
+INSERT INTO valoraciones (id, id_evento, username, nota, comentario, fecha) VALUES
+(1, 1, 'admin', 5, 'Tercio gratis para aquellos que lleguéis antes de las 19:00!!! No te lo pierdas ;)', '2025-03-13'),
+(2, 2, 'user', 5, 'guapísimo', '2025-03-17'),
+(3, 3, 'user', 4, 'aunque me decepcionó un poco que no se rompiera la camiseta al terminar el conci :(', '2025-03-17');
 
 
 -- Insertar el usuario promotor

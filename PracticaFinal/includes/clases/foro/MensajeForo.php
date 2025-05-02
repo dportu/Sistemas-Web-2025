@@ -81,7 +81,7 @@
                 die("Error al insertar el mensaje: " . $stmt->error);
             }
         
-            $idMensaje = $conexion->insert_id;
+            $conexion->insert_id;
         
             $stmt->close();
         
@@ -89,26 +89,25 @@
         }
 
         // Editar un mensaje existente
-        public static function editarMensaje($id_mensaje, $titulo, $mensaje, $evento, $autor) {
+        public static function editarMensaje($id_mensaje, $titulo, $mensaje, $evento) {
             $conexion = Aplicacion::getInstance()->getConexionBd();
         
             $titulo = $conexion->real_escape_string($titulo);
             $mensaje = $conexion->real_escape_string($mensaje);
-            $autor = $conexion->real_escape_string($autor);
         
             if ($evento === 'General') { 
                 $evento = null;
             }
         
             if ($evento === null) {
-                $sql = "UPDATE foro SET titulo = ?, mensaje = ?, evento = NULL WHERE id = ? AND autor = ?";
+                $sql = "UPDATE foro SET titulo = ?, mensaje = ?, evento = NULL WHERE id = ?";
                 $stmt = $conexion->prepare($sql);
-                $stmt->bind_param("ssis", $titulo, $mensaje, $id_mensaje, $autor);
+                $stmt->bind_param("ssi", $titulo, $mensaje, $id_mensaje);
             } else {
                 $evento = $conexion->real_escape_string($evento);
-                $sql = "UPDATE foro SET titulo = ?, mensaje = ?, evento = ? WHERE id = ? AND autor = ?";
+                $sql = "UPDATE foro SET titulo = ?, mensaje = ?, evento = ? WHERE id = ?";
                 $stmt = $conexion->prepare($sql);
-                $stmt->bind_param("ssisi", $titulo, $mensaje, $evento, $id_mensaje, $autor);
+                $stmt->bind_param("ssis", $titulo, $mensaje, $evento, $id_mensaje);
             }
         
             if (!$stmt) {

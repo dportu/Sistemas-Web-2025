@@ -9,6 +9,7 @@ class Valoracion {
 
     private $conn;
 
+    private $id;
     private $id_evento;
     private $username;
     private $nota;
@@ -17,6 +18,9 @@ class Valoracion {
 
 
     //  GETTERS
+    public function getId() {
+        return $this->id;
+    }
     public function getIdEvento() {
         return $this->id_evento;
     }
@@ -34,7 +38,8 @@ class Valoracion {
     }
 
     //  CONSTRUCTOR
-    function __construct($id_evento, $username, $nota, $comentario, $fecha) {
+    function __construct($id, $id_evento, $username, $nota, $comentario, $fecha) {
+        $this->id = $id;
         $this->id_evento = $id_evento;
         $this->username = $username;
         $this->nota = $nota;
@@ -44,12 +49,12 @@ class Valoracion {
         $this->conn = Aplicacion::getInstance()->getConexionBd();
     }
 
-    public static function notaMedia($evento) {
-        $valoraciones = Valoracion::valoracionesEvento($evento);
+    public static function notaMedia($id_evento) {
+        $valoraciones = Valoracion::valoracionesEvento($id_evento);
         $notaTotal = 0;
 
         if (count($valoraciones) === 0) {
-            return 0; // O null, o mostrar un mensaje, según tu lógica
+            return 0;
         }
 
         for($i = 0; $i< count($valoraciones); $i++) {
@@ -59,12 +64,12 @@ class Valoracion {
         return $notaTotal / $i;
     }
 
-    public static function valoracionesEvento($evento) {
+    public static function valoracionesEvento($id_evento) {
         $conexion = Aplicacion::getInstance()->getConexionBd();
-        $idEvento = $evento->getId(); // Get event ID
         $query = "SELECT * FROM valoraciones WHERE id_evento = ?";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("i", $idEvento);
+        $id_evento = $conexion->real_escape_string($id_evento);
+        $stmt->bind_param("i", $id_evento);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -72,6 +77,7 @@ class Valoracion {
         if ($result) {
             while ($row = $result->fetch_assoc()) {
                 $valoraciones[] = new Valoracion(
+                    $row['id'],
                     $row['id_evento'], 
                     $row['username'], 
                     $row['nota'], 
@@ -106,29 +112,34 @@ class Valoracion {
         return null;
     }
 
-    public static function insertarValoracion($evento, $username, $nota, $comentario) {
+    public static function insertarValoracion($id_evento, $username, $nota, $comentario) {
         $conexion = Aplicacion::getInstance()->getConexionBd();
         $query = "INSERT INTO valoraciones (id_evento, username, nota, comentario, fecha) VALUES (?, ?, ?, ?, NOW())";
         
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("isis", $evento->getId(), $username, $nota, $comentario);
+        $stmt->bind_param("isis", $id_evento, $username, $nota, $comentario);
         if (!$stmt) {
             die("Error en la preparación de la consulta: " . $conexion->error);
         }
+
         if (!$stmt->execute()) {
             die("Error al insertar valoracion: " . $stmt->error);
         }
+
+        $conexion->insert_id;
+
         $stmt->close();
+        
         return true;
     }
 
-    public static function editarValoracion($evento, $username, $nota, $comentario) {
+    public static function editarValoracion($id, $nota, $comentario) {
         $conexion = Aplicacion::getInstance()->getConexionBd();
         
-        $query = "UPDATE valoraciones SET nota = ?, comentario = ?, fecha = NOW() WHERE id_evento = ? AND username = ?";
+        $query = "UPDATE valoraciones SET nota = ?, comentario = ?, fecha = NOW() WHERE id = ?";
     
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("isis", $nota, $comentario, $evento->getId(), $username);
+        $stmt->bind_param("isi", $nota, $comentario, $id);
         if (!$stmt) {
             die("Error en la preparación de la consulta: " . $conexion->error);
         }
