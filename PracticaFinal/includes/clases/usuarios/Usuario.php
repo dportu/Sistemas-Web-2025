@@ -161,6 +161,16 @@ class Usuario
         return $this->puntos;
     }
 
+    public function setPuntos($nuevosPuntos) {
+        if ($nuevosPuntos >= 0) {
+            $this->puntos = $nuevosPuntos;
+            return true;
+        }
+        return false;
+    }
+
+
+
     
 
     //  GETTERS
@@ -185,6 +195,27 @@ class Usuario
         return $this->puntos;
     }
 
+
+    public static function getComprasByUsuario($username) {
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $query = sprintf(
+            "SELECT c.*, e.nombre as evento_nombre, e.imagen as evento_imagen 
+            FROM compras c 
+            JOIN eventos e ON c.evento_id = e.id 
+            WHERE c.usuario = '%s' 
+            ORDER BY c.fecha_compra DESC",
+            $conn->real_escape_string($username)
+        );
+        
+        $compras = [];
+        if ($rs = $conn->query($query)) {
+            while ($fila = $rs->fetch_assoc()) {
+                $compras[] = $fila;
+            }
+            $rs->free();
+        }
+        return $compras;
+    }
 
 
     public function tieneRol($rol)
