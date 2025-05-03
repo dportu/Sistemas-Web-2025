@@ -84,6 +84,19 @@ CREATE TABLE `valoraciones` (
   `fecha` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+
+
+CREATE TABLE `compras` (
+  `id` int(11) NOT NULL,
+  `usuario` varchar(10) NOT NULL,
+  `evento_id` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `precio_unitario` decimal(10,2) NOT NULL,
+  `puntos_usados` int(11) NOT NULL,
+  `fecha_compra` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Índices para tablas volcadas
 --
@@ -114,6 +127,15 @@ ALTER TABLE `valoraciones`
   ADD KEY `username` (`username`);
 
 --
+-- Indices de la tabla `compras`
+--
+ALTER TABLE `compras`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `usuario` (`usuario`),
+  ADD KEY `evento_id` (`evento_id`);
+
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -135,6 +157,13 @@ ALTER TABLE `foro`
 ALTER TABLE `valoraciones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
+
+--
+-- AUTO_INCREMENT de la tabla `compras`
+--
+ALTER TABLE `compras`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- Restricciones para tablas volcadas
 --
@@ -146,6 +175,15 @@ ALTER TABLE `valoraciones`
   ADD CONSTRAINT `valoraciones_ibfk_1` FOREIGN KEY (`id_evento`) REFERENCES `eventos` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `valoraciones_ibfk_2` FOREIGN KEY (`username`) REFERENCES `usuarios` (`username`) ON DELETE SET NULL;
 COMMIT;
+
+
+-- Filtros para la tabla `compras`
+--
+ALTER TABLE `compras`
+  ADD CONSTRAINT `compras_ibfk_1` FOREIGN KEY (`usuario`) REFERENCES `usuarios` (`username`),
+  ADD CONSTRAINT `compras_ibfk_2` FOREIGN KEY (`evento_id`) REFERENCES `eventos` (`id`);
+COMMIT;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
