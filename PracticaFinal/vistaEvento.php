@@ -75,10 +75,11 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             }
 
 
-            $usuario = $app->nombreUsuario();
+            $usuarioNom = $app->nombreUsuario();
+            $usuario = Usuario::buscaUsuario($usuarioNom);
             $esAdmin = $app->tieneRol(Usuario::ADMIN_ROLE);
             $esPromotor = $app->tieneRol(Usuario::PROMOTOR_ROLE);
-            $esOrganizador = ($organizador === $usuario);
+            $esOrganizador = ($organizador === $usuarioNom);
           
             // Botón de edición y de eliminar solo para admins y para los promotores de esos eventos 
             $botonEditar = '';   // Para que no de errores 
@@ -115,10 +116,20 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                                        value="1"
                                        class="input-cantidad">
                             </label>
-                            <button type="submit" class="boton-accion comprar">🎟️ Comprar entradas</button>
+                        <div class="campo-puntos">
+                            <label>Usar puntos (1 punto = 1€): 
+                                <input type="number" name="puntos" 
+                                    min="0" 
+                                    max="{$usuario->getPuntos()}" 
+                                    value="0">
+                            </label>
+                        <p class="info-puntos">Puntos disponibles: {$usuario->getPuntos()}</p>
+                            </div>
+                            <button type="submit" class="boton-accion comprar">🎟️ Comprar</button>
                         </div>
                     </form>
-                    EOS;
+    EOS;
+
                 } else {
                     $botonCompra = "<p class='aviso-agotado'>❌ No quedan entradas disponibles</p>";
                     

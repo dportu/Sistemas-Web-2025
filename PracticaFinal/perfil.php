@@ -35,8 +35,11 @@
     } else {
         $opcionesEspecificas = <<<EOS
             <h2>Opciones de Usuario</h2>
+            <div class="puntos-info">
+                <p>Puntos disponibles: {$usuario->getPuntos()}</p>
+                <small>1 punto = 1€ de descuento en tu próxima compra</small>
+            </div>
             <a href="$enlaceCompras">Mis Compras</a>
-            <p>Puntos acumulados: $puntos </p>
         EOS;
     }
 
