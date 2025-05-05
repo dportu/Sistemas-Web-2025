@@ -1,7 +1,7 @@
 Práctica final:
 - Evento: añadir la compra y que se sumen los puntos bien
 - Valoraciones: completo a falta de revisión
-- Foro: añadir que se pueda responder mensajes y que el promotor pueda editar y eliminar sus mensajes
+- Foro: añadir que se pueda responder mensajes
 - Puntos: cambiar descuento y revisarlo
 - Administrador: completar con las nuevas funcionalidades y corregir lo de añadir/eliminar imagenes
 - CSS: totalidad implementada (sobretodo editar evento, cuadrar los textos, ...)
