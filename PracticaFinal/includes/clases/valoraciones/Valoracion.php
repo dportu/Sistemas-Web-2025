@@ -64,6 +64,19 @@ class Valoracion {
         return $notaTotal / $i;
     }
 
+    public static function eventoValoradoPorUsuario($username, $id_evento) {
+        $valoraciones = Valoracion::valoracionesEvento($id_evento);
+        $found = false;
+
+        foreach ($valoraciones as $valoracion) {
+            if ($valoracion->getUsername() === $username) {
+                $found = true;
+            }
+        }
+
+        return $found;
+    }
+
     public static function valoracionesEvento($id_evento) {
         $conexion = Aplicacion::getInstance()->getConexionBd();
         $query = "SELECT * FROM valoraciones WHERE id_evento = ?";

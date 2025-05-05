@@ -6,7 +6,10 @@
 
     function modificarValoracion($app, $valoracion, $id_evento) {
         $acciones = '';
-        if ($app->usuarioLogueado() && $app->nombreUsuario() === $valoracion->getUsername()) {
+        if ($app->usuarioLogueado() && 
+            (($app->nombreUsuario() === $valoracion->getUsername())
+            || ($app->esAdmin() )) 
+            ) {
             // Si es el autor o administrador, puede editar/eliminar
             $urlEditar = $app->buildUrl('editar_valoracion.php', ['id' => $valoracion->getId()]);
             $urlActual = $app->buildUrl('vistaEvento.php', ['id' => $id_evento]);
@@ -71,13 +74,16 @@
 
         // Formulario para añadir una nueva valoracion
 
-        $form = new FormularioValoracion($id_evento);
-        $formLogin = $form->gestiona();
-        $contenido .= <<<EOS
-            <div class="formulario-contenedor">
-                $formLogin
-            </div>
-        EOS;
+        if($app->usuarioLogueado() && !Valoracion::eventoValoradoPorUsuario($app->nombreUsuario(), $id_evento)) {
+            $form = new FormularioValoracion($id_evento);
+            $formLogin = $form->gestiona();
+
+            $contenido .= <<<EOS
+                <div class="formulario-contenedor">
+                    $formLogin
+                </div>
+            EOS;
+        }
 
         return $contenido;
     }
