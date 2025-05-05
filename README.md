@@ -1,6 +1,6 @@
 Práctica final:
 - Evento: añadir la compra y que se sumen los puntos bien
-- Valoraciones: completo a falta de revisión (¿un usuario solo puede enviar una valoración una vez?). Y que el promotor pueda editar y eliminar las valoraciones de su evento.
+- Valoraciones: completo a falta de revisión (¿un usuario solo puede enviar una valoración una vez?).
 - Foro: añadir que se pueda responder mensajes y que el promotor pueda editar y eliminar sus mensajes
 - Puntos: cambiar descuento y revisarlo
 - Administrador: completar con las nuevas funcionalidades y corregir lo de añadir/eliminar imagenes
