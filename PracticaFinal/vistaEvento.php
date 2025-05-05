@@ -102,41 +102,17 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             $url = $app->buildUrl('foro.php', $params);
 
             #$url = 'foro.php?id='.$id;
-
-            if ($app->usuarioLogueado()) {
-                if ($entradas > 0) {
-                    $botonCompra = <<<EOS
-                    <form action="compraEvento.php?id={$id}" method="POST" class="form-compra">
-                        <div class="selector-cantidad">
-                            <label>Cantidad: 
-                                <input type="number" 
-                                       name="cantidad" 
-                                       min="1" 
-                                       max="{$entradas}" 
-                                       value="1"
-                                       class="input-cantidad">
-                            </label>
-                        <div class="campo-puntos">
-                            <label>Usar puntos (1 punto = 1€): 
-                                <input type="number" name="puntos" 
-                                    min="0" 
-                                    max="{$usuario->getPuntos()}" 
-                                    value="0">
-                            </label>
-                        <p class="info-puntos">Puntos disponibles: {$usuario->getPuntos()}</p>
-                            </div>
-                            <button type="submit" class="boton-accion comprar">🎟️ Comprar</button>
-                        </div>
-                    </form>
-    EOS;
-
-                } else {
-                    $botonCompra = "<p class='aviso-agotado'>❌ No quedan entradas disponibles</p>";
-                    
-                }
-                $botonCompra .= "<a href='$url' class='boton-accion foro'>💬 Foro del evento</a>";
+   
+            if ($app->usuarioLogueado() && $entradas > 0) {
+                $botonCompra = <<<EOS
+                <form action="procesarCompra.php" method="GET">
+                    <input type="hidden" name="id" value="$id">
+                    <button type="submit" class="boton-accion comprar">🎟️ Comprar entradas</button>
+                </form>
+            EOS;
+            } else {
+                $botonCompra = "<p class='aviso-agotado'>❌ No quedan entradas disponibles</p>";
             }
-
 
             $evento = Evento::buscaPorId($id);
             $valoracionMedia = Valoracion::notaMedia($id);

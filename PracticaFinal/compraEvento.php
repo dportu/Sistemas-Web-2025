@@ -7,96 +7,105 @@ use es\ucm\fdi\aw\usuarios\Usuario;
 
 $app = Aplicacion::getInstance();
 $tituloPagina = 'Compra';
+$mensaje = '';
+$compraExitosa = false;
 
-// Verificar usuario logueado
-if (!$app->usuarioLogueado()) {
+// Validación inicial
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !$app->usuarioLogueado()) {
     header('Location: login.php');
     exit();
 }
 
-// Inicializar variables importantes
-$mensaje = '';
-$compraExitosa = false;
-$id_evento = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+// Recoger parámetros
+$id_evento = isset($_POST['id_evento']) ? (int)$_POST['id_evento'] : 0;
 $cantidad = isset($_POST['cantidad']) ? (int)$_POST['cantidad'] : 0;
 $puntos_usar = isset($_POST['puntos']) ? (int)$_POST['puntos'] : 0;
 
-// Validaciones básicas
+// Validar parámetros básicos
 if ($id_evento <= 0 || $cantidad <= 0) {
     $app->paginaError(400, "Parámetros de compra inválidos");
     exit();
 }
 
-// Obtener objetos necesarios
+// Obtener objetos
 $usuario = Usuario::buscaUsuario($app->nombreUsuario());
 $evento = Evento::buscaPorId($id_evento);
 
-// Verificar existencia de recursos
+// Verificar existencia
 if (!$usuario || !$evento) {
     $app->paginaError(404, "Recurso no encontrado");
     exit();
 }
 
-// Lógica de compra
+// Validar disponibilidad y puntos
+$errores = [];
+if ($evento->getEntradasDisponibles() < $cantidad) {
+    $errores[] = "No hay suficientes entradas disponibles";
+}
+
+if ($puntos_usar > $usuario->getPuntos()) {
+    $errores[] = "No tienes suficientes puntos";
+}
+
+// Manejar errores
+if (!empty($errores)) {
+    $app->putAtributoPeticion('errores_compra', $errores);
+    header("Location: procesar_compra.php?id=$id_evento");
+    exit();
+}
+
+// Lógica de compra (manteniendo tu implementación original)
 $precio_unitario = $evento->getPrecio();
 $precio_total = $precio_unitario * $cantidad;
 $descuento = min($puntos_usar, $usuario->getPuntos());
 $precio_final = max(0, $precio_total - $descuento);
 $nuevos_puntos = $usuario->getPuntos() - $descuento;
 
-// Validar disponibilidad
-if ($evento->getEntradasDisponibles() < $cantidad) {
-    $mensaje = "❌ No hay suficientes entradas disponibles";
-} elseif ($nuevos_puntos < 0) {
-    $mensaje = "❌ No tienes suficientes puntos";
+// Ejecutar transacción
+if ($evento->actualizaEntradas($cantidad) && $usuario->setPuntos($nuevos_puntos)) {
+    $puntos_ganados = $precio_final * 0.5;
+    $usuario->setPuntos($puntos_ganados + $nuevos_puntos);
+    Usuario::actualiza($usuario);
+    $compraExitosa = true;
+
+    // Registrar en BD (tu código original)
+    $conn = $app->getConexionBd();
+    $query = sprintf(
+        "INSERT INTO compras (usuario, evento_id, cantidad, precio_unitario, puntos_usados) 
+        VALUES ('%s', %d, %d, %.2f, %d)",
+        $conn->real_escape_string($usuario->getUsername()),
+        $evento->getId(),
+        $cantidad,
+        $precio_unitario,
+        $descuento
+    );
+    
+    if (!$conn->query($query)) {
+        error_log("Error BD: " . $conn->error);
+        $compraExitosa = false;
+    }
+}
+
+// Mensaje final (tu formato original)
+if ($compraExitosa) {
+    $mensaje = "✅ Compra exitosa!<br>
+               - Entradas: $cantidad<br>
+               - Descuento: {$descuento}€<br>
+               - Total pagado: {$precio_final}€<br>
+               - Puntos ganados: {$puntos_ganados}<br>
+               - Puntos usados: {$puntos_usar}<br>
+               - Puntos restantes: " . $usuario->getPuntos();
 } else {
-    // Realizar compra
-    if ($evento->actualizaEntradas($cantidad) && $usuario->setPuntos($nuevos_puntos)) {
-        $puntos_ganados = $precio_final * 0.5;
-        $usuario->setPuntos( $puntos_ganados + $nuevos_puntos);
-
-        Usuario::actualiza($usuario);
-        $compraExitosa = true;
-
-
-        $mensaje = "✅ Compra exitosa!<br>
-                   - Entradas: $cantidad<br>
-                   - Descuento: {$descuento}€<br>
-                   - Total pagado: {$precio_final}€<br>
-                   - Puntos ganados: {$puntos_ganados}<br>
-                   - Puntos usados: {$puntos_usar}<br>
-                   - Puntos restantes: {$nuevos_puntos}";
-
-        // En compraEvento.php, después de validar la compra exitosa:
-            if ($compraExitosa) {
-                $conn = Aplicacion::getInstance()->getConexionBd();
-                $query = sprintf(
-                    "INSERT INTO compras (usuario, evento_id, cantidad, precio_unitario, puntos_usados) 
-                    VALUES ('%s', %d, %d, %.2f, %d)",
-                    $conn->real_escape_string($usuario->getUsername()),
-                    $evento->getId(),
-                    $cantidad,
-                    $precio_unitario,
-                    $descuento
-                    );
-                
-                if ($conn->query($query)) {
-                    // Éxito
-                } else {
-                    error_log("Error al guardar compra: " . $conn->error);
-                }
-            }
-    } else {
-        $mensaje = "❌ Error al procesar la compra";
-}
+    $mensaje = "❌ Error al procesar la compra";
 }
 
-// Mostrar resultado
+// Vista (manteniendo tu estructura)
 $contenidoPrincipal = <<<EOS
 <div class="resultado-compra">
     <h2>Resultado de la compra</h2>
     <p>$mensaje</p>
     <a href="vistaEvento.php?id=$id_evento" class="boton-volver">Volver al evento</a>
+    <a href="misEntradas.php" class="boton">Ver mis entradas</a>
 </div>
 EOS;
 
