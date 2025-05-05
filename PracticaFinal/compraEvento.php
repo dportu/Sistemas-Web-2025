@@ -39,6 +39,12 @@ if (!$usuario || !$evento) {
 
 // Validar disponibilidad y puntos
 $errores = [];
+
+$precioTotal = $evento->getPrecio() * $cantidad;
+if ($puntos_usar > $precioTotal) {
+    $errores[] = "No puedes usar más puntos que el precio total ($precioTotal puntos)";
+}
+
 if ($evento->getEntradasDisponibles() < $cantidad) {
     $errores[] = "No hay suficientes entradas disponibles";
 }

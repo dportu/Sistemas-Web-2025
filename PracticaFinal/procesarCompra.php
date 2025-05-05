@@ -38,12 +38,24 @@ $contenidoPrincipal = <<<EOS
         
         <div class="campo">
             <label>Entradas disponibles: $entradasDisponibles</label>
-            <input type="number" name="cantidad" min="1" max="$entradasDisponibles" value="1" required>
+            <input type="number" 
+                   name="cantidad" 
+                   id="input-cantidad"
+                   min="1" 
+                   max="$entradasDisponibles" 
+                   value="1" 
+                   required
+                   data-precio="$precioEvento"
+                   data-puntos="$puntosUsuario">
         </div>
         
         <div class="campo">
             <label>Usar puntos (tienes $puntosUsuario):</label>
-            <input type="number" name="puntos" min="0" max="$puntosUsuario" value="0">
+            <input type="number" 
+                   name="puntos" 
+                   id="input-puntos" 
+                   min="0" 
+                   value="0">
             <small>1 punto = 1€ de descuento</small>
         </div>
         
@@ -57,22 +69,11 @@ $contenidoPrincipal = <<<EOS
     </form>
 </div>
 
-<script>
-    // Actualizar precio total en tiempo real
-    document.querySelector('input[name="cantidad"]').addEventListener('input', calcularTotal);
-    document.querySelector('input[name="puntos"]').addEventListener('input', calcularTotal);
-    
-    function calcularTotal() {
-        const cantidad = parseInt(document.querySelector('input[name="cantidad"]').value) || 0;
-        const puntos = parseInt(document.querySelector('input[name="puntos"]').value) || 0;
-        const total = ($precioEvento * cantidad) - puntos;
-        document.getElementById('precio-total').textContent = `Total estimado: \${Math.max(total, 0)} €`;
-    }
-</script>
+<script src="js/compra.js"> </script> <!-- CORREGIDO: espacio antes de src -->
 EOS;
 
-require __DIR__.'/includes/vistas/plantillas/plantilla.php';
 
+require __DIR__.'/includes/vistas/plantillas/plantilla.php';
 /*
 if ($app->usuarioLogueado()) {
                 if ($entradas > 0) {
