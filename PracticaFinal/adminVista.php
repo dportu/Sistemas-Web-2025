@@ -29,37 +29,19 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
         EOS;
     }
 
-    $contenidoPrincipal = <<<EOS
-    <div class="enlace-registro">
-        <h2>Consola de Administración</h2>
-        
-        <div class="admin-section">
-            <h2>Gestión de Eventos</h2>
-            <a href="{$rutaApp}/anyadir_evento.php" class="boton-crear">Crear Nuevo Evento</a>
-            <table class="tabla-eventos">
-                <thead>    
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Precio</th>
-                        <th>Fecha Inicio</th>
-                        <th>Ubicación</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    $tablaEventos
-                </tbody>
-            </table>
-        </div>
-
-        <div class="admin-section">
-            <h2>Moderación de Contenido</h2>
-            <a href="moderar_mensajes.php" class="boton-moderar">Moderar Mensajes del Foro</a>
-        </div>
-
-
+   // En la sección de contenidoPrincipal, reemplaza la tabla de eventos con:
+$contenidoPrincipal = <<<EOS
+<div class="enlace-registro">
+    <h2>Consola de Administración</h2>
+    
+    <div class="admin-section">
+        <h2>Gestión de Contenido</h2>
+        <a href="moderar_eventos.php" class="boton-moderar">Gestionar Eventos</a>
+        <a href="moderar_mensajes.php" class="boton-moderar">Moderar Mensajes del Foro</a>
     </div>
-    EOS;
+</div>
+EOS;
+
 } else {
     $contenidoPrincipal = <<<EOS
     <div class="acceso-denegado">
