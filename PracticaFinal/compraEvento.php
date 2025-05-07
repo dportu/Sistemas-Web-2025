@@ -4,6 +4,7 @@ require_once __DIR__.'/includes/config.php';
 use es\ucm\fdi\aw\Aplicacion;
 use es\ucm\fdi\aw\eventos\Evento;
 use es\ucm\fdi\aw\usuarios\Usuario;
+use es\ucm\fdi\aw\compras\Compra;
 
 $app = Aplicacion::getInstance();
 $tituloPagina = 'Compra';
@@ -60,7 +61,7 @@ if (!empty($errores)) {
     exit();
 }
 
-// Lógica de compra (manteniendo tu implementación original)
+// Lógica de compra
 $precio_unitario = $evento->getPrecio();
 $precio_total = $precio_unitario * $cantidad;
 $descuento = min($puntos_usar, $usuario->getPuntos());
@@ -72,27 +73,14 @@ if ($evento->actualizaEntradas($cantidad) && $usuario->setPuntos($nuevos_puntos)
     $puntos_ganados = $precio_final * 0.5;
     $usuario->setPuntos($puntos_ganados + $nuevos_puntos);
     Usuario::actualiza($usuario);
-    $compraExitosa = true;
 
-    // Registrar en BD (tu código original)
+    // Registrar en BD
     $conn = $app->getConexionBd();
-    $query = sprintf(
-        "INSERT INTO compras (usuario, evento_id, cantidad, precio_unitario, puntos_usados) 
-        VALUES ('%s', %d, %d, %.2f, %d)",
-        $conn->real_escape_string($usuario->getUsername()),
-        $evento->getId(),
-        $cantidad,
-        $precio_unitario,
-        $descuento
-    );
     
-    if (!$conn->query($query)) {
-        error_log("Error BD: " . $conn->error);
-        $compraExitosa = false;
-    }
+    $compraExitosa = Compra::comprar($conn, $usuario, $evento, $cantidad, $precio_unitario, $descuento);
 }
 
-// Mensaje final (tu formato original)
+// Mensaje final
 if ($compraExitosa) {
     $mensaje = "✅ Compra exitosa!<br>
                - Entradas: $cantidad<br>
@@ -105,13 +93,13 @@ if ($compraExitosa) {
     $mensaje = "❌ Error al procesar la compra";
 }
 
-// Vista (manteniendo tu estructura)
+// Vista 
 $contenidoPrincipal = <<<EOS
 <div class="resultado-compra">
     <h2>Resultado de la compra</h2>
     <p>$mensaje</p>
     <a href="vistaEvento.php?id=$id_evento" class="boton-volver">Volver al evento</a>
-    <a href="misEntradas.php" class="boton">Ver mis entradas</a>
+    <a href="perfil.php" class="boton">Ver mis entradas</a>
 </div>
 EOS;
 

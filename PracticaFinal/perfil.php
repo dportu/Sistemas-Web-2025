@@ -3,6 +3,7 @@
 
     use es\ucm\fdi\aw\Aplicacion;
     use es\ucm\fdi\aw\usuarios\Usuario;
+    use es\ucm\fdi\aw\compras\Compra;
 
     $app = Aplicacion::getInstance();
 
@@ -62,6 +63,9 @@
             </div>
         </article>
     EOS;
+
+    //mostramos las entradas adquiridas por el usuario
+    Compra::mostrarEntradas($nombre, $contenidoPrincipal);
 
     require __DIR__.'/includes/vistas/plantillas/plantilla.php';
 ?>

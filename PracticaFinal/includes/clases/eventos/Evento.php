@@ -61,6 +61,22 @@ class Evento {
     }
     
     
+    public static function getIds() {
+        $conexion = Aplicacion::getInstance()->getConexionBd();
+        $query = "SELECT id FROM eventos";
+        $result = $conexion->query($query);
+
+        $ids = [];
+
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $ids[] = $row['id'];
+            }
+            $result->free();
+        }
+
+        return $ids;
+    }
     public static function getEventos() {
         //return: array con todos los eventos en la base de datos actualmente
 
@@ -210,7 +226,7 @@ class Evento {
     //METODOS PRIVADOS
 
     //solo puede ser usada en altaevento
-    private static function insertarEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen) {
+    private static function insertarEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen, $entradas) { //creo que hay que modificar mas cosas para adaptar al nuevo parametro entradas
         $conexion = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf("INSERT INTO eventos (nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen, entradas) VALUES ('%s', %d, '%s', '%s', '%s', '%s', '%s')",
             $conexion->real_escape_string($nombre),
