@@ -1,5 +1,5 @@
 Práctica final:
-- Evento: crear ver tu entrada
+- Compra/evento: hacer que se vean bonitas las entradas en el perfil
 - Valoraciones: completo
 - Foro: añadir que se pueda responder mensajes
 - Puntos: cambiar descuento y revisarlo
