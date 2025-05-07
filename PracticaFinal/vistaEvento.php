@@ -110,7 +110,11 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                     <button type="submit" class="boton-accion comprar">🎟️ Comprar entradas</button>
                 </form>
             EOS;
-            } else {
+            } 
+            else if (!$app->usuarioLogueado()) {
+                $botonCompra = "<p class='aviso-agotado'>❌ Tienes que estar registrado para poder comprar una entrada. <a href='login.php'> Iniciar sesión </a> </p>";
+            }
+            else {
                 $botonCompra = "<p class='aviso-agotado'>❌ No quedan entradas disponibles</p>";
             }
 

@@ -35,7 +35,7 @@ class FormularioEditarEvento extends Formulario{
         
         $app = Aplicacion::getInstance();
 
-        $erroresCampos = self::generaErroresCampos(['nombre', 'precio', 'descripcion', 'fecha_inicio', 'ubicacion', 'organizador', 'imagen'], $this->errores, 'span', ['class' => 'error']);
+        $erroresCampos = self::generaErroresCampos(['nombre', 'precio', 'descripcion', 'fecha_inicio', 'ubicacion', 'organizador', 'imagen', 'entradas'], $this->errores, 'span', ['class' => 'error']);
         $erroresGlobales = self::generaListaErroresGlobales($this->errores, 'errores-globales');
         $html = $erroresGlobales;
 

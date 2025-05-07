@@ -18,7 +18,6 @@ define('BD_PASS', '');
  */
 define('RAIZ_APP', __DIR__);
 define('RUTA_APP', '');
-// define('RUTA_APP', '');
 define('RUTA_IMGS', RUTA_APP.'img/');
 define('RUTA_CSS', RUTA_APP.'css/');
 define('RUTA_JS', RUTA_APP.'js/');

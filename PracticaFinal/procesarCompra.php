@@ -102,7 +102,11 @@ if ($app->usuarioLogueado()) {
                     </form>
     EOS;
 
-                } else {
+                }
+                else if (!$app->usuarioLogueado()) {
+                    $botonCompra = "<p class='aviso-agotado'>❌ Tienes que estar registrado para poder comprar una entrada</p>";
+                } 
+                else {
                     $botonCompra = "<p class='aviso-agotado'>❌ No quedan entradas disponibles</p>";
                     
                 }
