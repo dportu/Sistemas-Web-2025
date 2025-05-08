@@ -113,6 +113,7 @@ ALTER TABLE `eventos`
 ALTER TABLE `foro`
   ADD PRIMARY KEY (`id`);
 
+
 --
 -- Indices de la tabla `usuarios`
 --
@@ -184,6 +185,17 @@ ALTER TABLE `compras`
   ADD CONSTRAINT `compras_ibfk_2` FOREIGN KEY (`evento_id`) REFERENCES `eventos` (`id`);
 COMMIT;
 
+
+
+ALTER TABLE foro 
+ADD COLUMN parent_id INT DEFAULT NULL;
+
+
+ALTER TABLE foro 
+ADD CONSTRAINT fk_parent_id 
+    FOREIGN KEY (parent_id) 
+    REFERENCES foro(id) 
+    ON DELETE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
