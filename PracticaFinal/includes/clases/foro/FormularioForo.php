@@ -10,13 +10,17 @@
 
         private $idEvento;
 
-        public function __construct($idEvento) {
-            $this->idEvento = $idEvento;
-            parent::__construct('formForo');
+        public function __construct($id_evento = null, $parent_id = null) {
+            parent::__construct(
+                'formForo', 
+                ['urlRedireccion' => $id_evento ? 'foro.php?id='.$id_evento : 'foro.php']
+            );
+            $this->parent_id = $parent_id;
         }
 
         protected function generaCamposFormulario(&$datos) {
             // Recuperamos los valores de los datos del formulario.
+            $html = '';
             $titulo = $datos['titulo'] ?? '';
             $mensaje = $datos['mensaje'] ?? '';
             if ($this->idEvento) {
@@ -29,6 +33,9 @@
             // Generamos los errores de campos si existen.
             $erroresCampos = self::generaErroresCampos(['titulo', 'mensaje'], $this->errores, 'span', ['class' => 'error']);
             $htmlErroresGlobales = self::generaListaErroresGlobales($this->errores);
+            if ($this->parent_id) {
+                $html .= '<input type="hidden" name="parent_id" value="'.$this->parent_id.'">';
+            }
 
             // Generamos el HTML del formulario.
             if (Aplicacion::getInstance()->usuarioLogueado()){
@@ -63,6 +70,7 @@
                     EOF;
             }
 
+            $html .= '<input type="hidden" name="parent_id" value="'.$this->parent_id.'">';
             return $html;
         }
 
