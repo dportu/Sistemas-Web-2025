@@ -1,16 +1,14 @@
 <?php 
-	require_once __DIR__.'/includes/config.php';
+    require_once __DIR__.'/includes/config.php';
 
     use es\ucm\fdi\aw\Aplicacion;
     use es\ucm\fdi\aw\eventos\Evento;
-	use es\ucm\fdi\aw\foro\MensajeForo;
+    use es\ucm\fdi\aw\foro\MensajeForo;
     use es\ucm\fdi\aw\foro\FormularioForo;
 
-	$tituloPagina = 'Foro';
-
-	$contenidoPrincipal = '';
-
-    // Mostrar el foro dependiendo de su categoría
+    $tituloPagina = 'Foro';
+    $contenidoPrincipal = '';
+    $aplicacion = Aplicacion::getInstance(); // <-- INICIALIZACIÓN AQUÍ
     $id_evento = $_GET['id'] ?? null;
 	$mensajes = MensajeForo::getMensajes($id_evento);
 
@@ -18,6 +16,98 @@
         $contenidoPrincipal .= "<p>Todavía no hay mensajes.</p>";
     }
 
+    function renderizarMensaje($mensaje, $aplicacion, $id_evento, $nivel = 0) {
+        // Indentación progresiva
+        $margen = $nivel * 50; // 50px por cada nivel de anidación
+        
+        $html = '<div class="mensaje" style="margin-left: '.$margen.'px; border-left: 2px solid #ddd; padding-left: 15px; margin-bottom: 20px;">';
+        
+        // Contenido principal del mensaje
+        $html .= '<div class="contenido-mensaje">';
+        $html .= sprintf('
+            <p class="mensaje-contenido">
+                <strong>Título:</strong> %s <br>
+                <strong>Autor:</strong> %s <br>
+                <strong>Mensaje:</strong> %s <br>
+                <strong>Fecha:</strong> %s
+            </p>',
+            htmlspecialchars($mensaje->getTitulo()),
+            htmlspecialchars($mensaje->getAutor()),
+            nl2br(htmlspecialchars($mensaje->getMensaje())),
+            $mensaje->getFechaPublicacion()
+        );
+        
+        // Botones de acciones
+        if ($aplicacion->usuarioLogueado() && ($aplicacion->nombreUsuario() === $mensaje->getAutor() || $aplicacion->esAdmin())) {
+            $html .= sprintf('
+                <div class="acciones-mensaje">
+                    <a href="%s" class="boton-enlace">Editar</a>
+                    <form method="POST" style="display:inline;">
+                        <input type="hidden" name="mensaje_id" value="%d">
+                        <button type="submit" name="accion" value="eliminar">Eliminar</button>
+                    </form>
+                </div>',
+                $aplicacion->buildUrl('editar_mensajeForo.php', ['id' => $mensaje->getId()]),
+                $mensaje->getId()
+            );
+        }
+        
+        // Botón de responder
+        if ($aplicacion->usuarioLogueado()) {
+            $form = new FormularioForo($id_evento, $mensaje->getId());
+            $html .= '<button class="toggle-reply">Responder</button>';
+            $html .= '<div class="formulario-respuesta" style="display:none;">'.$form->gestiona().'</div>';
+        }
+        
+        $html .= '</div>'; // Cierre contenido-mensaje
+        
+        // Respuestas (llamada recursiva)
+        $respuestas = MensajeForo::getRespuestas($mensaje->getId());
+        foreach ($respuestas as $respuesta) {
+            $html .= renderizarMensaje($respuesta, $aplicacion, $id_evento, $nivel + 1);
+        }
+        
+        return $html.'</div>'; // Cierre div.mensaje
+    }
+
+    
+    $id_evento = $_GET['id'] ?? null;
+    $mensajesPrincipales = MensajeForo::getMensajes($id_evento);
+    
+    if (empty($mensajesPrincipales)) {
+        $contenidoPrincipal .= "<p>Todavía no hay mensajes.</p>";
+    } else {
+       foreach ($mensajesPrincipales as $mensaje) {
+        $contenidoPrincipal .= renderizarMensaje($mensaje, $aplicacion, $id_evento);
+        }
+    }
+
+     // Formulario para añadir un nuevo mensaje al foro
+
+    $form = new FormularioForo($id_evento);
+    $htmlFormLogin = $form->gestiona();
+    $contenidoPrincipal .= <<<EOS
+        <div class="formulario-contenedor">
+            $htmlFormLogin
+        </div>
+    EOS;
+
+    $contenidoPrincipal .= <<<EOS
+    <script>
+    document.querySelectorAll('.toggle-reply').forEach(button => {
+        button.addEventListener('click', function() {
+            const form = this.nextElementSibling;
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        });
+    });
+    </script>
+    EOS;
+
+	require __DIR__.'/includes/vistas/plantillas/plantilla.php';
+  
+
+    
+    /*
 	for ($i = 0; $i < count($mensajes); $i++) {
         $titulo = $mensajes[$i]->titulo;
         $autor = $mensajes[$i]->autor;
@@ -88,18 +178,7 @@
                 $modificarMensaje
             </div>
         EOS;
-	}
+	}*/
 
-    // Formulario para añadir un nuevo mensaje al foro
-
-    $form = new FormularioForo($id_evento);
-    $htmlFormLogin = $form->gestiona();
-    $contenidoPrincipal .= <<<EOS
-        <div class="formulario-contenedor">
-            $htmlFormLogin
-        </div>
-    EOS;
-
-	require __DIR__.'/includes/vistas/plantillas/plantilla.php';
-  
 ?>
+
