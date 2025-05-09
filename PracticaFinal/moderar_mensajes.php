@@ -8,9 +8,10 @@
     $app = Aplicacion::getInstance();
     $tituloPagina = 'Moderación del Foro';
     $rutaApp = RUTA_APP;
+    $usuarioActual = $app->nombreUsuario();
     
     if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
-        // Obtener todos los mensajes del foro
+        
         $mensajes = MensajeForo::getMensajes(null);
         
         $tablaMensajes = '';
@@ -19,14 +20,22 @@
                 ? Evento::buscaPorId($mensaje->getEvento())->getNombre() 
                 : 'General';
 
+
+            $botonEditar = ($mensaje->getAutor() === $usuarioActual)
+            ? "<a href='editar_mensajeForo.php?id={$mensaje->getId()}' class='boton-editar'>Editar</a>"
+                : "<span class='no-editable'>No editable</span>";
+
+            $nivel = $mensaje->getParentId(); 
+            $claseFila = $mensaje->getParentId() ? 'respuesta' : '';
             $tablaMensajes .= <<<EOS
-            <tr>
-                <td>{$mensaje->getTitulo()}</td>
+            <tr class ="$claseFila">
+                <td>$nivel{$mensaje->getTitulo()}</td>
+                
                 <td>{$mensaje->getAutor()}</td>
                 <td>{$eventoNombre}</td>
                 <td>{$mensaje->getFechaPublicacion()}</td>
                 <td>
-                    <a href="editar_mensajeForo.php?id={$mensaje->getId()}" class="boton-editar">Editar</a>
+                    $botonEditar
                     <form action="{$rutaApp}/moderar_mensajes.php" method="POST"">
                         <input type="hidden" name="mensaje_id" value="{$mensaje->getId()}">
                         <button type="submit" name="accion" value="eliminar" 
