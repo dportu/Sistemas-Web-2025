@@ -77,7 +77,7 @@ class FormularioRegistro extends Formulario {
 
         if (count($this->errores) === 0) {
             if(!Usuario::buscaUsuario($username)) { //sirve asi?
-                $usuario = Usuario::crea($username, $password, $email, 'cliente' , 0);
+                $usuario = Usuario::crea($username, $password, $email, 'cliente' , 0); //jurao que deberiamos meter la sal pero funciona igualmente??
 
                 if ($usuario) {
                     $_SESSION['login'] = true;
