@@ -66,7 +66,8 @@ CREATE TABLE `usuarios` (
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `rol` enum('cliente','promotor','administrador') NOT NULL DEFAULT 'cliente',
-  `puntos` INT NOT NULL DEFAULT 0
+  `puntos` INT NOT NULL DEFAULT 0,
+  `sal` char(32)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

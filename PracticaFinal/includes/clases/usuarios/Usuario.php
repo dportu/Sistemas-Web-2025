@@ -2,6 +2,7 @@
 namespace es\ucm\fdi\aw\usuarios;
 
 use es\ucm\fdi\aw\Aplicacion;
+define('PIMIENTA', 'superseguro'); //donde poner?
 
 class Usuario
 {
@@ -16,9 +17,10 @@ class Usuario
     private $email;
     private $rol;
     private $puntos;
+    private $sal;
 
     //  CONSTRUCTOR
-    private function __construct($username, $password, $email, $rol, $puntos) //pq no se consigue el id en el constructor?
+    private function __construct($username, $password, $email, $rol, $puntos, $sal) //pq no se consigue el id en el constructor?
     {
         //$this->id = $id;
         $this->username = $username;
@@ -40,6 +42,7 @@ class Usuario
 
     public static function crea($username, $password, $email, $rol, $puntos)
     {
+        $sal = self::hashPassword($password);
         $user = new Usuario($username, self::hashPassword($password), $email, $rol, $puntos);
         return $user->guarda();
     }
@@ -83,16 +86,23 @@ class Usuario
         return false;
     }
 
-    private static function hashPassword($password)
-    {
-        return password_hash($password, PASSWORD_DEFAULT);
+
+    //hashpassword con sal y pimienta
+    function hashPassword($password) {
+        $salt = bin2hex(random_bytes(16));
+        $pepper = hash_hmac("sha256", $password, PIMIENTA);
+        $salted = $pepper . $salt;
+
+        return password_hash($salted, PASSWORD_BCRYPT);
     }
+    
 
     private static function inserta($usuario)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
+
         $query = sprintf(
-            "INSERT INTO usuarios (username, password, email, rol, puntos) VALUES ('%s', '%s', '%s', '%s', '%d')",
+            "INSERT INTO usuarios (username, password, email, rol, puntos, sal) VALUES ('%s', '%s', '%s', '%s', '%d', '%s')",
             $conn->real_escape_string($usuario->username),
             $conn->real_escape_string($usuario->password),
             $conn->real_escape_string($usuario->email),
@@ -230,6 +240,7 @@ class Usuario
 
     public function cambiaPassword($nuevoPassword)
     {
+
         $this->password = self::hashPassword($nuevoPassword);
     }
 
