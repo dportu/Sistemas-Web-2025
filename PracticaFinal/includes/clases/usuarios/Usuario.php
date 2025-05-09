@@ -16,9 +16,10 @@ class Usuario
     private $email;
     private $rol;
     private $puntos;
+    private $sal; //puede que haya que actualizar mas funciones para adaptar a sal y pimienta
 
     //  CONSTRUCTOR
-    private function __construct($username, $password, $email, $rol, $puntos) //pq no se consigue el id en el constructor?
+    private function __construct($username, $password, $email, $rol, $puntos, $sal) //pq no se consigue el id en el constructor?
     {
         //$this->id = $id;
         $this->username = $username;
@@ -26,6 +27,7 @@ class Usuario
         $this->email = $email;
         $this->rol = $rol;
         $this->puntos = $puntos;
+        $this->sal = $sal;
     }
 
     
@@ -40,7 +42,10 @@ class Usuario
 
     public static function crea($username, $password, $email, $rol, $puntos)
     {
-        $user = new Usuario($username, self::hashPassword($password), $email, $rol, $puntos);
+        $hash = self::hashPassword($password);
+        $password = $hash[0];
+        $sal = $hash[1];
+        $user = new Usuario($username, $password, $email, $rol, $puntos, $sal);
         return $user->guarda();
     }
 
@@ -55,7 +60,7 @@ class Usuario
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $user = new Usuario($fila['username'], $fila['password'], $fila['email'], $fila['rol'], $fila['puntos']);
+                $user = new Usuario($fila['username'], $fila['password'], $fila['email'], $fila['rol'], $fila['puntos'], $fila['sal']);
                 $rs->free();
                 return $user;
             }
@@ -73,7 +78,7 @@ class Usuario
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $user = new Usuario($fila['username'], $fila['password'], $fila['email'], $fila['rol'], $fila['puntos']);
+                $user = new Usuario($fila['username'], $fila['password'], $fila['email'], $fila['rol'], $fila['puntos'], $fila['sal']);
                 $rs->free();
                 return $user;
             }
@@ -83,21 +88,30 @@ class Usuario
         return false;
     }
 
-    private static function hashPassword($password)
-    {
-        return password_hash($password, PASSWORD_DEFAULT);
+
+    //hashpassword con sal y pimienta
+    
+    public static function hashPassword($password) {
+        $salt = bin2hex(random_bytes(16));
+        $pepper = PIMIENTA; // definida globalmente
+        $hash = hash('sha256', $salt . $password . $pepper);
+    
+        return [$hash, $salt];
     }
+    
 
     private static function inserta($usuario)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
+
         $query = sprintf(
-            "INSERT INTO usuarios (username, password, email, rol, puntos) VALUES ('%s', '%s', '%s', '%s', '%d')",
+            "INSERT INTO usuarios (username, password, email, rol, puntos, sal) VALUES ('%s', '%s', '%s', '%s', '%d', '%s')",
             $conn->real_escape_string($usuario->username),
             $conn->real_escape_string($usuario->password),
             $conn->real_escape_string($usuario->email),
             $conn->real_escape_string($usuario->rol),
-            $usuario->puntos
+            $usuario->puntos,
+            $conn->real_escape_string($usuario->sal)
         );
         if ($conn->query($query)) {
             $usuario->id = $conn->insert_id;
@@ -223,14 +237,21 @@ class Usuario
         return $this->rol === $rol;
     }
 
-    public function compruebaPassword($password)
-    {
-        return password_verify($password, $this->password);
+    public function compruebaPassword($password) {
+        $pepper = PIMIENTA; // debe estar definida en un lugar seguro, idealmente como constante global o fuera del repo
+
+        // Recalcula el hash con la misma lógica del registro
+        $hashInput = hash('sha256', $this->sal . $password . $pepper);
+
+        // Compara hashes usando hash_equals para evitar ataques de timing
+        return hash_equals($this->password, $hashInput);
     }
 
     public function cambiaPassword($nuevoPassword)
     {
-        $this->password = self::hashPassword($nuevoPassword);
+        [$hash, $salt] = self::hashPassword($nuevoPassword);
+        $this->password = $hash;
+        $this->sal = $salt;
     }
 
     public function guarda()
