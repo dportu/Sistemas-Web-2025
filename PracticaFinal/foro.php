@@ -16,119 +16,74 @@
         $contenidoPrincipal .= "<p>Todavía no hay mensajes.</p>";
     }
 
-   // no la usamos por ahora eliminar si no
-    function mostrarMensajes($conn, $parent_id = null, $nivel = 0) {
-       
-        if (is_null($parent_id)) {              // Aui depende de si es padre o no 
-            $sql = "SELECT * FROM foro WHERE parent_id IS NULL ORDER BY fecha_publicacion ASC";
-            $stmt = $conn->prepare($sql);
-        } else {
-            $sql = "SELECT * FROM foro WHERE parent_id = ? ORDER BY fecha_publicacion ASC";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param('i', $parent_id);
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-    
-        
-        while ($row = $result->fetch_assoc()) {
-            // Esto hay que pasartlo a un css o algo
-            echo '<div style="margin-left: ' . (20 * $nivel) . 'px; border-left: 1px solid #ccc; padding-left: 10px; margin-top: 10px;">';
-            echo '<p><strong>' . htmlspecialchars($row['autor']) . '</strong> <small>(' . $row['fecha_publicacion'] . ')</small></p>';
-            echo '<p>' . nl2br(htmlspecialchars($row['mensaje'])) . '</p>';
-            
-            echo '<p><a href="FormularioForo.php?responder_a=' . $row['id'] . '">Responder</a></p>';
-           // Con esto llamamos recursivamente , cuando hay muchos se ve mal , hayque implementar un boton para ver respuestas
-            mostrarMensajes($conn, $row['id'], $nivel + 1);
-            echo '</div>';
-        }
-        $stmt->close();
-    }
-    
-
     function renderizarMensaje($mensaje, $aplicacion, $id_evento, $nivel = 0) {
-       // Esto hay que pasartlo a un css o algo
-        $margen = $nivel * 40;
-        $borde = $nivel > 0 ? 'border-left: 3px solid #e0e0e0;' : '';
+        // Indentación progresiva
+        $margen = $nivel * 50; // 50px por cada nivel de anidación
         
-        $html = <<<EOS
-        <div class="mensaje" style="margin-left: {$margen}px; $borde padding: 15px; margin-bottom: 15px; background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-            <div class="cabecera-mensaje">
-                <h3 style="margin: 0; color: #2c3e50;">{$mensaje->getTitulo()}</h3>
-                <div style="display: flex; gap: 10px; align-items: center; margin-top: 8px;">
-                    <span style="color: #3498db;">@{$mensaje->getAutor()}</span>
-                    <span style="color: #7f8c8d; font-size: 0.9em;">{$mensaje->getFechaPublicacion()}</span>
-                </div>
-            </div>
-            
-            <div class="cuerpo-mensaje" style="margin-top: 12px;">
-                <p style="margin: 0; color: #34495e;">{$mensaje->getMensaje()}</p>
-        EOS;
-    
-       // tambien meter a CSS
+        $html = '<div class="mensaje" style="margin-left: '.$margen.'px; border-left: 2px solid #ddd; padding-left: 15px; margin-bottom: 20px;">';
+        
+        // Contenido principal del mensaje
+        $html .= '<div class="contenido-mensaje">';
+        $html .= sprintf('
+            <p class="mensaje-contenido">
+                <strong>Título:</strong> %s <br>
+                <strong>Autor:</strong> %s <br>
+                <strong>Mensaje:</strong> %s <br>
+                <strong>Fecha:</strong> %s
+            </p>',
+            htmlspecialchars($mensaje->getTitulo()),
+            htmlspecialchars($mensaje->getAutor()),
+            nl2br(htmlspecialchars($mensaje->getMensaje())),
+            $mensaje->getFechaPublicacion()
+        );
+        
+        // Botones de acciones
         if ($aplicacion->usuarioLogueado() && ($aplicacion->nombreUsuario() === $mensaje->getAutor() || $aplicacion->esAdmin())) {
-            $html .= <<<EOS
-                <div style="margin-top: 15px; display: flex; gap: 10px;">
-                    <a href="{$aplicacion->buildUrl('editar_mensajeForo.php', ['id' => $mensaje->getId()])}" 
-                       class="boton-editar" 
-                       style="padding: 6px 12px; background: #3498db; color: white; text-decoration: none; border-radius: 4px;">
-                        Editar
-                    </a>
-
-                    
-                    <form method="POST" style="display: inline;">
-                        <input type="hidden" name="mensaje_id" value="{$mensaje->getId()}">
-                        <button type="submit" name="accion" value="eliminar" 
-                                style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                            Eliminar
-                        </button>
+            $html .= sprintf('
+                <div class="acciones-mensaje">
+                    <a href="%s" class="boton-enlace">Editar</a>
+                    <form method="POST" style="display:inline;">
+                        <input type="hidden" name="mensaje_id" value="%d">
+                        <button type="submit" name="accion" value="eliminar">Eliminar</button>
                     </form>
-                </div>
-            EOS;
+                </div>',
+                $aplicacion->buildUrl('editar_mensajeForo.php', ['id' => $mensaje->getId()]),
+                $mensaje->getId()
+            );
         }
-    
-        // responder nos funciona bien , pero hay que cambiarlo
+        
+        // Botón de responder
         if ($aplicacion->usuarioLogueado()) {
             $form = new FormularioForo($id_evento, $mensaje->getId());
-            $html .= <<<EOS
-                <div style="margin-top: 15px;">
-                    <button class="toggle-reply" 
-                            style="padding: 8px 15px; background: #2ecc71; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                        Responder
-                    </button>
-                    <div class="formulario-respuesta" style="display: none; margin-top: 10px;">
-                        {$form->gestiona()}
-                    </div>
-                </div>
-            EOS;
+            $html .= '<button class="toggle-reply">Responder</button>';
+            $html .= '<div class="formulario-respuesta" style="display:none;">'.$form->gestiona().'</div>';
         }
-    
-        // Con esto llamamos recursivamente , cuando hay muchos se ve mal , hayque implementar un boton para ver respuestas
+        
+        $html .= '</div>'; // Cierre contenido-mensaje
+        
+        // Respuestas (llamada recursiva)
         $respuestas = MensajeForo::getRespuestas($mensaje->getId());
         foreach ($respuestas as $respuesta) {
             $html .= renderizarMensaje($respuesta, $aplicacion, $id_evento, $nivel + 1);
         }
-    
-        $html .= "</div></div>";
-        return $html; 
+        
+        return $html.'</div>'; // Cierre div.mensaje
     }
 
     
     $id_evento = $_GET['id'] ?? null;
     $mensajesPrincipales = MensajeForo::getMensajes($id_evento);
-    $parent_id = $_GET['parent_id'] ?? null;
     
     if (empty($mensajesPrincipales)) {
         $contenidoPrincipal .= "<p>Todavía no hay mensajes.</p>";
     } else {
        foreach ($mensajesPrincipales as $mensaje) {
-       
         $contenidoPrincipal .= renderizarMensaje($mensaje, $aplicacion, $id_evento);
         }
     }
 
-  
-  // form para los mensajes nuevos 
+     // Formulario para añadir un nuevo mensaje al foro
+
     $form = new FormularioForo($id_evento);
     $htmlFormLogin = $form->gestiona();
     $contenidoPrincipal .= <<<EOS
@@ -137,9 +92,7 @@
         </div>
     EOS;
 
-    // habria que pasar el script a un js?? 
     $contenidoPrincipal .= <<<EOS
-    
     <script>
     document.querySelectorAll('.toggle-reply').forEach(button => {
         button.addEventListener('click', function() {

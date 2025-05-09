@@ -22,12 +22,14 @@
                 $fecha = $eventos[$i]->fecha;
 
                 $contenidoPrincipal .= <<<EOS
-                    <a href="vistaEvento.php?id={$id}" class="evento">
-                        <img src="{$imagen}" alt="Imagen de {$nombre}" class="evento-icono">
-                        <h3>[ {$nombre} ]</h3>
-                        <p> {$precio} € </p>
-                        <p> {$fecha} </p>
-                    </a>
+                    <div class="evento">
+                        <a href="vistaEvento.php?id={$id}">
+                            <img src="{$imagen}" alt="Imagen de {$nombre}" class="evento-icono">
+                            <h3>[ {$nombre} ]</h3>
+                            <p> {$precio} € </p>
+                            <p> {$fecha} </p>
+                        </a>
+                    </div>
                 EOS;
             }
             $contenidoPrincipal .= '</div>';

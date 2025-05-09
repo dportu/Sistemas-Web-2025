@@ -37,7 +37,7 @@
             $query = "SELECT f.*, e.nombre AS nombre_evento 
                       FROM foro f 
                       LEFT JOIN eventos e ON f.evento = e.id 
-                      WHERE 1=1"; 
+                      WHERE 1=1"; // WHERE inicial
             
             $params = [];
             $types = '';
@@ -49,7 +49,14 @@
                 $types .= 'i';
             }
             
-            
+            // Condición para parent_id
+            if ($parent_id !== null) {
+                $query .= " AND f.parent_id = ?";
+                $params[] = $parent_id;
+                $types .= 'i';
+            } else {
+                $query .= " AND f.parent_id IS NULL"; // Mensajes principales
+            }
             
             $query .= " ORDER BY fecha_publicacion DESC";
             
@@ -224,13 +231,6 @@
 
         public function getConexion() {
             return $this->conn;
-        }
-
-        public function getParentId() {
-            return $this->parent_id;
-        }
-        public function setParentId($parent_id) {
-            $this->parent_id = $parent_id;
         }
 
         public function getId() {

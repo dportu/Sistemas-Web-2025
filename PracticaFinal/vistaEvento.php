@@ -23,6 +23,7 @@ mostrarEvento($id_evento, $contenidoPrincipal);
 function mostrarEvento($id, &$contenidoPrincipal) {
     $app = Aplicacion::getInstance();
     
+    // if ($id === null), en principio lo quitamos
     if ($id === null) {
         // Mostrar todos los eventos
         $eventos = Evento::getEventos();
@@ -33,9 +34,9 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             $fecha = date('d/m/Y H:i', strtotime($evento->getFecha()));
             
             $contenidoPrincipal .= <<<EOS
-                <div class="evento-card">
+                <div class="evento">
                     <a href="vistaEvento.php?id={$evento->getId()}">
-                        <img src="{$imagen}" alt="{$nombre}" class="evento-imagen">
+                        <img src="{$imagen}" alt="{$nombre}" class="evento-icono">
                         <h3>{$nombre}</h3>
                         <p>{$precio} €</p>
                         <p>{$fecha}</p>
@@ -107,7 +108,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                 $botonCompra = <<<EOS
                 <form action="procesarCompra.php" method="GET">
                     <input type="hidden" name="id" value="$id">
-                    <button type="submit" class="boton-accion comprar">🎟️ Comprar entradas</button>
+                    <button type="submit" class="boton-accion comprar">Comprar entradas</button>
                 </form>
             EOS;
             } 
@@ -122,7 +123,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             $valoracionMedia = Valoracion::notaMedia($id);
             $valoracionHTML = $valoracionMedia ? "<span class='valoracion-media'>(".number_format($valoracionMedia, 1)." ★)</span>" : "<span class='valoracion-media'>(Sin valoraciones)</span>";
             $entradas = $evento->getEntradasDisponibles();
-            $info_entradas = $entradas > 0 ? "<p class='entradas-disponibles'>Entradas disponibles: $entradas</p>" : "<p class='agotado'>¡Agotado!</p>";
+            $info_entradas = $entradas > 0 ? "<p><strong>Entradas disponibles:</strong> $entradas</p>" : "<p class='agotado'>¡Agotado!</p>";
             
             
             $contenidoPrincipal .= <<<EOS
@@ -130,14 +131,16 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                 <img src="{$imagen}" alt="{$nombre}" class="evento-imagen-detalle">
                 <div class="info-evento">
                     <h2>{$nombre} {$valoracionHTML}</h2>
-                        {$botonEditar}
-                        {$botonEliminar}
-                        {$info_entradas}
-                        {$botonCompra}
                         <p><strong>Precio:</strong> {$precio} €</p>
                         <p><strong>Fecha:</strong> {$fecha}</p>
                         <p><strong>Ubicación:</strong> {$ubicacion}</p>
                         <p><strong>Organizador:</strong> {$organizador}</p>
+                        {$info_entradas}
+                        <div class="botones-accion">
+                            {$botonCompra}
+                            {$botonEditar}
+                            {$botonEliminar}
+                        </div>
                         <p><strong>Descripción:</strong> {$descripcion}</p>
                     </div>
                 </div>

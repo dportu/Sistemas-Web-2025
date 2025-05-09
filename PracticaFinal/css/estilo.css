@@ -40,17 +40,19 @@ h2 {
 
 
 /* Cambiar color enlaces :) */
-.enlaces {
-    color: #977af7;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-}
 
-.enlaces:hover {
-    color: rgb(116, 3, 141);
-    text-decoration: underline;
-}
+/* Enlaces */
+    a {
+        color: #977af7;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+
+    a:hover {
+        color: #4e3898;
+        text-decoration: underline;
+    }
 
 /* Estilos principales */
 body {
@@ -202,6 +204,15 @@ main p {
     background: linear-gradient(90deg, #977af7 0%, #977af7 30%, #feee0a 100%);
 }
 
+.evento:hover h3,
+.evento:hover p {
+    color: black;
+}
+
+.evento:hover a {
+    text-decoration: none !important;
+}
+
 .evento-icono {
     width: 80%;
     height: auto; /* mantener proporcion de la imagen */
@@ -213,7 +224,7 @@ main p {
 /* Navigation area */
 nav {
     grid-area: sidebar;
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.885);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
@@ -223,6 +234,9 @@ nav {
 }
 
 nav h2 {
+    font-size: 2em;
+    font-weight: 100;
+    font-family: "Rubik Glitch", sans-serif;
     color: #feee0a;
     margin-bottom: 15px;
 }
@@ -238,7 +252,6 @@ nav ul li {
 }
 
 /*Evento informacion*/
-    
     .evento-card, .evento-detalle, .valoraciones {
         font-family: 'Arial', sans-serif;
         color: #ffffff;
@@ -254,7 +267,7 @@ nav ul li {
         border-radius: 10px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }   
-/*
+    /*
     .evento-card p {
         text-decoration: none;
         color: #ffffffc0;
@@ -268,7 +281,7 @@ nav ul li {
     .evento-card a:hover {
         transform: translateY(-5px);
     }
-/*
+    /*
     .evento-card a {
         color: #555;
         font-size: 1em;
@@ -276,10 +289,11 @@ nav ul li {
     }*/
 
     .evento-imagen {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
+        width: 80%;
+        height: auto; /* mantener proporcion de la imagen */
         border-radius: 10px 10px 0 0;
+        margin-bottom: 10px;
+        object-fit: cover;
     }
 
     /* Vista detalle del evento; ES ESTAAAAAA!!!! */
@@ -309,45 +323,6 @@ nav ul li {
         display: flex;
         text-align: left;
         gap: 0.8em;
-    }
-
-    /* Botones de acción */
-    .boton-accion {
-        padding: 0.5rem 1rem;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: opacity 0.3s ease;
-        margin-right: 1rem;
-    }
-
-    .boton-accion:hover {
-        opacity: 0.8;
-    }
-
-    .editar {
-        background-color: #3498db;
-        color: white;
-    }
-
-    .eliminar {
-        background-color: #e74c3c;
-        color: white;
-    }
-
-    .comprar {
-        background-color: #2ecc71;
-        color: white;
-        padding: 0.8rem 2rem;
-        font-size: 1.1rem;
-    }
-
-    .foro {
-        background: #a544ff;
-        color: white;
-        padding: 0.8rem 2rem;
-        font-size: 0.8rem;
     }
 
     /* Valoraciones y Foro :D*/
@@ -401,7 +376,7 @@ nav ul li {
         color: #916bf2;
     }
 
-/*Perfil*/
+    /*Perfil*/
     .perfil-usuario {
         font-family: 'Arial', sans-serif;
         color: #ffffff;
@@ -482,6 +457,71 @@ nav ul li {
         margin-bottom: 1rem;
     }
 
+    /* Botones de acción */
+
+    .botones-accion {
+        display: flex;
+        gap: 1rem;
+        margin: 1rem 0;
+        flex-wrap: wrap;
+    }
+
+    .boton-accion {
+        padding: 0.5rem 1rem;
+        border: black;
+        border-radius: 6px;
+        cursor: pointer;
+        text-align: center;
+        flex: 1; /* todos los botones ocupan el mismo espacio disponible */
+        font-weight: bold;
+        transition: opacity 0.3s ease;
+        min-width: 150px; /* evita que queden muy pequeños */
+        max-width: 200px;
+    }
+
+    .boton-accion.comprar {
+        background-color: #28a745;
+        color: white;
+    }  
+
+    .boton-accion.editar {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .boton-accion.eliminar {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .boton-accion:hover {
+        opacity: 0.8;
+    }
+
+    .editar {
+        background-color: #3498db;
+        color: white;
+    }
+
+    .eliminar {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .comprar {
+        background-color: #2ecc71;
+        color: white;
+        padding: 0.8rem 2rem;
+        font-size: 1.1rem;
+    }
+
+    .foro {
+        background: #a544ff;
+        color: white;
+        padding: 0.8rem 2rem;
+        font-size: 0.8rem;
+    }
+
     /* Botones */
     .boton-editar {
         display: inline-block;
@@ -538,18 +578,7 @@ nav ul li {
         border-radius: 5px;
     }
 
-    /* Enlaces */
-    a {
-        color: #916bf2;
-        text-decoration: none;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-
-
-/* Foro */
+    /* Foro */
     .foro-contenedor {
         max-width: 1200px;
         margin: 2rem auto;
