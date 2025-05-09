@@ -9,6 +9,9 @@
 //define('BD_USER', 'eventia_db');
 //define('BD_PASS', 'eventia');
 
+
+define('PIMIENTA', 'superseguro'); //pimienta
+
 define('BD_HOST', 'localhost');
 define('BD_NAME', 'eventia_db');
 define('BD_USER', 'root');
