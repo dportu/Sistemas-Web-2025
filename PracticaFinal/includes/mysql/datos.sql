@@ -19,9 +19,9 @@ INSERT INTO foro (id, titulo, autor, mensaje, evento, fecha_publicacion) VALUES
 
 -- Insercion de datos en la tabla Usuarios
 
-INSERT INTO usuarios (username, email, password, rol, puntos) VALUES
-('admin', 'admin@eventia.es', '$2y$10$nx7sPLOeZyLFfQ5wHYDSnea7eJOtf5XGhEKDK7YJpe8Bmp8wk5dkG', 'administrador', 0),
-('user', ' user@gmail.com', '$2y$10$0jHBrtOHcO/BQi8mZ1ZZvulNjN4UUQhjRlkx/m55RaH8GbKdd.db.', 'cliente', 0);
+INSERT INTO usuarios (username, email, password, rol, puntos, sal) VALUES
+('admin', 'admin@eventia.es', '28ab8d632daf6f8db094855bf1c34fb2980b4a9e06e81a5b094533a8c4e62d5c', 'administrador', 0, '60017997c3cd912d2552ab4d2bfa31fe'),
+('user', ' user@gmail.com', 'a82914ac1cf67bbb6bd963a9b7ceb260a0435c131dbd65d21290920b320f4737', 'cliente', 0, '939d012ef22c3d110c9cc1f4c42c569f');
 
 -- Insercion de datos en la tabla Valoraciones
 
@@ -32,8 +32,8 @@ INSERT INTO valoraciones (id, id_evento, username, nota, comentario, fecha) VALU
 
 
 -- Insertar el usuario promotor
-INSERT INTO usuarios (username, email, password, rol, puntos) VALUES
-('promotor1', 'promotor1@eventia.es', '$2y$10$nx7sPLOeZyLFfQ5wHYDSnea7eJOtf5XGhEKDK7YJpe8Bmp8wk5dkG', 'promotor', 0);
+INSERT INTO usuarios (username, email, password, rol, puntos, sal) VALUES
+('promotor1', 'promotor1@eventia.es', 'e4fc3b6a405e7e69f850c909f6475ab940f4e0542566f0e59a5f8cbbcdce546d', 'promotor', 0, '66ab0db1e1acb5c4e909884b04d5f306');
 
 -- Insertar un nuevo evento asignado a este promotor
 INSERT INTO eventos (nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen) VALUES
