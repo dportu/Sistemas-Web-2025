@@ -30,14 +30,14 @@
             }
             $autor = Aplicacion::getInstance()->nombreUsuario();
 
-            // Generamos los errores de campos si existen.
+            
             $erroresCampos = self::generaErroresCampos(['titulo', 'mensaje'], $this->errores, 'span', ['class' => 'error']);
             $htmlErroresGlobales = self::generaListaErroresGlobales($this->errores);
             if ($this->parent_id) {
                 $html .= '<input type="hidden" name="parent_id" value="'.$this->parent_id.'">';
             }
 
-            // Generamos el HTML del formulario.
+           
             if (Aplicacion::getInstance()->usuarioLogueado()){
                 $html = <<<EOF
                 $htmlErroresGlobales
@@ -77,10 +77,11 @@
         protected function procesaFormulario(&$datos) {
             $this->errores = [];
 
-            // Validación de título y mensaje.
+
             $titulo = trim($datos['titulo'] ?? '');
             $mensaje = trim($datos['mensaje'] ?? '');
             $evento = isset($datos['evento']) && !empty($datos['evento']) ? trim($datos['evento']) : null;
+            $parent_id = $datos['parent_id'] ?? null;
 
             if (empty($titulo)) {
                 $this->errores['titulo'] = 'El título no puede estar vacío.';
@@ -90,21 +91,20 @@
                 $this->errores['mensaje'] = 'El mensaje no puede estar vacío.';
             }
 
-            // Verificar si el usuario está logueado
+
             $app = Aplicacion::getInstance();
             if (!$app->usuarioLogueado()) {
                 $this->errores[] = 'Debes iniciar sesión para publicar.';
                 return;
             }
 
-            // Obtener los datos del usuario
+           
             $usuario = $app->nombreUsuario();
 
-            // Si no hay errores, se inserta el mensaje en la base de datos
             if (count($this->errores) === 0) {
-                // Intentar agregar el mensaje
-                if (MensajeForo::agregarMensaje($titulo, $mensaje, $usuario, $evento)) {
-                    // Redirección después de la inserción
+                 //Ahora pasamos tambien el parent_id
+                if (MensajeForo::agregarMensaje($titulo, $mensaje, $usuario, $evento, $parent_id)) {
+                    
                     $redirectUrl = 'foro.php' . ($evento ? "?id=$evento" : '');
                     header("Location: $redirectUrl");
                     exit();
