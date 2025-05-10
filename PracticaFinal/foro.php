@@ -1,184 +1,205 @@
 <?php 
-    require_once __DIR__.'/includes/config.php';
+require_once __DIR__.'/includes/config.php';
 
-    use es\ucm\fdi\aw\Aplicacion;
-    use es\ucm\fdi\aw\eventos\Evento;
-    use es\ucm\fdi\aw\foro\MensajeForo;
-    use es\ucm\fdi\aw\foro\FormularioForo;
+use es\ucm\fdi\aw\Aplicacion;
+use es\ucm\fdi\aw\foro\MensajeForo;
+use es\ucm\fdi\aw\foro\FormularioForo;
 
-    $tituloPagina = 'Foro';
-    $contenidoPrincipal = '';
-    $aplicacion = Aplicacion::getInstance(); // <-- INICIALIZACIÓN AQUÍ
-    $id_evento = $_GET['id'] ?? null;
-	$mensajes = MensajeForo::getMensajes($id_evento);
+$tituloPagina = 'Foro';
+$contenidoPrincipal = '';
+$aplicacion = Aplicacion::getInstance();
+$id_evento = $_GET['id'] ?? null;
 
-    if (count($mensajes) == 0) {
-        $contenidoPrincipal .= "<p>Todavía no hay mensajes.</p>";
+// Manejar eliminación de mensajes
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
+    $accion = $_POST['accion'];
+    $mensaje_id = $_POST['mensaje_id'] ?? null;
+
+    if ($accion === 'eliminar' && $mensaje_id) {
+        $mensaje = MensajeForo::getMensajePorId($mensaje_id);
+        $app = Aplicacion::getInstance();
+        
+        if ($mensaje && ($app->nombreUsuario() === $mensaje->getAutor() || $app->esAdmin())) {
+            MensajeForo::eliminarMensaje($mensaje_id);
+            $id_evento = $mensaje->getEvento();
+            header("Location: foro.php" . ($id_evento ? "?id=$id_evento" : ""));
+            exit();
+        }
+    }
+}
+
+function renderizarMensaje($mensaje, $aplicacion, $id_evento, $nivel = 0) {
+    // Referencia al mensaje padre
+    $referenciaPadre = '';
+    if ($mensaje->getParentId()) {
+        $mensajePadre = MensajeForo::getMensajePorId($mensaje->getParentId());
+        if ($mensajePadre) {
+            $referenciaPadre = <<<EOS
+                <div class="referencia-padre">
+                    Respondiendo a <a href="#mensaje-{$mensajePadre->getId()}" class="enlace-padre">
+                        @{$mensajePadre->getAutor()}
+                    </a> en "<span class="titulo-padre">{$mensajePadre->getTitulo()}</span>"
+                </div>
+            EOS;
+        }
     }
 
-    function renderizarMensaje($mensaje, $aplicacion, $id_evento, $nivel = 0) {
-        // Indentación progresiva
-        $margen = $nivel * 50; // 50px por cada nivel de anidación
+    $html = <<<EOS
+    <div class="mensaje" id="mensaje-{$mensaje->getId()}">
+        {$referenciaPadre}
+        <div class="cabecera-mensaje">
+            <h3 class="titulo-mensaje">
+                <a href="#mensaje-{$mensaje->getId()}" class="enlace-titulo">{$mensaje->getTitulo()}</a>
+            </h3>
+            <div class="meta-mensaje">
+                <span class="autor">@{$mensaje->getAutor()}</span>
+                <span class="fecha">{$mensaje->getFechaPublicacion()}</span>
+            </div>
+        </div>
         
-        $html = '<div class="mensaje" style="margin-left: '.$margen.'px; border-left: 2px solid #ddd; padding-left: 15px; margin-bottom: 20px;">';
-        
-        // Contenido principal del mensaje
-        $html .= '<div class="contenido-mensaje">';
-        $html .= sprintf('
-            <p class="mensaje-contenido">
-                <strong>Título:</strong> %s <br>
-                <strong>Autor:</strong> %s <br>
-                <strong>Mensaje:</strong> %s <br>
-                <strong>Fecha:</strong> %s
-            </p>',
-            htmlspecialchars($mensaje->getTitulo()),
-            htmlspecialchars($mensaje->getAutor()),
-            nl2br(htmlspecialchars($mensaje->getMensaje())),
-            $mensaje->getFechaPublicacion()
-        );
-        
-        // Botones de acciones
-        if ($aplicacion->usuarioLogueado() && ($aplicacion->nombreUsuario() === $mensaje->getAutor() || $aplicacion->esAdmin())) {
-            $html .= sprintf('
-                <div class="acciones-mensaje">
-                    <a href="%s" class="boton-enlace">Editar</a>
-                    <form method="POST" style="display:inline;">
-                        <input type="hidden" name="mensaje_id" value="%d">
-                        <button type="submit" name="accion" value="eliminar">Eliminar</button>
-                    </form>
-                </div>',
-                $aplicacion->buildUrl('editar_mensajeForo.php', ['id' => $mensaje->getId()]),
-                $mensaje->getId()
-            );
-        }
-        
-        // Botón de responder
-        if ($aplicacion->usuarioLogueado()) {
-            $form = new FormularioForo($id_evento, $mensaje->getId());
-            $html .= '<button class="toggle-reply">Responder</button>';
-            $html .= '<div class="formulario-respuesta" style="display:none;">'.$form->gestiona().'</div>';
-        }
-        
-        $html .= '</div>'; // Cierre contenido-mensaje
-        
-        // Respuestas (llamada recursiva)
-        $respuestas = MensajeForo::getRespuestas($mensaje->getId());
+        <div class="contenido-mensaje">
+            <p class="texto-mensaje">{$mensaje->getMensaje()}</p>
+    EOS;
+
+    // Botones de acción
+    if ($aplicacion->usuarioLogueado() && ($aplicacion->nombreUsuario() === $mensaje->getAutor() || $aplicacion->esAdmin())) {
+        $html .= <<<EOS
+            <div class="acciones-mensaje">
+                <a href="{$aplicacion->buildUrl('editar_mensajeForo.php', ['id' => $mensaje->getId()])}" class="boton editar">
+                    Editar
+                </a>
+                <form method="POST" class="form-eliminar">
+                    <input type="hidden" name="mensaje_id" value="{$mensaje->getId()}">
+                    <button type="submit" name="accion" value="eliminar" class="boton eliminar">
+                        Eliminar
+                    </button>
+                </form>
+            </div>
+        EOS;
+    }
+
+    // Formulario de respuesta
+    if ($aplicacion->usuarioLogueado()) {
+        $form = new FormularioForo($id_evento, $mensaje->getId());
+        $html .= <<<EOS
+            <details class="contenedor-respuesta">
+                <summary class="boton-respuesta">Responder</summary>
+                <div class="formulario-respuesta">
+                    {$form->gestiona()}
+                </div>
+            </details>
+        EOS;
+    }
+
+    // Respuestas
+    $respuestas = MensajeForo::getRespuestas($mensaje->getId());
+    if (!empty($respuestas)) {
+        $html .= '<div class="respuestas">';
         foreach ($respuestas as $respuesta) {
             $html .= renderizarMensaje($respuesta, $aplicacion, $id_evento, $nivel + 1);
         }
-        
-        return $html.'</div>'; // Cierre div.mensaje
+        $html .= '</div>';
     }
 
-    
-    $id_evento = $_GET['id'] ?? null;
-    $mensajesPrincipales = MensajeForo::getMensajes($id_evento);
-    
-    if (empty($mensajesPrincipales)) {
-        $contenidoPrincipal .= "<p>Todavía no hay mensajes.</p>";
-    } else {
-       foreach ($mensajesPrincipales as $mensaje) {
-        $contenidoPrincipal .= renderizarMensaje($mensaje, $aplicacion, $id_evento);
+    $html .= "</div></div>";
+    return $html;
+}
+
+// Contenido principal
+$mensajesPrincipales = MensajeForo::getMensajes($id_evento);
+if (empty($mensajesPrincipales)) {
+    $contenidoPrincipal .= "<p class='sin-mensajes'>Todavía no hay mensajes.</p>";
+} else {
+    foreach ($mensajesPrincipales as $mensaje) {
+        // Solo mostrar mensajes que no son respuestas
+        if ($mensaje->getParentId() === null) {
+            // Renderizar el mensaje
+            $contenidoPrincipal .= renderizarMensaje($mensaje, $aplicacion, $id_evento);
         }
+        //$contenidoPrincipal .= renderizarMensaje($mensaje, $aplicacion, $id_evento);
     }
+}
 
-     // Formulario para añadir un nuevo mensaje al foro
+// Formulario principal
+$form = new FormularioForo($id_evento);
+$contenidoPrincipal .= <<<EOS
+    <div class="nuevo-hilo">
+        <h2>Iniciar nuevo tema</h2>
+        {$form->gestiona()}
+    </div>
 
-    $form = new FormularioForo($id_evento);
-    $htmlFormLogin = $form->gestiona();
-    $contenidoPrincipal .= <<<EOS
-        <div class="formulario-contenedor">
-            $htmlFormLogin
-        </div>
-    EOS;
-
-    $contenidoPrincipal .= <<<EOS
-    <script>
-    document.querySelectorAll('.toggle-reply').forEach(button => {
-        button.addEventListener('click', function() {
-            const form = this.nextElementSibling;
-            form.style.display = form.style.display === 'none' ? 'block' : 'none';
-        });
-    });
-    </script>
-    EOS;
-
-	require __DIR__.'/includes/vistas/plantillas/plantilla.php';
-  
-
-    
-    /*
-	for ($i = 0; $i < count($mensajes); $i++) {
-        $titulo = $mensajes[$i]->titulo;
-        $autor = $mensajes[$i]->autor;
-        $$id_evento = $mensajes[$i]->evento;
-        $mensajeId = $mensajes[$i]->id;
-
-        if (!$id_evento) {
-            $nombre_evento = 'General';
-        }
-        else {
-            $nombre_evento = Evento::buscaPorId($id_evento)->nombre;
-        }
-        $mensaje = $mensajes[$i]->mensaje;
-        $fecha_publicacion = $mensajes[$i]->fechaPublicacion;
-
-        $aplicacion = Aplicacion::getInstance();
-        $modificarMensaje = '';
-        #$urlEdicion = $aplicacion->buildUrl('editar_mensaje.php');
-        
-        if ($mensajeId) {
-            $params = ['id' => $mensajeId];
-            $urlEdicion = $aplicacion->buildUrl('editar_mensajeForo.php', $params);
-            
-        }
-        $urlForo = $aplicacion->buildUrl('foro.php');
-        
-
-        if ($id_evento) {
-            $params = ['id' => $id_evento];
-            $urlForo = $aplicacion->buildUrl('foro.php', $params);
+    <style>
+        .mensaje {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            padding: 20px;
+            position: relative;
         }
 
-        // Si el usuario está logueado y es el autor del mensaje, mostrar opciones de edición y eliminación
-        if ($aplicacion->usuarioLogueado() && ($aplicacion->nombreUsuario() === $autor || $aplicacion->esAdmin())) { // || que sea promotor del evento
-            $modificarMensaje .= "
-                <a href='$urlEdicion' class='boton-enlace'>Editar</a> 
-                <form action='$urlForo' method='POST' style='display:inline;'>
-                    <input type='hidden' name='mensaje_id' value='$mensajeId'>
-                    <button type='submit' name='accion' value='eliminar' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este mensaje?\")'>Eliminar</button>
-                </form> 
-                ";
+        .referencia-padre {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+            padding-left: 15px;
+            border-left: 3px solid #e0e0e0;
         }
 
-        // Eliminar mensaje
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $accion = $_POST['accion'] ?? null;
-        
-            if ($accion) {
-                MensajeForo::eliminarMensaje($mensajeId);
-                if ($nombre_evento != 'General') {
-                    header("Location: foro.php?id=$id_evento");
-                } 
-                else {
-                    header("Location: foro.php");
-                }
-                exit;
-            }
+        .cabecera-mensaje {
+            margin-bottom: 15px;
         }
 
-		$contenidoPrincipal .= <<<EOS
-            <div class='valoraciones'>
-            <p class='mensaje-contenido'>
-                <strong>Título:</strong> $titulo <br>
-                <strong>Autor:</strong> $autor <br>
-                <strong>Evento:</strong> $nombre_evento <br>
-                <strong>Mensaje:</strong> $mensaje <br>
-                <strong>Fecha:</strong> $fecha_publicacion <br> </p>
-                $modificarMensaje
-            </div>
-        EOS;
-	}*/
+        .titulo-mensaje {
+            margin: 0;
+            font-size: 1.3em;
+        }
 
+        .meta-mensaje {
+            display: flex;
+            gap: 15px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 8px;
+        }
+
+        .acciones-mensaje {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .boton {
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+        }
+
+        .editar { background: #3498db; color: white; }
+        .eliminar { background: #e74c3c; color: white; }
+
+        .contenedor-respuesta {
+            margin-top: 15px;
+        }
+
+        .boton-respuesta {
+            background: none;
+            border: none;
+            color: #2ecc71;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+
+        .nuevo-hilo {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+    </style>
+EOS;
+
+require __DIR__.'/includes/vistas/plantillas/plantilla.php';
 ?>
-
