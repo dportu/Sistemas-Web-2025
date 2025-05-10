@@ -176,7 +176,7 @@ class Evento {
             return false;
         }
         
-        $stmt->bind_param("sdsssssi",
+        $stmt->bind_param("sdsssssii",
             $this->nombre, 
             $this->precio, 
             $this->descripcion, 
@@ -184,8 +184,8 @@ class Evento {
             $this->ubicacion, 
             $this->organizador, 
             $this->imagen,
-            $this->id,
-            $this->entradas
+            $this->entradas,
+            $this->id
         );
     
         $result = $stmt->execute();
@@ -228,7 +228,8 @@ class Evento {
     //solo puede ser usada en altaevento
     private static function insertarEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen, $entradas) { //creo que hay que modificar mas cosas para adaptar al nuevo parametro entradas
         $conexion = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("INSERT INTO eventos (nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen, entradas) VALUES ('%s', %d, '%s', '%s', '%s', '%s', '%s')",
+        $query = sprintf("INSERT INTO eventos (nombre, precio, descripcion, fecha_inicio, ubicacion, organizador, imagen, entradas) 
+                    VALUES ('%s', %f, '%s', '%s', '%s', '%s', '%s', %d)",
             $conexion->real_escape_string($nombre),
             $conexion->real_escape_string($precio),
             $conexion->real_escape_string($descripcion),
@@ -237,7 +238,6 @@ class Evento {
             $conexion->real_escape_string($organizador),
             $conexion->real_escape_string($imagen),
             $conexion->real_escape_string($entradas)
-
         );
         if ($conexion->query($query)) {
             return $conexion->insert_id;

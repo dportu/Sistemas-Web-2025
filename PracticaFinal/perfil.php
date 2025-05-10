@@ -18,7 +18,7 @@
     $puntos = htmlspecialchars($usuario->getPuntos());
 
     // Usamos la funcion build url , que nos venia en app , 
-    $enlaceEditar = $app->buildUrl('editar_perfil.php');
+    $enlaceEditar = $app->buildUrl('mostrar_entradas.php');
     $enlaceLogout = $app->buildUrl('logout.php');
     $enlaceAdmin = $app->buildUrl('adminVista.php');
     $enlaceCompras = $app->buildUrl('mis_compras.php');
@@ -51,7 +51,7 @@
             <h3>Bienvenido, $nombre!</h3>
             <div class="info-perfil">
                 <p><strong>Email:</strong> $email</p>
-                <a href="$enlaceEditar" class="boton-editar"> Editar perfil</a>
+                <a href="$enlaceEditar" class="boton-editar"> Mostrar entradas</a>
             </div>
             
             <section class="opciones-perfil">

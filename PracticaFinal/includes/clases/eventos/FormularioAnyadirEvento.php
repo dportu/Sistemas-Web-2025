@@ -24,14 +24,14 @@ class FormularioAnyadirEvento extends Formulario {
             'ubicacion' => '',
             'organizador' => '',
             'imagen' => '',
-            'entradas_disponibles' => 0
+            'entradas' => 0
         ];
 
         $app = Aplicacion::getInstance();
 
         
         $erroresCampos = self::generaErroresCampos(
-            ['nombre', 'precio', 'descripcion', 'fecha_inicio', 'ubicacion', 'organizador', 'imagen', 'entradas_disponibles'],
+            ['nombre', 'precio', 'descripcion', 'fecha_inicio', 'ubicacion', 'organizador', 'imagen', 'entradas'],
             $this->errores, 
             'span', 
             ['class' => 'error']
@@ -52,7 +52,7 @@ class FormularioAnyadirEvento extends Formulario {
 
             <div class="campo-formulario">
                 <label for="precio">Precio (€):</label>
-                <input type="number" id="precio" name="precio" step="0.01" required>
+                <input type="number" id="precio" name="precio" min='0' step="0.5" required>
                 {$erroresCampos['precio']}
             </div>
 
@@ -88,7 +88,7 @@ class FormularioAnyadirEvento extends Formulario {
             <div class="campo-formulario">
                 <label for="entradas">Entradas disponibles:</label>
                 <input type="number" id="entradas" name="entradas" 
-                    min="0" step="1" required value="{$datos['entradas_disponibles']}">
+                    min="0" step="1" required value="{$datos['entradas']}">
                 {$erroresCampos['entradas']}
             </div>
 
@@ -104,36 +104,61 @@ class FormularioAnyadirEvento extends Formulario {
     }
 
     protected function procesaFormulario(&$datos) {
-        // Validación de datos
+        // Validar nombre
         $nombre = trim($datos['nombre'] ?? '');
         if (empty($nombre)) {
             $this->errores['nombre'] = 'El nombre es obligatorio';
         }
 
-        $precio = filter_var($datos['precio'] ?? 0, FILTER_VALIDATE_FLOAT);
+        // Validar precio
+        $precioRaw = str_replace(',', '.', $datos['precio'] ?? '');
+        $precio = filter_var($precioRaw, FILTER_VALIDATE_FLOAT);
         if ($precio === false || $precio < 0) {
             $this->errores['precio'] = 'Precio no válido';
         }
 
+        // Validar descripción
         $descripcion = trim($datos['descripcion'] ?? '');
         
+        // Validar fecha
         $fecha_inicio = trim($datos['fecha_inicio'] ?? '');
         if (empty($fecha_inicio)) {
             $this->errores['fecha_inicio'] = 'Fecha de inicio requerida';
         }
         
+        // Validar ubicación
         $ubicacion = trim($datos['ubicacion'] ?? '');
         if (empty($ubicacion)) {
             $this->errores['ubicacion'] = 'La ubicación es obligatoria';
         }
         
+        // Validar organizador
         $organizador = trim($datos['organizador'] ?? '');
         if (empty($organizador)) {
             $this->errores['organizador'] = 'El organizador es obligatorio';
         }
         
-        $imagen = trim($datos['imagen'] ?? '');
+        // Validar imagen
+        $tiposPermitidos = ['image/jpeg', 'image/jpg', 'image/png'];
+        $imagen = 'img/default.png';
 
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+            if (!in_array($_FILES['imagen']['type'], $tiposPermitidos)) {
+                $this->errores['imagen'] = 'El tipo de imagen no es válido. Solo se permiten JPEG, JPG o PNG.';
+            } else {
+                $nombreImagen = basename($_FILES['imagen']['name']);
+                $rutaTemporal = $_FILES['imagen']['tmp_name'];
+                $rutaDestino = RAIZ_APP . '/' . RUTA_IMGS. '/' . $nombreImagen;
+
+                if (!move_uploaded_file($rutaTemporal, $rutaDestino)) {
+                    $this->errores['imagen'] = 'Error al guardar la imagen en el servidor';
+                } else {
+                    $imagen = 'img/' . $nombreImagen;
+                }
+            }
+        }
+
+        // Validar entradas
         $entradas = filter_var($datos['entradas'], FILTER_VALIDATE_INT);
         if ($entradas === false || $entradas < 0) {
             $this->errores['entradas'] = 'Número de entradas no válido';

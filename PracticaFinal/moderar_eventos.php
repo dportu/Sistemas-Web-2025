@@ -6,7 +6,7 @@ use es\ucm\fdi\aw\usuarios\Usuario;
 
 $app = Aplicacion::getInstance();
 $tituloPagina = 'Moderación de Eventos';
-$rutaApp = RUTA_APP;
+$rutaApp = RAIZ_APP;
 
 if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
     // Obtener todos los eventos
@@ -22,7 +22,7 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
             <td>{$evento->getUbicacion()}</td>
             <td>
                 <a href="editar_evento.php?id={$evento->getId()}" class="boton-editar">Editar</a>
-                <form action="{$rutaApp}/moderar_eventos.php" method="POST" ">
+                <form action="{$rutaApp}/moderar_eventos.php" method="POST">
                     <input type="hidden" name="evento_id" value="{$evento->getId()}">
                     <button type="submit" name="accion" value="eliminar" 
                         class="boton-eliminar" 
@@ -39,7 +39,7 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
     $contenidoPrincipal = <<<EOS
     <div class="admin-section">
         <h2>Gestión de Eventos</h2>
-        <a href="{$rutaApp}/anyadir_evento.php" class="boton-crear">Crear Nuevo Evento</a>
+        <a href="anyadir_evento.php" class="boton-crear">Añadir Nuevo Evento</a>
         <table class="tabla-moderacion">
             <thead>
                 <tr>

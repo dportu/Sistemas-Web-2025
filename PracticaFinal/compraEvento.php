@@ -99,7 +99,7 @@ $contenidoPrincipal = <<<EOS
     <h2>Resultado de la compra</h2>
     <p>$mensaje</p>
     <a href="vistaEvento.php?id=$id_evento" class="boton-volver">Volver al evento</a>
-    <a href="perfil.php" class="boton">Ver mis entradas</a>
+    <a href="mostrar_entradas.php" class="boton">Ver mis entradas</a>
 </div>
 EOS;
 

@@ -10,7 +10,12 @@ class FormularioEditarEvento extends Formulario{
     private $evento;
 
     public function __construct($idEvento){
-        parent::__construct('formEditarEvento', ['urlRedireccion' => 'adminVista.php', 'method' => 'POST', 'class' => 'form-Editar']);
+        parent::__construct('formEditarEvento', 
+                            ['urlRedireccion' => 'adminVista.php', 
+                            'method' => 'POST', 
+                            'class' => 'form-Editar',
+                            'enctype' => 'multipart/form-data'
+                        ]);
         $this->idEvento = $idEvento;
         $this->evento = Evento::buscaPorId($idEvento);
         
@@ -52,8 +57,8 @@ class FormularioEditarEvento extends Formulario{
 
             <div class="campo-formulario">
                 <label for="precio">Precio (€):</label>
-                <input type="number" id="precio" name="precio" required
-                       value="{$datos['precio']}">
+                <input type="number" id="precio" name="precio" step="0.5" min="0" 
+                    value="{$datos['precio']}" required>
                 {$erroresCampos['precio']}
             </div>
 
@@ -85,8 +90,9 @@ class FormularioEditarEvento extends Formulario{
             </div>
 
             <div class="campo-formulario">
-                <label for="imagen">URL de la imagen:</label>
-                <input type="text" id="imagen" name="imagen" value="{$datos['imagen']}">
+                <label for="imagen">Imagen actual: {$datos['imagen']}</label><br>
+                <label for="imagen">Subir nueva imagen (opcional):</label>
+                <input type="file" id="imagen" name="imagen" accept="image/*">
                 {$erroresCampos['imagen']}
             </div>
 
@@ -109,42 +115,71 @@ class FormularioEditarEvento extends Formulario{
     }
 }
 
-    protected function procesaFormulario(&$datos) {  // Si cambiamos a que no peudan estar vacios , habria que quitar los ifs 
+    protected function procesaFormulario(&$datos) {
         $id = filter_var($datos['id'] ?? $this->idEvento, FILTER_VALIDATE_INT);
         if (!$id) {
             $this->errores[] = 'ID de evento no válido';
             return;
         }
 
+        // Validar nombre
         $nombre = trim($datos['nombre'] ?? '');
         if (empty($nombre)) {
             $this->errores['nombre'] = 'El nombre es obligatorio';
         }
-        
-        $precio = filter_var($datos['precio'] ?? '', FILTER_VALIDATE_FLOAT);
+
+        // Validar precio
+        $precioRaw = str_replace(',', '.', $datos['precio'] ?? '');
+        $precio = filter_var($precioRaw, FILTER_VALIDATE_FLOAT);
         if ($precio === false || $precio < 0) {
             $this->errores['precio'] = 'Precio no válido';
         }
-        
+
+        // Validar descripción
         $descripcion = trim($datos['descripcion'] ?? '');
-        
+
+        // Validar fecha
         $fecha_inicio = trim($datos['fecha_inicio'] ?? '');
         if (empty($fecha_inicio)) {
             $this->errores['fecha_inicio'] = 'Fecha de inicio requerida';
         }
-        
+
+        // Validar ubicación
         $ubicacion = trim($datos['ubicacion'] ?? '');
         if (empty($ubicacion)) {
             $this->errores['ubicacion'] = 'La ubicación es obligatoria';
         }
-        
+
+        // Validar organizador
         $organizador = trim($datos['organizador'] ?? '');
         if (empty($organizador)) {
             $this->errores['organizador'] = 'El organizador es obligatorio';
         }
-        
-        $imagen = trim($datos['imagen'] ?? '');
 
+       // Validar imagen
+        $tiposPermitidos = ['image/jpeg', 'image/jpg', 'image/png'];
+        $imagen = $this->evento->getImagen();
+
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+            if (!in_array($_FILES['imagen']['type'], $tiposPermitidos)) {
+                $this->errores['imagen'] = 'El tipo de imagen no es válido. Solo se permiten JPEG, JPG o PNG.';
+            } else {
+                $nombreImagen = basename($_FILES['imagen']['name']);
+                $rutaTemporal = $_FILES['imagen']['tmp_name'];
+                $rutaDestino = RAIZ_APP . '/' . RUTA_IMGS. '/' . $nombreImagen;
+
+                error_log("*********************TRAZA: Ruta temporal: $rutaTemporal; ruta destino: $rutaDestino", 0);
+
+                if (!move_uploaded_file($rutaTemporal, $rutaDestino)) {
+                    $this->errores['imagen'] = 'Error al guardar la imagen en el servidor';
+                } else {
+                    $imagen = 'img/' . $nombreImagen;
+                }
+            }
+        }
+
+
+        // Validar entradas
         $entradas = filter_var($datos['entradas'] ?? 0, FILTER_VALIDATE_INT);
         if ($entradas === false || $entradas < 0) {
             $this->errores['entradas'] = 'Número de entradas no válido';
@@ -153,12 +188,13 @@ class FormularioEditarEvento extends Formulario{
         if (count($this->errores) > 0) {
             return;
         }
+
         try {
             $evento = Evento::buscaPorId($id);
             if (!$evento) {
                 throw new \Exception("No se encontró el evento con ID: $id");
             }
-            
+
             $resultado = $evento->editarEvento(
                 $nombre,
                 $precio,
@@ -169,16 +205,17 @@ class FormularioEditarEvento extends Formulario{
                 $imagen,
                 $entradas
             );
-            
+
             if (!$resultado) {
                 throw new \Exception("No se pudo actualizar el evento en la base de datos");
             }
-            
+
             return 'adminVista.php';
-            
+
         } catch (\Exception $e) {
             $this->errores[] = "Error al actualizar el evento: " . $e->getMessage();
         }
     }
+
 }
 

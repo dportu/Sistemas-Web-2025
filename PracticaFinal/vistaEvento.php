@@ -90,7 +90,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                 $botonEliminar = <<<EOS
                 <form action="eliminar_evento.php" method="POST" onsubmit="return confirm('¿Estás seguro de querer eliminar este evento?');">
                     <input type="hidden" name="id" value="{$id}">
-                    <button type="submit" class="boton-accion eliminar">🗑️ Eliminar</button>
+                    <button type="submit" class="boton-accion eliminar"> Eliminar</button>
                 </form>
             EOS;
                 $botonEditar = "<a href='editar_evento.php?id={$id}' class='boton-accion editar'> Editar</a>";
