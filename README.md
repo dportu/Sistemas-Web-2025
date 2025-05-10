@@ -1,7 +1,7 @@
 Práctica final:
 - Compra/evento: hacer que se vean bonitas las entradas en el perfil
 - Valoraciones: completo
-- Foro: ya se puede responder a mensajes , hacerlo bonito o mejor , ya no esta eliminar mensajes???
+- Foro: ya se puede responder a mensajes , hacerlo bonito o mejor 
 - Puntos: cambiar descuento y revisarlo
 - Administrador: falta eliminar Valoraciones y mensajes  y corregir lo de añadir/eliminar imagenes
 - CSS: totalidad implementada (sobretodo editar evento, cuadrar los textos, ...)
