@@ -49,15 +49,7 @@
                 $types .= 'i';
             }
             
-            // Condición para parent_id
-            if ($parent_id !== null) {
-                $query .= " AND f.parent_id = ?";
-                $params[] = $parent_id;
-                $types .= 'i';
-            } else {
-                $query .= " AND f.parent_id IS NULL"; // Mensajes principales
-            }
-            
+  
             $query .= " ORDER BY fecha_publicacion DESC";
             
             $stmt = $conexion->prepare($query);
@@ -133,7 +125,7 @@
                 $evento = null;
             }
         
-            $stmt->bind_param("sssii", $titulo, $autor, $mensaje, $evento, $parent_id);
+            $stmt->bind_param("sssii", $titulo, $autor, $mensaje, $evento , $parent_id);
             if (!$stmt->execute()) {
                 die("Error al insertar el mensaje: " . $stmt->error);
             }
@@ -235,6 +227,14 @@
 
         public function getId() {
             return $this->id;
+        }
+
+        public function getParentId() {
+            return $this->parent_id;
+        }
+
+        public function setParentId($parent_id) {
+            $this->parent_id = $parent_id;
         }
         
         public function getTitulo() {

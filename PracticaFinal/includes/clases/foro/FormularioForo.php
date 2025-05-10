@@ -7,14 +7,17 @@
     use es\ucm\fdi\aw\eventos\Evento;
 
     class FormularioForo extends Formulario {
-
+       
+    
         private $idEvento;
+  
 
         public function __construct($id_evento = null, $parent_id = null) {
             parent::__construct(
                 'formForo', 
                 ['urlRedireccion' => $id_evento ? 'foro.php?id='.$id_evento : 'foro.php']
             );
+            $this->idEvento = $id_evento;
             $this->parent_id = $parent_id;
         }
 
@@ -28,7 +31,9 @@
             } else {
                 $evento = 'General';
             }
+        
             $autor = Aplicacion::getInstance()->nombreUsuario();
+           
 
             // Generamos los errores de campos si existen.
             $erroresCampos = self::generaErroresCampos(['titulo', 'mensaje'], $this->errores, 'span', ['class' => 'error']);
@@ -36,7 +41,7 @@
             if ($this->parent_id) {
                 $html .= '<input type="hidden" name="parent_id" value="'.$this->parent_id.'">';
             }
-
+            
             // Generamos el HTML del formulario.
             if (Aplicacion::getInstance()->usuarioLogueado()){
                 $html = <<<EOF
@@ -78,9 +83,11 @@
             $this->errores = [];
 
             // Validación de título y mensaje.
+           
             $titulo = trim($datos['titulo'] ?? '');
             $mensaje = trim($datos['mensaje'] ?? '');
             $evento = isset($datos['evento']) && !empty($datos['evento']) ? trim($datos['evento']) : null;
+             $parent_id = $datos['parent_id'] ?? null;
 
             if (empty($titulo)) {
                 $this->errores['titulo'] = 'El título no puede estar vacío.';
@@ -103,7 +110,7 @@
             // Si no hay errores, se inserta el mensaje en la base de datos
             if (count($this->errores) === 0) {
                 // Intentar agregar el mensaje
-                if (MensajeForo::agregarMensaje($titulo, $mensaje, $usuario, $evento)) {
+                if (MensajeForo::agregarMensaje($titulo, $mensaje, $usuario, $evento, $parent_id)) {
                     // Redirección después de la inserción
                     $redirectUrl = 'foro.php' . ($evento ? "?id=$evento" : '');
                     header("Location: $redirectUrl");
