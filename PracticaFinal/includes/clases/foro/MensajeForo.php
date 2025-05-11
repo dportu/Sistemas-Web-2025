@@ -120,7 +120,9 @@
             if (!$stmt) {
                 die("Error en la preparación de la consulta: " . $conexion->error);
             }
-        
+            $evento = !empty($evento) ? (int)$evento : null;
+            $parent_id = !empty($parent_id) ? (int)$parent_id : null;
+            
             if (empty($evento)) {
                 $evento = null;
             }
