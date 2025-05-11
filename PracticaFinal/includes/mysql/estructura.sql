@@ -47,7 +47,7 @@ CREATE TABLE `eventos` (
 --
 
 CREATE TABLE `foro` (
-  `id` int(11) NOT NULL,
+  `id` int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
   `titulo` varchar(255) NOT NULL,
   `autor` varchar(100) NOT NULL,
   `mensaje` text NOT NULL,
@@ -112,7 +112,8 @@ ALTER TABLE `eventos`
 -- Indices de la tabla `foro`
 --
 ALTER TABLE `foro`
-  ADD PRIMARY KEY (`id`);
+  ADD KEY `evento` (`evento`),
+  ADD KEY `autor` (`autor`);
 
 
 --
@@ -166,16 +167,13 @@ ALTER TABLE `valoraciones`
 ALTER TABLE `compras`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- Restricciones para tablas volcadas
---
 
 --
 -- Filtros para la tabla `valoraciones`
 --
 ALTER TABLE `valoraciones`
   ADD CONSTRAINT `valoraciones_ibfk_1` FOREIGN KEY (`id_evento`) REFERENCES `eventos` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `valoraciones_ibfk_2` FOREIGN KEY (`username`) REFERENCES `usuarios` (`username`) ON DELETE SET NULL;
+  ADD CONSTRAINT `valoraciones_ibfk_2` FOREIGN KEY (`username`) REFERENCES `usuarios` (`username`) ON DELETE CASCADE;
 COMMIT;
 
 
@@ -186,17 +184,27 @@ ALTER TABLE `compras`
   ADD CONSTRAINT `compras_ibfk_2` FOREIGN KEY (`evento_id`) REFERENCES `eventos` (`id`);
 COMMIT;
 
+-- Filtros para la tabla `foro`
+ALTER TABLE `foro`
+  ADD CONSTRAINT `foro_ibfk_1` FOREIGN KEY (`evento`) REFERENCES `eventos`(`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `foro_ibfk_2` FOREIGN KEY (`autor`) REFERENCES `usuarios`(`username`) ON DELETE CASCADE;
+
+ALTER TABLE `foro`
+  ADD COLUMN `parent_id` INT DEFAULT NULL;
 
 
-ALTER TABLE foro 
-ADD COLUMN parent_id INT DEFAULT NULL;
+ALTER TABLE `foro` 
+  ADD CONSTRAINT `fk_parent_id` 
+      FOREIGN KEY (`parent_id`) 
+      REFERENCES `foro`(`id`) 
+      ON DELETE CASCADE;
+COMMIT;
 
+-- Filtros para la tabla `eventos`
+Alter table `eventos`
+  ADD CONSTRAINT `fk_evento_organizador` FOREIGN KEY (`organizador`) REFERENCES `usuarios`(`username`) ON DELETE CASCADE;
+COMMIT;
 
-ALTER TABLE foro 
-ADD CONSTRAINT fk_parent_id 
-    FOREIGN KEY (parent_id) 
-    REFERENCES foro(id) 
-    ON DELETE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
