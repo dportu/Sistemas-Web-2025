@@ -21,7 +21,6 @@
                 $nombre = htmlspecialchars($evento->getNombre());
                 $precio = $evento->getPrecio();
                 $fecha = date('d/m/Y H:i', strtotime($evento->getFecha()));
-        
                 $res .= <<<EOS
                     <div class="evento">
                         <a href="vistaEvento.php?id={$evento->getId()}">
