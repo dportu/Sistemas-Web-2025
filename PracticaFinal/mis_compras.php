@@ -1,57 +1,67 @@
 <?php
-require_once __DIR__.'/includes/config.php';
+    require_once __DIR__.'/includes/config.php';
 
-use es\ucm\fdi\aw\Aplicacion;
-use es\ucm\fdi\aw\usuarios\Usuario;
+    use es\ucm\fdi\aw\Aplicacion;
+    use es\ucm\fdi\aw\usuarios\Usuario;
+    use es\ucm\fdi\aw\compras\Compra;
+    use es\ucm\fdi\aw\eventos\Evento;
 
-$app = Aplicacion::getInstance();
-$tituloPagina = 'Mis Compras';
+    $app = Aplicacion::getInstance();
+    $tituloPagina = 'Mis Compras';
 
-// Verificar usuario logueado
-if (!$app->usuarioLogueado()) {
-    $app->redirige($app->buildUrl('login.php'));
-}
-
-// Obtener usuario y compras
-$usuario = Usuario::buscaUsuario($app->nombreUsuario());
-$comprasHTML = '';
-
-if ($usuario) {
-    $compras = Usuario::getComprasByUsuario($usuario->getUsername());
-    
-    foreach ($compras as $compra) {
-        $fecha = date('d/m/Y H:i', strtotime($compra['fecha_compra']));
-        $total = $compra['precio_unitario'] * $compra['cantidad'];
+    function mostrarEntradas($username, &$contenidoPrincipal) {
+        $entradas = Compra::getEntradasUsuario($username);
+       // Mostrar todas las entradas del usuario
+       $res = '<div id="contenedor-eventos">';
+       foreach ($entradas as $idEvento => $numeroDeEntradas) {
+            $evento = Evento::buscaPorId($idEvento);
         
-        $comprasHTML .= <<<EOS
-        <div class="compra-item">
-            <img src="{$compra['evento_imagen']}" class="compra-imagen" alt="{$compra['evento_nombre']}">
-            <div class="compra-detalle">
-                <h3>{$compra['evento_nombre']}</h3>
-                <p><strong>Fecha:</strong> {$fecha}</p>
-                <p><strong>Cantidad:</strong> {$compra['cantidad']} entradas</p>
-                <p><strong>Precio unitario:</strong> {$compra['precio_unitario']}€</p>
-                <p><strong>Total:</strong> {$total}€</p>
-                <p><strong>Puntos usados:</strong> {$compra['puntos_usados']}</p>
+            if ($evento) {
+                $imagen = htmlspecialchars($evento->getImagen());
+                $nombre = htmlspecialchars($evento->getNombre());
+                $precio = $evento->getPrecio();
+                $fecha = date('d/m/Y H:i', strtotime($evento->getFecha()));
+        
+                $res .= <<<EOS
+                    <div class="evento">
+                        <a href="vistaEvento.php?id={$evento->getId()}">
+                            <img src="{$imagen}" alt="{$nombre}" class="evento-icono">
+                            <h3>{$nombre}</h3>
+                            <p>{$precio} €</p>
+                            <p>{$fecha}</p>
+                            <p>{$numeroDeEntradas} entradas adquiridas</p>
+                        </a>
+                    </div>
+                EOS;
+            }
+        }
+        if (empty($entradas)) {
+            $res .= "<p class='aviso-compras'> Aún no has realizado ninguna compra</p>";
+        }
+        $res .= '</div>';
+
+        return $res;
+    }
+
+    // Verificar usuario logueado
+    if (!$app->usuarioLogueado()) {
+        $app->redirige($app->buildUrl('login.php'));
+    }
+
+    // Mostrar el historial de compras
+    $comprasHTML = mostrarEntradas($app->nombreUsuario(), $contenidoPrincipal);
+
+    $contenidoPrincipal = <<<EOS
+        <div class="contenedor-compras">
+            <h1>Historial de Compras</h1>
+            <div class="lista-compras">
+                {$comprasHTML}
             </div>
+            <a href="perfil.php" class="boton-volver">← Volver al perfil</a>
         </div>
-        EOS;
-    }
-    
-    if (empty($compras)) {
-        $comprasHTML = "<p class='aviso-compras'>🎫 Aún no has realizado ninguna compra</p>";
-    }
-}
+    EOS;
 
-$contenidoPrincipal = <<<EOS
-    <div class="contenedor-compras">
-        <h1>Historial de Compras</h1>
-        <div class="lista-compras">
-            {$comprasHTML}
-        </div>
-        <a href="perfil.php" class="boton-volver">← Volver al perfil</a>
-    </div>
-EOS;
+    require __DIR__.'/includes/vistas/plantillas/plantilla.php';
 
-require __DIR__.'/includes/vistas/plantillas/plantilla.php';
 ?>
+

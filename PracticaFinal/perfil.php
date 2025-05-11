@@ -18,7 +18,6 @@
     $puntos = htmlspecialchars($usuario->getPuntos());
 
     // Usamos la funcion build url , que nos venia en app , 
-    $enlaceEditar = $app->buildUrl('mostrar_entradas.php');
     $enlaceLogout = $app->buildUrl('logout.php');
     $enlaceAdmin = $app->buildUrl('adminVista.php');
     $enlaceCompras = $app->buildUrl('mis_compras.php');
@@ -40,7 +39,6 @@
                 <p>Puntos disponibles: {$usuario->getPuntos()}</p>
                 <small>1 punto = 1€ de descuento en tu próxima compra</small>
             </div>
-            <a href="$enlaceCompras">Mis Compras</a>
         EOS;
     }
 
@@ -51,7 +49,7 @@
             <h3>Bienvenido, $nombre!</h3>
             <div class="info-perfil">
                 <p><strong>Email:</strong> $email</p>
-                <a href="$enlaceEditar" class="boton-editar"> Mostrar entradas</a>
+                <a href="$enlaceCompras" class="boton-editar"> Mostrar mis entradas</a>
             </div>
             
             <section class="opciones-perfil">
@@ -63,9 +61,6 @@
             </div>
         </article>
     EOS;
-
-    //mostramos las entradas adquiridas por el usuario
-    Compra::mostrarEntradas($nombre, $contenidoPrincipal);
 
     require __DIR__.'/includes/vistas/plantillas/plantilla.php';
 ?>

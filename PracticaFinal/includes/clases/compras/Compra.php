@@ -55,36 +55,6 @@ class Compra {
         return $compraExitosa;
     }
 
-
-    public static function mostrarEntradas($username, &$contenidoPrincipal) {
-        $app = Aplicacion::getInstance();
-        $entradas = Compra::getEntradasUsuario($username);
-       // Mostrar todas las entradas del usuario
-       foreach ($entradas as $idEvento => $numeroDeEntradas) {
-            $evento = Evento::buscaPorId($idEvento);
-        
-            if ($evento) {
-                $imagen = htmlspecialchars($evento->getImagen());
-                $nombre = htmlspecialchars($evento->getNombre());
-                $precio = $evento->getPrecio();
-                $fecha = date('d/m/Y H:i', strtotime($evento->getFecha()));
-        
-                $contenidoPrincipal .= <<<EOS
-                    <div class="evento">
-                        <a href="vistaEvento.php?id={$evento->getId()}">
-                            <img src="{$imagen}" alt="{$nombre}" class="evento-icono">
-                            <h3>{$nombre}</h3>
-                            <p>{$precio} €</p>
-                            <p>{$fecha}</p>
-                            <p>{$numeroDeEntradas} entradas adquiridas</p>
-                        </a>
-                    </div>
-                EOS;
-            }
-        }
-    }
-    
-
     public static function getEntradasUsuario($username) {
         $compras = Compra::comprasUsuario($username);
         $entradasPorEvento = [];

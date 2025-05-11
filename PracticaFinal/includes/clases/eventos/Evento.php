@@ -127,19 +127,34 @@ class Evento {
 
     public static function buscaPorId($idEvento) {
         //modificacion sobre buscaPorId
-        
         $conexion = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("SELECT * FROM eventos WHERE id=%d", $conexion->real_escape_string($idEvento));
-        $rs = $conexion->query($query);
+        $sql = "SELECT * FROM eventos WHERE id = ?";
+        $stmt = $conexion->prepare($sql);
         $result = false;
-        if ($rs) {
-            $fila = $rs->fetch_assoc();
-            if ($fila) {
-                $result = new Evento($idEvento, $fila['nombre'], $fila['precio'], $fila['descripcion'], $fila['fecha_inicio'], $fila['ubicacion'], $fila['organizador'], $fila['imagen'], $fila['entradas']);
+
+        if ($stmt) {
+            $stmt->bind_param("i", $idEvento);
+            if ($stmt->execute()) {
+                $rs = $stmt->get_result();
+                if ($fila = $rs->fetch_assoc()) {
+                    $result = new Evento(
+                        $idEvento,
+                        $fila['nombre'],
+                        $fila['precio'],
+                        $fila['descripcion'],
+                        $fila['fecha_inicio'],
+                        $fila['ubicacion'],
+                        $fila['organizador'],
+                        $fila['imagen'],
+                        $fila['entradas']
+                    );
+                }
+            } else {
+                error_log("Error al ejecutar la consulta: " . $stmt->error);
             }
-            $rs->free();
+            $stmt->close();
         } else {
-            error_log("Error BD ({$conexion->errno}): {$conexion->error}");
+            error_log("Error al preparar la consulta: " . $conexion->error);
         }
         return $result;
     }
@@ -200,17 +215,20 @@ class Evento {
         //preparamos la insercion
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) {
-            die("Error en la preparación de la consulta: " . $this->conn->error);
+            error_log("Error en la preparación de la consulta: " . $this->conn->error);
+            return false;
         }
 
         //vinculamos los parametros
         $stmt->bind_param("i", $this->id);
 
         if (!$stmt->execute()) {
-            die("Error al eliminar evento: " . $stmt->error);
-        }
+            error_log("Error al ejecutar la eliminación: " . $stmt->error);
+            return false;
+        }   
         
-        $stmt->close(); //hay que cerrar ?
+        $stmt->close();
+        return true;
     }
 
 

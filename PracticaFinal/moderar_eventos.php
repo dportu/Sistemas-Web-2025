@@ -6,7 +6,6 @@ use es\ucm\fdi\aw\usuarios\Usuario;
 
 $app = Aplicacion::getInstance();
 $tituloPagina = 'Moderación de Eventos';
-$rutaApp = RAIZ_APP;
 
 if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
     // Obtener todos los eventos
@@ -14,6 +13,7 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
     
     $tablaEventos = '';
     foreach ($eventos as $evento) {
+        $eventoId = $evento->getId();
         $tablaEventos .= <<<EOS
         <tr>
             <td>{$evento->getNombre()}</td>
@@ -21,9 +21,9 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
             <td>{$evento->getFecha()}</td>
             <td>{$evento->getUbicacion()}</td>
             <td>
-                <a href="editar_evento.php?id={$evento->getId()}" class="boton-editar">Editar</a>
-                <form action="{$rutaApp}/moderar_eventos.php" method="POST">
-                    <input type="hidden" name="evento_id" value="{$evento->getId()}">
+                <a href="editar_evento.php?id={$eventoId}" class="boton-editar">Editar</a>
+                <form action="moderar_eventos.php" method="POST">
+                    <input type="hidden" name="evento_id" value="{$eventoId}">
                     <button type="submit" name="accion" value="eliminar" 
                         class="boton-eliminar" 
                         onclick="return confirm('¿Eliminar este evento permanentemente?')">
@@ -59,34 +59,35 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
 
     // Procesar eliminación
     // En la sección de procesamiento POST:
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) { // Quitar paréntesis extra
-    $eventoId = filter_input(INPUT_POST, 'evento_id', FILTER_VALIDATE_INT);
-    
-    if ($_POST['accion'] === 'eliminar' && $eventoId) {
-        try {
-            $evento = Evento::buscaPorId($eventoId);
-            if ($evento) {
-                $evento->eliminarEvento();
-                header("Location: {$rutaApp}/moderar_eventos.php");
-                exit();
-            } else {
-                throw new \Exception("Evento no encontrado");
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
+        $eventoId = filter_input(INPUT_POST, 'evento_id', FILTER_VALIDATE_INT);
+        
+        if ($_POST['accion'] === 'eliminar' && $eventoId) {
+            try {
+                $evento = Evento::buscaPorId($eventoId);
+                if ($evento) {
+                    $evento->eliminarEvento();
+                    header("Location: moderar_eventos.php");
+                    exit();
+                } else {
+                    throw new \Exception("Evento no encontrado");
+                }
+            } catch (\Exception $e) {
+                error_log("Error al eliminar evento: " . $e->getMessage());
+                $contenidoPrincipal .= "<p class='error'>Error al eliminar el evento</p>";
             }
-        } catch (\Exception $e) {
-            error_log("Error al eliminar evento: " . $e->getMessage());
-            $contenidoPrincipal .= "<p class='error'>Error al eliminar el evento</p>";
         }
     }
-}
-} else {
-    $contenidoPrincipal = <<<EOS
-    <div class="acceso-denegado">
-        <h2>Acceso Denegado!</h2>
-        <p>No tienes permisos de administrador.</p>
-        <a href="index.php" class="boton-volver">Volver al Inicio</a>
-    </div>
-    EOS;
-}
+    } 
+    else {
+        $contenidoPrincipal = <<<EOS
+        <div class="acceso-denegado">
+            <h2>Acceso Denegado!</h2>
+            <p>No tienes permisos de administrador.</p>
+            <a href="index.php" class="boton-volver">Volver al Inicio</a>
+        </div>
+        EOS;
+    }
 
-require __DIR__.'/includes/vistas/plantillas/plantilla.php';
+    require __DIR__.'/includes/vistas/plantillas/plantilla.php';
 ?>
