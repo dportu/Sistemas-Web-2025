@@ -164,7 +164,7 @@ class Evento {
         
         if ($evento && $evento->entradas >= $cantidad) {
             $evento->actualizaEntradas($cantidad);
-            $puntos = ($precio * $cantidad) / 2;
+            $puntos = ($precio * $cantidad) * 0.25; // 25% del precio total
             $usuario->addPuntos($puntos);
             Usuario::actualiza($usuario);
             return true;

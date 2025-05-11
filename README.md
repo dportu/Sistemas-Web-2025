@@ -1,12 +1,12 @@
 Práctica final:
-- Compra/evento: hacer que se vean bonitas las entradas en el perfil
+- Compra/evento: completo
 - Valoraciones: completo
-- Foro: ya se puede responder a mensajes , hacerlo bonito o mejor 
-- Puntos: cambiar descuento y revisarlo
-- Administrador: falta eliminar Valoraciones y mensajes  y corregir lo de añadir/eliminar imagenes
+- Foro: hacerlo bonito o mejor. Volver a poner que sea un foro para cada evento.
+- Puntos: completo
+- Administrador: completo
 - CSS: totalidad implementada (sobretodo editar evento, cuadrar los textos, ...)
 - Corregir lo de la práctica 3 (en el readme del campus).
-- Se valora: sal y pimienta y aias.
+- Sal y pimienta, y aias: completo
 - Añadir más información a la base de datos
 
  No son vista con plantilla para mover a otra carpeta: comprobarUsuario, eliminar_evento

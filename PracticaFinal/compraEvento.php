@@ -24,7 +24,7 @@ $puntos_usar = isset($_POST['puntos']) ? (int)$_POST['puntos'] : 0;
 
 // Validar parámetros básicos
 if ($id_evento <= 0 || $cantidad <= 0) {
-    $app->paginaError(400, "Parámetros de compra inválidos");
+    $app->paginaError(400, "Parámetros de compra inválidos", "Debes proporcionar un ID de evento y una cantidad válidos.");
     exit();
 }
 
@@ -34,7 +34,7 @@ $evento = Evento::buscaPorId($id_evento);
 
 // Verificar existencia
 if (!$usuario || !$evento) {
-    $app->paginaError(404, "Recurso no encontrado");
+    $app->paginaError(404, "Recurso no encontrado", "El usuario o evento solicitado no existe.");
     exit();
 }
 
@@ -70,7 +70,7 @@ $nuevos_puntos = $usuario->getPuntos() - $descuento;
 
 // Ejecutar transacción
 if ($evento->actualizaEntradas($cantidad) && $usuario->setPuntos($nuevos_puntos)) {
-    $puntos_ganados = $precio_final * 0.5;
+    $puntos_ganados = $precio_final * 0.25;
     $usuario->setPuntos($puntos_ganados + $nuevos_puntos);
     Usuario::actualiza($usuario);
 
@@ -82,15 +82,16 @@ if ($evento->actualizaEntradas($cantidad) && $usuario->setPuntos($nuevos_puntos)
 
 // Mensaje final
 if ($compraExitosa) {
-    $mensaje = "✅ Compra exitosa!<br>
+    $mensaje = "Compra exitosa!<br>
                - Entradas: $cantidad<br>
                - Descuento: {$descuento}€<br>
                - Total pagado: {$precio_final}€<br>
                - Puntos ganados: {$puntos_ganados}<br>
                - Puntos usados: {$puntos_usar}<br>
                - Puntos restantes: " . $usuario->getPuntos();
-} else {
-    $mensaje = "❌ Error al procesar la compra";
+} 
+else {
+    $mensaje = "Error al procesar la compra";
 }
 
 // Vista 

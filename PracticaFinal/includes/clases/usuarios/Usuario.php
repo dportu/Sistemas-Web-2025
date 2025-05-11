@@ -183,10 +183,6 @@ class Usuario
         return false;
     }
 
-
-
-    
-
     //  GETTERS
   
 
