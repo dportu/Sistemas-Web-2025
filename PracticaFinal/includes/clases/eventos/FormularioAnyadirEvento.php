@@ -10,7 +10,8 @@ class FormularioAnyadirEvento extends Formulario {
         parent::__construct('formAnyadirEvento', [
             'urlRedireccion' => 'adminVista.php', 
             'method' => 'POST', 
-            'class' => 'form-Nuevo'
+            'class' => 'form-Nuevo',
+            'enctype' => 'multipart/form-data'
         ]);
     }
 
@@ -82,7 +83,8 @@ class FormularioAnyadirEvento extends Formulario {
 
             <div class="campo-formulario">
                 <label for="imagen">Selecciona una imagen:</label>
-                 <input type="file" id="imagen" name="imagen" accept={$erroresCampos['imagen']}>
+                <input type="file" id="imagen" name="imagen" accept="image/*">
+                {$erroresCampos['imagen']}
             </div>
 
             <div class="campo-formulario">
@@ -115,6 +117,9 @@ class FormularioAnyadirEvento extends Formulario {
         $precio = filter_var($precioRaw, FILTER_VALIDATE_FLOAT);
         if ($precio === false || $precio < 0) {
             $this->errores['precio'] = 'Precio no válido';
+        } 
+        else {
+            $precio = number_format($precio, 2, '.', '');
         }
 
         // Validar descripción

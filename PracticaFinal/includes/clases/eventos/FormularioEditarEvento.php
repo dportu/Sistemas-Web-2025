@@ -133,6 +133,9 @@ class FormularioEditarEvento extends Formulario{
         $precio = filter_var($precioRaw, FILTER_VALIDATE_FLOAT);
         if ($precio === false || $precio < 0) {
             $this->errores['precio'] = 'Precio no válido';
+        } 
+        else {
+            $precio = number_format($precio, 2, '.', '');
         }
 
         // Validar descripción

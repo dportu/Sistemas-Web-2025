@@ -19,7 +19,8 @@ INSERT INTO eventos (id, nombre, precio, descripcion, fecha_inicio, ubicacion, o
 (5, 'Concierto de Dua Lipa', '45', '¡Ven a disfrutar de la increíble música de Dua Lipa en vivo!', '2025-05-25 21:00:00', 'Palacio de los Deportes', 'Eventia', 'img/dualipa.jpg', 150),
 (6, 'Concierto de Coldplay', '60', 'Una experiencia única con Coldplay en un escenario increíble.', '2025-06-10 19:00:00', 'Estadio Metropolitano', 'promotor1', 'img/coldplay.jpg', 200),
 (7, 'Musical El Rey León', '50', 'Disfruta de la magia y los espectáculos del aclamado musical El Rey León. Vive la historia de Simba con música, danza y efectos visuales impresionantes.', '2025-07-01 18:00:00', 'Teatro Lope de Vega', 'Eventia', 'img/rey-leon.jpg', 300),
-(8, 'Festival de musica', '30', 'Festival para aquellos que les guste todo tipo de música o quienes deseen experimentar nuevos estilos.', '2025-06-10 19:00:00', 'Ifema de Madrid', 'admin', 'img/festival-musica.jpg', 200);
+(8, 'Festival de musica', '30', 'Festival para aquellos que les guste todo tipo de música o quienes deseen experimentar nuevos estilos.', '2025-06-10 19:00:00', 'Ifema de Madrid', 'admin', 'img/festival-musica.jpg', 200),
+(9, 'Exposición de verduras', '15', 'Una increible experiencia que nunca olvidarás.', '2025-10-10 17:00:00', 'Ifema de Madrid', 'promotor1', 'img/imagen.jpg', 50);
 
 -- Inserción de datos en la tabla Foro
 INSERT INTO foro (id, titulo, autor, mensaje, evento, fecha_publicacion, parent_id) VALUES

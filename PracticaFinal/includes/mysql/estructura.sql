@@ -31,7 +31,7 @@ USE `eventia_db`;
 CREATE TABLE `eventos` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) NOT NULL,
-  `precio` varchar(255) NOT NULL,
+  `precio` DECIMAL(6,2) NOT NULL,
   `descripcion` text DEFAULT NULL,
   `fecha_inicio` datetime NOT NULL,
   `ubicacion` varchar(255) DEFAULT NULL,
@@ -182,7 +182,6 @@ COMMIT;
 ALTER TABLE `compras`
   ADD CONSTRAINT `compras_ibfk_1` FOREIGN KEY (`usuario`) REFERENCES `usuarios` (`username`),
   ADD CONSTRAINT `compras_ibfk_2` FOREIGN KEY (`evento_id`) REFERENCES `eventos` (`id`);
-COMMIT;
 
 -- Filtros para la tabla `foro`
 ALTER TABLE `foro`
@@ -198,12 +197,10 @@ ALTER TABLE `foro`
       FOREIGN KEY (`parent_id`) 
       REFERENCES `foro`(`id`) 
       ON DELETE CASCADE;
-COMMIT;
 
 -- Filtros para la tabla `eventos`
 Alter table `eventos`
   ADD CONSTRAINT `fk_evento_organizador` FOREIGN KEY (`organizador`) REFERENCES `usuarios`(`username`) ON DELETE CASCADE;
-COMMIT;
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
