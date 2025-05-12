@@ -762,3 +762,142 @@ nav ul li {
     }
 
 }
+
+
+.admin-panel {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 20px;
+}
+
+.titulo-seccion {
+    text-align: center;
+    color: #de25ff;
+    margin-bottom: 2rem;
+   
+    font-size: 2.5em;
+    text-shadow: 0 0 10px rgba(222,37,255,0.4);
+}
+
+.grid-modulos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.modulo-card {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+    padding: 2rem;
+    border: 2px solid #3a1a4a;
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.modulo-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(222,37,255,0.2);
+    border-color: #6b2d8b;
+}
+
+.modulo-card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(106,45,139,0.2), transparent);
+    transform: rotate(45deg);
+    z-index: 0;
+}
+
+.icono-modulo {
+    font-size: 2.8em;
+    margin-bottom: 1rem;
+    color: #ac4dff;
+    text-shadow: 0 0 15px rgba(172,77,255,0.4);
+    position: relative;
+    z-index: 1;
+}
+
+.modulo-card h3 {
+    color: #cd3ce7;
+    font-family: 'Syne Mono', monospace;
+    font-size: 1.4em;
+    margin: 1rem 0;
+    position: relative;
+    z-index: 1;
+}
+
+.modulo-card p {
+    color: #bdbdbd;
+    font-size: 0.95em;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.boton-accion {
+    display: inline-block;
+    width: auto;
+    padding: 0.75rem 1.5rem;
+    background-color: #6a2d8b; 
+    color: #ffffff;
+    border-radius: 8px;
+    border: 2px solid #8e44ad;
+    text-align: center;
+    position: relative;
+    z-index: 2; 
+    margin-top: 1rem;
+}
+
+.boton-accion:hover {
+    background-color: #8e44ad;
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(142, 68, 173, 0.3);
+}
+
+.boton-accion:active {
+    transform: scale(0.95);
+    background-color: #5d3d7a;
+}
+
+/* Variantes de tarjetas */
+.evento-card {
+    border-color: #3498db;
+}
+.evento-card:hover {
+    border-color: #2980b9;
+}
+
+.foro-card {
+    border-color: #2ecc71;
+}
+.foro-card:hover {
+    border-color: #27ae60;
+}
+
+.valoraciones-card {
+    border-color: #f1c40f;
+}
+.valoraciones-card:hover {
+    border-color: #f39c12;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .grid-modulos {
+        grid-template-columns: 1fr;
+    }
+    
+    .modulo-card {
+        padding: 1.5rem;
+    }
+    
+   
+
+}
