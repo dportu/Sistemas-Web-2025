@@ -107,6 +107,7 @@ class Valoracion {
                     $row['fecha']
                 );
             }
+            $result->free();
         }
 
         return $valoraciones; // devolvemos el array con todas las valoraciones
@@ -119,10 +120,11 @@ class Valoracion {
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
+        $valoracion = null;
 
         if ($result && $result->num_rows === 1) {
             $row = $result->fetch_assoc();
-            return new Valoracion(
+            $valoracion = new Valoracion(
                 $row['id'], 
                 $row['id_evento'], 
                 $row['username'], 
@@ -130,8 +132,12 @@ class Valoracion {
                 $row['comentario'], 
                 $row['fecha']
             );
+            $result->free();
         } 
-        return null;
+        
+        $stmt->close();
+
+        return $valoracion;
     }
 
     public static function insertarValoracion($id_evento, $username, $nota, $comentario) {

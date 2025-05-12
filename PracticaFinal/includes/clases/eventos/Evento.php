@@ -158,6 +158,7 @@ class Evento {
                         $fila['entradas']
                     );
                 }
+                $rs->free();
             } else {
                 error_log("Error al ejecutar la consulta: " . $stmt->error);
             }

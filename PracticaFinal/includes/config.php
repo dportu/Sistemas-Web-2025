@@ -5,8 +5,8 @@
  */
 
 //define('BD_HOST', 'vm006.db.swarm.test');
-//define('BD_NAME', 'eventia_db');
-//define('BD_USER', 'eventia_db');
+//define('BD_NAME', 'eventia');
+//define('BD_USER', 'eventia');
 //define('BD_PASS', 'eventia');
 
 

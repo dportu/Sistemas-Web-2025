@@ -107,6 +107,8 @@
                     $row['parent_id']
                 );
             }
+
+            $result->free();
             
             return $respuestas;
         }
@@ -218,7 +220,8 @@
             } else {
                 error_log("Error BD ({$conexion->errno}): {$conexion->error}");
             }
-        
+            
+            $resultado->free();
             $stmt->close();
             return $result;
         }
