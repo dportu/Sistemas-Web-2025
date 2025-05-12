@@ -38,6 +38,15 @@ class Evento {
 
     //  METODOS PUBLICOS
     //  ESTATICOS
+
+    public static function getNombrePorId($id) {
+        $evento = Evento::buscaPorId($id);
+        $ret = null;
+        if($evento) {
+            $ret = $evento->getNombre();
+        }
+        return $ret;
+    }
     public static function altaEvento($nombre, $precio, $descripcion, $fecha_inicio, $ubicacion, $organizador, $imagen, $entradas) {
         $evento = Evento::buscaPorNombre($nombre);
         if($evento != null) {
