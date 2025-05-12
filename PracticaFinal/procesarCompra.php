@@ -39,6 +39,7 @@ $contenidoPrincipal = <<<EOS
         <div class="campo">
             <label>Entradas disponibles: $entradasDisponibles</label>
             <input type="number" 
+                class="texto-card"
                    name="cantidad" 
                    id="input-cantidad"
                    min="1" 
@@ -52,6 +53,7 @@ $contenidoPrincipal = <<<EOS
         <div class="campo">
             <label>Usar puntos (tienes $puntosUsuario):</label>
             <input type="number" 
+                class="texto-card"
                    name="puntos" 
                    id="input-puntos" 
                    min="0" 
