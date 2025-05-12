@@ -30,18 +30,18 @@
 
             return <<<EOS
                 <label for="titulo">Título:</label>
-                <input type="text" name="titulo" id="titulo" value="{$titulo}" required><br><br>
+                <input type="text" class="texto-card" name="titulo" id="titulo" value="{$titulo}" required><br><br>
 
                 <p>Autor: <strong>{$autor}</strong></p>
                 
                 <p>Evento: <strong>{$nombreEvento}</strong></p>
 
                 <label for="mensaje">Mensaje:</label>
-                <textarea name="mensaje" id="mensaje">{$contenido}</textarea>
+                <textarea name="mensaje" class="texto-card" id="mensaje">{$contenido}</textarea>
 
                 <input type="hidden" name="idMensaje" value="{$this->idMensaje}">
 
-                <input type="submit" value="Guardar Cambios">
+                <input type="submit" class="texto-card" value="Guardar Cambios">
                 <a href="foro.php">Cancelar</a>
             EOS;
         }
