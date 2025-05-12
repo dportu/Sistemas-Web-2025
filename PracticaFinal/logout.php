@@ -18,7 +18,7 @@
 
 	$contenidoPrincipal = <<<EOS
 	<div class="enlace-registro">
-		<h2>Sesión cerrada</h2>
+		<h1>Sesión cerrada</h1>
 		<p> Gracias por visitar nuestra web. Hasta pronto. </p>
 	</div>
 	EOS;

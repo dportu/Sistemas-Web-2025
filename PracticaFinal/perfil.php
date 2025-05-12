@@ -49,7 +49,7 @@
             <h3>Bienvenido, $nombre!</h3>
             <div class="info-perfil">
                 <p><strong>Email:</strong> $email</p>
-                <a href="$enlaceCompras" class="boton-editar"> Mostrar mis entradas</a>
+                <a href="$enlaceCompras" class="boton editar"> Mostrar mis entradas</a>
             </div>
             
             <section class="opciones-perfil">
@@ -57,7 +57,7 @@
             </section>
             
             <div class="acciones-secundarias">
-                <a href="$enlaceLogout" class="boton-logout"> Cerrar sesión</a>
+                <a href="$enlaceLogout" class="boton eliminar"> Cerrar sesión</a>
             </div>
         </article>
     EOS;

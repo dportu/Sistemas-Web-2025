@@ -197,6 +197,7 @@ header h1::after {
 
 .saludo {
     font-family: 'Syne Mono', monospace;
+    color: #cc83fc;
     font-size: 0.9em; /* Ajusta el tamaño de la fuente si es necesario */
 }
 
@@ -553,35 +554,21 @@ nav ul li {
 }
 
 /* Botones : Perfil */
-.boton-editar {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    background-color: #3498db;
-    color: white;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: transform 0.3s ease;
-    margin-top: 1rem;
-}
-
 .boton_admin {
     display: inline-block;
     padding: 0.8rem 1.5rem;
-    background-color: #2ecc71;
+    background-color: #a544ff;
     color: white;
     border-radius: 5px;
     text-decoration: none;
     transition: opacity 0.3s ease;
 }
 
-.boton-logout {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    background-color: #e74c3c;
+.boton_admin:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
     color: white;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: transform 0.3s ease;
+    text-decoration: none !important;
 }
 
 .acciones-secundarias {
@@ -608,9 +595,23 @@ nav ul li {
 
 .fondo h4 {
     color: #ac4dff;
-    border-bottom: 2px solid #3498db;
+    border-bottom: 2px solid #34db85;
     padding-bottom: 0.5rem;
     margin-bottom: 1.5rem;
+}
+
+.acciones-mensaje {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.acciones-mensaje .form-eliminar {
+    margin: 0;
+}
+
+.boton-respuesta {
+    cursor: pointer;
 }
 
     /* Formularios */
@@ -677,6 +678,8 @@ nav ul li {
         color: #916bf2;
     }
 
+
+/* Consola de administración */
 .admin-panel {
     max-width: 1200px;
     margin: 2rem auto;
@@ -687,7 +690,6 @@ nav ul li {
     text-align: center;
     color: #de25ff;
     margin-bottom: 2rem;
-   
     font-size: 2.5em;
     text-shadow: 0 0 10px rgba(222,37,255,0.4);
 }
@@ -813,7 +815,7 @@ nav ul li {
         max-height: 300px;
     }
     
-    .boton-accion {
+    .boton {
         display: block;
         width: 100%;
         margin-bottom: 0.5rem;
