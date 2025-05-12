@@ -10,6 +10,7 @@
        
     
         private $idEvento;
+        private $parent_id;
   
 
         public function __construct($id_evento = null, $parent_id = null) {
