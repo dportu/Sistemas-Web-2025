@@ -27,12 +27,12 @@ class FormularioEditarValoracion extends Formulario {
         return <<<EOF
             <h3>Edita tu valoración</h3>
             <label for="nota">Nota (1-5):</label>
-            <input type="number" id="nota" name="nota" min="1" max="5" value="$nota" required>
+            <input type="number" class="texto-card" id="nota" name="nota" min="1" max="5" value="$nota" required>
 
             <label for="comentario">Comentario:</label>
-            <textarea id="comentario" name="comentario" required>$comentario</textarea>
+            <textarea id="comentario" class="texto-card" name="comentario" required>$comentario</textarea>
 
-            <input type="submit" value="Guardar cambios">
+            <input type="submit" class="texto-card" value="Guardar cambios">
         EOF;
     }
 
