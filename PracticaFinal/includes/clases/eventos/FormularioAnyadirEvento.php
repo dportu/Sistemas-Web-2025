@@ -47,56 +47,56 @@ class FormularioAnyadirEvento extends Formulario {
             
             <div class="campo-formulario">
                 <label for="nombre">Nombre del evento:</label>
-                <input type="text" id="nombre" name="nombre" required>
+                <input type="text" class="texto-card"  id="nombre" name="nombre" required>
                 {$erroresCampos['nombre']}
             </div>
 
             <div class="campo-formulario">
                 <label for="precio">Precio (€):</label>
-                <input type="number" id="precio" name="precio" min='0' step="0.5" required>
+                <input type="number" class="texto-card" id="precio" name="precio" min='0' step="0.5" required>
                 {$erroresCampos['precio']}
             </div>
 
             <div class="campo-formulario">
                 <label for="descripcion">Descripción:</label>
-                <textarea id="descripcion" name="descripcion"></textarea>
+                <textarea id="descripcion" class="texto-card"  name="descripcion"></textarea>
                 {$erroresCampos['descripcion']}
             </div>
 
             <div class="campo-formulario">
                 <label for="fecha_inicio">Fecha de inicio:</label>
-                <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" required>
+                <input type="datetime-local" class="texto-card" id="fecha_inicio" name="fecha_inicio" required>
                 {$erroresCampos['fecha_inicio']}
             </div>
 
             <div class="campo-formulario">
                 <label for="ubicacion">Ubicación:</label>
-                <input type="text" id="ubicacion" name="ubicacion" required>
+                <input type="text" class="texto-card"  id="ubicacion" name="ubicacion" required>
                 {$erroresCampos['ubicacion']}
             </div>
 
             <div class="campo-formulario">
                 <label for="organizador">Organizador:</label>
-                <input type="text" id="organizador" name="organizador" required>
+                <input type="text" class="texto-card"  id="organizador" name="organizador" required>
                 {$erroresCampos['organizador']}
             </div>
 
             <div class="campo-formulario">
                 <label for="imagen">Selecciona una imagen:</label>
-                <input type="file" id="imagen" name="imagen" accept="image/*">
+                <input type="file" class="texto-card" id="imagen" name="imagen" accept="image/*">
                 {$erroresCampos['imagen']}
             </div>
 
             <div class="campo-formulario">
                 <label for="entradas">Entradas disponibles:</label>
-                <input type="number" id="entradas" name="entradas" 
+                <input type="number" class="texto-card"  id="entradas" name="entradas" 
                     min="0" step="1" required value="{$datos['entradas']}">
                 {$erroresCampos['entradas']}
             </div>
 
 
             <div class="acciones">
-                <button type="submit" class="boton-guardar">Crear Evento</button>
+                <button type="submit" class="texto-card" class="boton-guardar">Crear Evento</button>
                 <a href="{$app->resuelve('adminVista.php')}" class="boton-cancelar">Cancelar</a>
             </div>
         </div>
