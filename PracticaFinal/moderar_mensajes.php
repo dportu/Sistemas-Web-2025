@@ -27,7 +27,7 @@
                 <td>{$mensaje->getFechaPublicacion()}</td>
                 <td>
                     <a href="editar_mensajeForo.php?id={$mensaje->getId()}" class="boton-editar">Editar</a>
-                    <form action="moderar_mensajes.php" method="POST"">
+                    <form action="moderar_mensajes.php" method="POST">
                         <input type="hidden" name="mensaje_id" value="{$mensaje->getId()}">
                         <button type="submit" name="accion" value="eliminar" 
                             class="boton-eliminar" 
