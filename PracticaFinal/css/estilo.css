@@ -28,6 +28,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: white;
     font-family: 'Syne Mono', monospace;
 }
 
@@ -651,7 +652,6 @@ nav ul li {
     }
 
     /* Botones del foro */
-
     button[type="submit"] {
         background-color: #cd3ce7;
         color: white;
@@ -676,92 +676,6 @@ nav ul li {
     strong {
         color: #916bf2;
     }
-
-/* Responsive Design */
-@media (max-width: 768px) { 
-    .evento-detalle {
-        flex-direction: column;
-        padding: 1rem;
-    }
-    
-    .evento-imagen-detalle {
-        width: 100%;
-        max-height: 300px;
-    }
-    
-    .boton-accion {
-        display: block;
-        width: 100%;
-        margin-bottom: 0.5rem;
-    }
-    .perfil-usuario {
-        padding: 1rem;
-        margin: 0.5rem;
-    }
-    
-    .info-perfil,
-    .opciones-perfil {
-        padding: 1rem;
-    }
-    
-    .boton-editar,
-    .boton-logout,
-    .boton_admin {
-        display: block;
-        width: 100%;
-        text-align: center;
-        margin: 0.5rem 0;
-    }
-    .foro-contenedor {
-        padding: 0 0.5rem;
-    }
-    
-    .fondo,
-    .formulario-contenedor {
-        padding: 1rem;
-        margin: 0.5rem;
-    }
-    
-    .boton-accion,
-    .boton-enlace {
-        display: block;
-        width: 100%;
-        margin: 0.5rem 0;
-        text-align: center;
-    }
-
-    .perfil-usuario {
-        padding: 1rem;
-        margin: 0.5rem;
-    }
-    
-    .info-perfil,
-    .opciones-perfil {
-        padding: 1rem;  
-    }
-    
-    .boton-editar,
-    .boton-logout,
-    .boton_admin {
-        display: block;
-        width: 100%;
-        text-align: center;
-        margin: 0.5rem 0;
-    }
-} 
-/* Ajustes de adaptabilidad para móviles */
-@media (max-width: 768px) {
-    #contenedor {
-        grid-template-columns: 1fr;
-        grid-template-areas: 
-            "header"
-            "main"
-            "sidebar"
-            "footer";
-    }
-
-}
-
 
 .admin-panel {
     max-width: 1200px;
@@ -887,8 +801,78 @@ nav ul li {
     border-color: #f39c12;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive Design */
+@media (max-width: 768px) { 
+    .evento-detalle {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .evento-imagen-detalle {
+        width: 100%;
+        max-height: 300px;
+    }
+    
+    .boton-accion {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    .perfil-usuario {
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+    
+    .info-perfil,
+    .opciones-perfil {
+        padding: 1rem;
+    }
+    
+    .boton-editar,
+    .boton-logout,
+    .boton_admin {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin: 0.5rem 0;
+    }
+    .foro-contenedor {
+        padding: 0 0.5rem;
+    }
+    
+    .fondo,
+    .formulario-contenedor {
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+    
+    .boton-accion,
+    .boton-enlace {
+        display: block;
+        width: 100%;
+        margin: 0.5rem 0;
+        text-align: center;
+    }
+
+    .perfil-usuario {
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+    
+    .info-perfil,
+    .opciones-perfil {
+        padding: 1rem;  
+    }
+    
+    .boton-editar,
+    .boton-logout,
+    .boton_admin {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin: 0.5rem 0;
+    }
+
     .grid-modulos {
         grid-template-columns: 1fr;
     }
@@ -896,7 +880,16 @@ nav ul li {
     .modulo-card {
         padding: 1.5rem;
     }
-    
-   
+} 
+/* Ajustes de adaptabilidad para móviles */
+@media (max-width: 768px) {
+    #contenedor {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "header"
+            "main"
+            "sidebar"
+            "footer";
+    }
 
 }
