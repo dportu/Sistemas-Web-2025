@@ -77,12 +77,21 @@ class Valoracion {
         return $found;
     }
 
-    public static function valoracionesEvento($id_evento) {
+  public static function valoracionesEvento($id_evento = null) {
         $conexion = Aplicacion::getInstance()->getConexionBd();
-        $query = "SELECT * FROM valoraciones WHERE id_evento = ?";
+        $query = $id_evento 
+        //Si no tenemos el id_evento, lo que queremos es mostrar todas las valoraciones
+        ? "SELECT * FROM valoraciones WHERE id_evento = ?" 
+        : "SELECT * FROM valoraciones";   // con esto conseguimos poder mostralos si el id es nuLL, esto es para la vista de admin
+       
+       
         $stmt = $conexion->prepare($query);
-        $id_evento = $conexion->real_escape_string($id_evento);
-        $stmt->bind_param("i", $id_evento);
+
+        if ($id_evento) {   // Si tenemos el id_evento, lo que queremos es mostrar solo las valoraciones de ese evento
+            $id_evento = $conexion->real_escape_string($id_evento);
+            $stmt->bind_param("i", $id_evento);
+        }
+   
         $stmt->execute();
         $result = $stmt->get_result();
 
