@@ -50,7 +50,7 @@
                         <h3>Escribe tu mensaje</h3>
 
                         <label for="titulo">Título:</label>
-                        <input id="titulo" type="text" name="titulo" value="$titulo" required ><br>
+                        <input id="titulo" type="text" class="texto-card" name="titulo" value="$titulo" required ><br>
                         {$erroresCampos['titulo']}
 
                         <!-- Autor y Evento, ocultos -->
@@ -61,7 +61,7 @@
                         <p>Evento: <strong> $evento </strong></p>
 
                         <label for="mensaje">Mensaje:</label>
-                        <textarea id="mensaje" name="mensaje" rows="4" required>$mensaje</textarea>
+                        <textarea id="mensaje" class="texto-card" name="mensaje" rows="4" required>$mensaje</textarea>
                         {$erroresCampos['mensaje']}
                             
                         <input type="hidden" name="evento" value="{$this->idEvento}">
