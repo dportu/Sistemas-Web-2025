@@ -52,7 +52,7 @@
 
     $contenidoPrincipal = <<<EOS
         <div class="contenedor-compras">
-            <h1>Historial de Compras</h1>
+            <h2>Historial de Compras</h2>
             <div class="lista-compras">
                 {$comprasHTML}
             </div>
