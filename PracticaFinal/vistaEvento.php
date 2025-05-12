@@ -81,6 +81,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             $esAdmin = $app->tieneRol(Usuario::ADMIN_ROLE);
             $esPromotor = $app->tieneRol(Usuario::PROMOTOR_ROLE);
             $esOrganizador = ($organizador === $usuarioNom);
+            
           
             // Botón de edición y de eliminar solo para admins y para los promotores de esos eventos 
             $botonEditar = '';   // Para que no de errores 
@@ -91,10 +92,10 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                 $botonEliminar = <<<EOS
                 <form action="eliminar_evento.php" method="POST" onsubmit="return confirm('¿Estás seguro de querer eliminar este evento?');">
                     <input type="hidden" name="id" value="{$id}">
-                    <button type="submit" class="boton-accion eliminar"> Eliminar</button>
+                    <button type="submit" class="boton eliminar">Eliminar</button>
                 </form>
             EOS;
-                $botonEditar = "<a href='editar_evento.php?id={$id}' class='boton-accion editar'> Editar</a>";
+                $botonEditar = "<a href='editar_evento.php?id={$id}' class='boton editar'>Editar</a>";
                 
             }
 
@@ -109,7 +110,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                 $botonCompra = <<<EOS
                 <form action="procesarCompra.php" method="GET">
                     <input type="hidden" name="id" value="$id">
-                    <button type="submit" class="boton-accion comprar">Comprar entradas</button>
+                    <button type="submit" class="boton comprar">Comprar</button>
                 </form>
             EOS;
             } 
@@ -122,7 +123,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             $botonForo = <<<EOS
                 <form action="foro.php" method="GET">
                     <input type="hidden" name="id" value="$id">
-                    <button type="submit" class="boton-accion foro">Foro</button>
+                    <button type="submit" class="boton foro">Foro</button>
                 </form>
             EOS;
 
@@ -143,7 +144,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                         <p><strong>Ubicación:</strong> {$ubicacion}</p>
                         <p><strong>Organizador:</strong> {$organizador}</p>
                         {$info_entradas}
-                        <div class="botones-accion">
+                        <div class="botones-evento">
                             {$botonCompra}
                             {$botonEditar}
                             {$botonEliminar}

@@ -15,10 +15,10 @@
             $urlActual = $app->buildUrl('vistaEvento.php', ['id' => $id_evento]);
 
             $acciones .= <<<EOS
-            <a href="$urlEditar" class="boton-enlace">Editar</a>
+            <a href="$urlEditar" class="boton editar-mini">Editar</a>
             <form action="$urlActual" method="POST" style="display:inline;">
                 <input type="hidden" name="valoracion_id" value="{$valoracion->getId()}">
-                <button type="submit" name="accion" value="eliminar" onclick="return confirm('¿Eliminar esta valoración?')">Eliminar</button>
+                <button type="submit" name="accion" value="eliminar" class="boton eliminar-mini" onclick="return confirm('¿Eliminar esta valoración?')">Eliminar</button>
             </form>
             EOS;
         }
@@ -26,7 +26,7 @@
     }
     
     function mostrarValoracionesEvento($id_evento) {
-        $contenido = "<div class='valoraciones'><h3>Valoraciones de los usuarios:</h3>";
+        $contenido = "<div class='fondo'><h3>Valoraciones de los usuarios:</h3>";
 
         $valoraciones = Valoracion::valoracionesEvento($id_evento);
         $app = Aplicacion::getInstance();
@@ -45,7 +45,7 @@
                 $modificarValoracion = modificarValoracion($app, $valoracion, $id_evento);
 
                 $contenido .= <<<EOS
-                    <div class="valoracion">
+                    <div class="mensaje">
                         <p><strong>Usuario:</strong> $usuarioNombre</p>
                         <p><strong>Puntuación:</strong> $puntuacion/5</p>
                         $comentarioHTML

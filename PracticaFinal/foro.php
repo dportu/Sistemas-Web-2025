@@ -50,21 +50,21 @@ function renderizarMensaje($mensaje, $aplicacion, $id_evento, $nivel = 0) {
         $event = 'General';
     }
     $html = <<<EOS
-    <div class="mensaje" id="mensaje-{$mensajeId}">
+    <div class="fondo" id="mensaje-{$mensajeId}">
         {$referenciaPadre}
-        <div class="cabecera-mensaje">
-            <h3 class="titulo-mensaje">
+        <div class="mensaje">
+            <h4 class="titulo-mensaje">
                 Foro: <a href = {$aplicacion->buildUrl('foro.php', ['id' => $mensaje->getEvento()])} {$mensaje->getTitulo()}>
                 $event
                 </a>
-            </h3>
+            </h4>
             <div class="meta-mensaje">
                 <span class="autor">@{$mensaje->getAutor()}</span>
                 <span class="fecha">{$mensaje->getFechaPublicacion()}</span>
             </div>
         </div>
         
-        <div class="contenido-mensaje">
+        <div class="mensaje">
             <p class="texto-mensaje"> Mensaje: "{$mensaje->getMensaje()}"</p>
     EOS;
 

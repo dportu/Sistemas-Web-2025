@@ -32,7 +32,7 @@ class FormularioValoracion extends Formulario {
                 <textarea id="comentario" name="comentario" required>$comentario</textarea>
                 {$erroresCampos['comentario']}
 
-                <input type="submit" name="enviar" value="Enviar valoración">
+                <input type="submit" name="enviar" value="Enviar valoración" class="boton valoracion">
             EOF;
         }
         else {

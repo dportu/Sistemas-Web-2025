@@ -4,23 +4,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 
 
-/*morado: #aa0fe7; text-align: center; o left, en el body?*/
-
-/* Estilos generales */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-h2 {
-    font-size: 2em;
-    font-weight: bold;
-    color: #7055c8;
-}
-
 /* Tipografías */
-.syne-mono {
+.syne-mono { /* ESTAAA */
     font-family: 'Syne Mono', monospace;
     /*font-weight: 400;
     font-style: normal;*/
@@ -38,23 +23,88 @@ h2 {
     font-style: normal;*/
 }
 
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Syne Mono', monospace;
+}
+
+h2 {
+    font-size: 2em;
+    font-weight: bold;
+    color: #7055c8;
+}
 
 /* Cambiar color enlaces :) */
+a {
+    color: #977af7;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
 
-/* Enlaces */
-    a {
-        color: #977af7;
-        text-decoration: none;
-        font-weight: bold;
-        transition: color 0.3s;
-    }
+a:hover {
+    color: #3306c7;
+    text-decoration: underline;
+}
 
-    a:hover {
-        color: #4e3898;
-        text-decoration: underline;
-    }
+/* Botones : General */
+.boton {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: bold;
+    box-sizing: border-box;
+    line-height: 1.2;
+    vertical-align: middle;
+    text-align: center;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    border: none; /* Elimina bordes predeterminados de botones */
+    min-width: 150px;
+    max-width: 200px;
+    
+}
 
-/* Estilos principales */
+.boton:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+    text-decoration: none;
+}
+
+/* Fondos : General */
+.fondo {
+    background: rgba(0, 0, 0, 0.45);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    margin: 1rem auto;
+}
+
+.mensaje {
+    background: rgba(57, 57, 57, 0.497);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.mensaje strong {
+    color: #916bf2;
+}
+
+.mensaje small {
+    color: #ffffffc0;
+    display: block;
+    margin-top: 0.5rem;
+}
+
 body {
     font-family: Verdana, sans-serif;
     color: black;
@@ -100,7 +150,7 @@ header {
     color: #cc83fc;
     padding: 10px 20px;
     box-shadow: 0 2px 4px rgba(101, 90, 118, 0.1);
-    font-family: "Rubik Glitch", sans-serif;
+    /* font-family: "Rubik Glitch", sans-serif; */
     text-align: center;
     position: sticky;
     top: 0;
@@ -116,6 +166,7 @@ header h1 {
     font-size: 4em;
     margin: 0;
     font-weight: 440;
+    font-family: "Rubik Glitch", sans-serif;
     /* Nuevo efecto de gradiente */
     background: linear-gradient(90deg, #977af7 0%, #977af7 30%, #feee0a 100%);
     -webkit-background-clip: text;
@@ -144,7 +195,7 @@ header h1::after {
 }
 
 .saludo {
-    font-family: Verdana, sans-serif; /* Cambia la tipografía */
+    font-family: 'Syne Mono', monospace;
     font-size: 0.9em; /* Ajusta el tamaño de la fuente si es necesario */
 }
 
@@ -183,6 +234,7 @@ main p {
 
 .evento {
     display: block; /* hacerlo bloque para poder hacer click en todo el evento */
+    color: #977af7;
     background-color: black;
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
@@ -251,7 +303,7 @@ nav ul li {
     margin-bottom: 20px;
 }
 
-/*Evento informacion*/
+/* Información Evento */
     .evento-card, .evento-detalle, .valoraciones {
         font-family: 'Arial', sans-serif;
         color: #ffffff;
@@ -325,41 +377,26 @@ nav ul li {
         gap: 0.8em;
     }
 
-    /* Valoraciones y Foro :D*/
+/* Valoraciones y Foro :D */
 
-    .valoraciones {
-        margin-top: 2rem;
-        padding: 2rem;
-        background: #2e2e2e7f;
-        border-radius: 10px;
-    }
+.fondo h3 {
+    color: #ac4dff;
+    border-bottom: 2px solid #feee0a;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
 
-    .valoraciones h3 {
-        color: #ac4dff;
-        border-bottom: 2px solid #3498db;
-        padding-bottom: 0.5rem;
-        margin-bottom: 1.5rem;
-    }
+.valoracion-media {
+    color: #f1c40f;
+    font-size: 1.2rem;
+}
 
-    .valoracion {
-        background:   rgba(0, 0, 0, 0.455);
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        border-radius: 8px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-
-    .valoracion-media {
-        color: #f1c40f;
-        font-size: 1.2rem;
-    }
-
-    .error {
-        color: #e74c3c;
-        padding: 2rem;
-        text-align: center;
-        font-size: 1.2rem;
-    }
+.error {
+    color: #c01717;
+    padding: 2rem;
+    text-align: center;
+    font-size: 1.2rem;
+}
 
 
     /* Mejoras de tipografía y espaciado */
@@ -376,7 +413,7 @@ nav ul li {
         color: #916bf2;
     }
 
-    /*Perfil*/
+    /* Perfil */
     .perfil-usuario {
         font-family: 'Arial', sans-serif;
         color: #ffffff;
@@ -457,117 +494,100 @@ nav ul li {
         margin-bottom: 1rem;
     }
 
-    /* Botones de acción */
+/* Botones : Evento */
+.botones-evento { /* contenedor botones */
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
 
-    .botones-accion {
-        display: flex;
-        gap: 1rem;
-        margin: 1rem 0;
-        flex-wrap: wrap;
-    }
+.boton.comprar {
+    flex: 1; /* todos los botones ocupan el mismo espacio disponible */
+    background-color: #cec000;
+    color: white;
+}  
 
-    .boton-accion {
-        padding: 0.5rem 1rem;
-        border: black;
-        border-radius: 6px;
-        cursor: pointer;
-        text-align: center;
-        flex: 1; /* todos los botones ocupan el mismo espacio disponible */
-        font-weight: bold;
-        transition: opacity 0.3s ease;
-        min-width: 150px; /* evita que queden muy pequeños */
-        max-width: 200px;
-    }
+.boton.editar {
+    flex: 1;
+    background-color: #695ef9;
+    color: white;
+}
 
-    .boton-accion.comprar {
-        background-color: #28a745;
-        color: white;
-    }  
+.boton.eliminar {
+    flex: 1;
+    background-color: #9e0b21;
+    color: white;
+}
 
-    .boton-accion.editar {
-        background-color: #007bff;
-        color: white;
-    }
+.boton.foro {
+    flex: 1;
+    background: #a544ff;
+    color: white;
+}
 
-    .boton-accion.eliminar {
-        background-color: #dc3545;
-        color: white;
-    }
+/* Botones : Valoraciones */
+.boton.valoracion {
+    background-color: #8e44ad;
+    color: white;
+    margin-top: 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
 
-    .boton-accion:hover {
-        opacity: 0.8;
-    }
+.boton.valoracion:hover {
+    background-color: #732d91;
+}
 
-    .editar {
-        background-color: #3498db;
-        color: white;
-    }
+.boton.editar-mini {
+    background-color: #695ef9;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
 
-    .eliminar {
-        background-color: #e74c3c;
-        color: white;
-    }
+.boton.eliminar-mini {
+    background-color: #9e0b21;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
 
-    .comprar {
-        background-color: #2ecc71;
-        color: white;
-        padding: 0.8rem 2rem;
-        font-size: 1.1rem;
-    }
+/* Botones : Perfil */
+.boton-editar {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+    margin-top: 1rem;
+}
 
-    .foro {
-        background: #a544ff;
-        color: white;
-        padding: 0.8rem 2rem;
-        font-size: 0.8rem;
-    }
+.boton_admin {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background-color: #2ecc71;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
 
-    /* Botones */
-    .boton-editar {
-        display: inline-block;
-        padding: 0.8rem 1.5rem;
-        background-color: #3498db;
-        color: white;
-        border-radius: 5px;
-        text-decoration: none;
-        transition: transform 0.3s ease;
-        margin-top: 1rem;
-    }
+.boton-logout {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
 
-    .boton-logout {
-        display: inline-block;
-        padding: 0.8rem 1.5rem;
-        background-color: #e74c3c;
-        color: white;
-        border-radius: 5px;
-        text-decoration: none;
-        transition: transform 0.3s ease;
-    }
-
-    .boton_admin {
-        display: inline-block;
-        padding: 0.8rem 1.5rem;
-        background-color: #2ecc71;
-        color: white;
-        border-radius: 5px;
-        text-decoration: none;
-        transition: opacity 0.3s ease;
-    }
-
-    .acciones-secundarias {
-        margin-top: 2rem;
-        padding-top: 2rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    /* Hover effects */
-    .boton-editar:hover, 
-    .boton-logout:hover,
-    .boton_admin:hover {
-        transform: translateY(-2px);
-        opacity: 0.9;
-        text-decoration: none;
-    }
+.acciones-secundarias {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
 
     /* Puntos acumulados */
     .puntos-acumulados {
@@ -578,39 +598,19 @@ nav ul li {
         border-radius: 5px;
     }
 
-    /* Foro */
-    .foro-contenedor {
-        max-width: 1200px;
-        margin: 2rem auto;
-        padding: 0 1rem;
-    }
+/* Foro */
+.foro-contenedor {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
 
-    .valoraciones {
-        background: rgba(0, 0, 0, 0.455);
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-        margin: 1rem;
-    }
-
-    .valoracion {
-        background: rgba(57, 57, 57, 0.497);
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        border-radius: 8px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        position: relative;
-    }
-
-    .valoracion strong {
-        color: #916bf2;
-    }
-
-    .valoracion small {
-        color: #ffffffc0;
-        display: block;
-        margin-top: 0.5rem;
-    }
+.fondo h4 {
+    color: #ac4dff;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
 
     /* Formularios */
     .formulario-contenedor {
@@ -651,7 +651,6 @@ nav ul li {
     }
 
     /* Botones del foro */
-
 
     button[type="submit"] {
         background-color: #cd3ce7;
@@ -717,7 +716,7 @@ nav ul li {
         padding: 0 0.5rem;
     }
     
-    .valoraciones,
+    .fondo,
     .formulario-contenedor {
         padding: 1rem;
         margin: 0.5rem;
