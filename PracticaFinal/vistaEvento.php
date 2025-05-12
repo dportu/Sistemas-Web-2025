@@ -85,6 +85,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             // Botón de edición y de eliminar solo para admins y para los promotores de esos eventos 
             $botonEditar = '';   // Para que no de errores 
             $botonEliminar = '';
+            $botonForo = "<a href='foro.php?id={$id}' Foro</a>";
 
             if (($app->usuarioLogueado()) && ($esAdmin) ||($esPromotor && $esOrganizador)) {
                 $botonEliminar = <<<EOS
@@ -118,6 +119,12 @@ function mostrarEvento($id, &$contenidoPrincipal) {
             else {
                 $botonCompra = "<p class='aviso-agotado'>❌ No quedan entradas disponibles</p>";
             }
+            $botonForo = <<<EOS
+                <form action="foro.php" method="GET">
+                    <input type="hidden" name="id" value="$id">
+                    <button type="submit" class="boton-accion foro">Foro</button>
+                </form>
+            EOS;
 
             $evento = Evento::buscaPorId($id);
             $valoracionMedia = Valoracion::notaMedia($id);
@@ -140,6 +147,7 @@ function mostrarEvento($id, &$contenidoPrincipal) {
                             {$botonCompra}
                             {$botonEditar}
                             {$botonEliminar}
+                            {$botonForo}
                         </div>
                         <p><strong>Descripción:</strong> {$descripcion}</p>
                     </div>
