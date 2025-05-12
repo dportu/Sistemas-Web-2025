@@ -4,6 +4,7 @@ require_once __DIR__.'/includes/config.php';
 use es\ucm\fdi\aw\Aplicacion;
 use es\ucm\fdi\aw\foro\MensajeForo;
 use es\ucm\fdi\aw\foro\FormularioForo;
+use es\ucm\fdi\aw\eventos\Evento;
 
 $tituloPagina = 'Foro';
 $contenidoPrincipal = '';
@@ -36,20 +37,26 @@ function renderizarMensaje($mensaje, $aplicacion, $id_evento, $nivel = 0) {
         if ($mensajePadre) {
             $referenciaPadre = <<<EOS
                 <div class="referencia-padre">
-                    Respondiendo a <a href="#mensaje-{$mensajePadre->getId()}" class="enlace-padre">
-                        @{$mensajePadre->getAutor()}
+                    Respondiendo a @{$mensajePadre->getAutor()}
                     </a> en "<span class="titulo-padre">{$mensajePadre->getTitulo()}</span>"
                 </div>
             EOS;
         }
     }
 
+    $mensajeId = $mensaje->getId();
+    $event = Evento::getNombrePorId($mensaje->getEvento());
+    if($event === null) {
+        $event = 'General';
+    }
     $html = <<<EOS
-    <div class="mensaje" id="mensaje-{$mensaje->getId()}">
+    <div class="mensaje" id="mensaje-{$mensajeId}">
         {$referenciaPadre}
         <div class="cabecera-mensaje">
             <h3 class="titulo-mensaje">
-                <a href="#mensaje-{$mensaje->getId()}" class="enlace-titulo">{$mensaje->getTitulo()}</a>
+                Foro: <a href = {$aplicacion->buildUrl('foro.php', ['id' => $mensaje->getEvento()])} {$mensaje->getTitulo()}>
+                $event
+                </a>
             </h3>
             <div class="meta-mensaje">
                 <span class="autor">@{$mensaje->getAutor()}</span>
@@ -58,7 +65,7 @@ function renderizarMensaje($mensaje, $aplicacion, $id_evento, $nivel = 0) {
         </div>
         
         <div class="contenido-mensaje">
-            <p class="texto-mensaje">{$mensaje->getMensaje()}</p>
+            <p class="texto-mensaje"> Mensaje: "{$mensaje->getMensaje()}"</p>
     EOS;
 
 
