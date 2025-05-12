@@ -7,7 +7,7 @@ use es\ucm\fdi\aw\Aplicacion;
 $app = Aplicacion::getInstance();
 
 // Verificar permisos
-if (!$app->usuarioLogueado() || !$app->tieneRol(Usuario::ADMIN_ROLE)) {
+if (!$app->usuarioLogueado() || !$app->tieneRol(Usuario::ADMIN_ROLE) && !$app->tieneRol(Usuario::PROMOTOR_ROLE)) {
     header("Location: index.php");
     exit();
 }

@@ -6,11 +6,18 @@ use es\ucm\fdi\aw\usuarios\Usuario;
 
 $app = Aplicacion::getInstance();
 $tituloPagina = 'Moderación de Eventos';
+$usuario = Usuario::buscaUsuario($app->nombreUsuario());
+$esAdmin = $app->tieneRol(Usuario::ADMIN_ROLE);
+$esPromotor = $app->tieneRol(Usuario::PROMOTOR_ROLE);
+$usuarioNombre = $usuario->getUsername(); // Obtener ID del usuario actual
 
-if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
-    // Obtener todos los eventos
-    $eventos = Evento::getEventos();
-    
+if ($esAdmin ){
+
+    if($esAdmin) {
+        $eventos = Evento::getEventos();
+
+    }
+
     $tablaEventos = '';
     foreach ($eventos as $evento) {
         $eventoId = $evento->getId();
@@ -79,6 +86,15 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
         }
     }
     } 
+    else if ($esPromotor) {
+        $contenidoPrincipal = <<<EOS
+    <div class="admin-section">
+        <h2>Gestión de Eventos</h2>
+        <a href="anyadir_evento.php" class="boton-crear">Añadir Nuevo Evento</a>
+
+    </div>
+    EOS;
+    }
     else {
         $contenidoPrincipal = <<<EOS
         <div class="acceso-denegado">

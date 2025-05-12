@@ -8,43 +8,51 @@ require_once __DIR__.'/includes/config.php';
 
 $tituloPagina = 'Panel de Administración';
 $app = Aplicacion::getInstance();
+$usuario = Usuario::buscaUsuario($app->nombreUsuario());
+
 $rutaApp = RUTA_APP;
+$esAdmin = $app->tieneRol(Usuario::ADMIN_ROLE);
+$esPromotor = $app->tieneRol(Usuario::PROMOTOR_ROLE);
+$rol = $usuario->getRol();
 
-if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
+if ($esAdmin || $esPromotor) {
+    $tarjetas = '';
     
+    // Siempre mostramos la de eventos
+    $tarjetas .= <<<EOS
+    <div class="modulo-card evento-card">
+        <div class="icono-modulo">📅</div>
+        <h3>Gestionar Eventos</h3>
+        <p>Organiza conciertos y actividades</p>
+        <a href="moderar_eventos.php" class="boton-accion editar">Acceder</a>
+    </div>
+    EOS;
 
-   // En la sección de contenidoPrincipal, reemplaza la tabla de eventos con:
-$contenidoPrincipal = <<<EOS
-<div class="admin-panel">
-    <h2 class="titulo-seccion">Panel de Administración</h2>
-    
-    <div class="grid-modulos">
-
-        <div class="modulo-card evento-card">
-            <div class="icono-modulo">📅</div>
-            <h3>Gestionar Eventos</h3>
-            <p>Organiza conciertos y actividades</p>
-            <a href="moderar_eventos.php" class="boton-accion editar">Acceder</a>
-        </div>
-
-
+    if($esAdmin) {
+        // Mostramos las demas solo al admin
+        $tarjetas .= <<<EOS
         <div class="modulo-card foro-card">
             <div class="icono-modulo">💬</div>
             <h3>Moderar Foro</h3>
             <p>Supervisa discusiones de usuarios</p>
             <a href="moderar_mensajes.php" class="boton-accion editar">Acceder</a>
         </div>
-
-
-        <div class="modulo-card valoraciones-card">
+         <div class="modulo-card valoraciones-card">
             <div class="icono-modulo">⭐</div>
             <h3>Moderar Valoraciones</h3>
             <p>Administra opiniones de usuarios</p>
             <a href="moderar_valoraciones.php" class="boton-accion editar">Acceder</a>
         </div>
-    </div>
-</div>
-EOS;
+        EOS;
+    }
+         $contenidoPrincipal = <<<EOS
+        <div class="admin-panel">
+            <h2 class="titulo-seccion">Panel de {$rol}</h2>
+            <div class="grid-modulos">
+                $tarjetas
+            </div>
+        </div>
+    EOS;
 
 } else {
     $contenidoPrincipal = <<<EOS
