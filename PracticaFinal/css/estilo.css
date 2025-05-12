@@ -803,6 +803,12 @@ nav ul li {
     border-color: #f39c12;
 }
 
+.texto-card {
+    border-color: #9658d5;
+    background-color: rgba(0, 0, 0, 0.21);;
+    color : #ffffff;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) { 
     .evento-detalle {
