@@ -27,7 +27,7 @@
                 <td>{$mensaje->getFechaPublicacion()}</td>
                 <td>
                     <a href="editar_mensajeForo.php?id={$mensaje->getId()}" class="boton-editar">Editar</a>
-                    <form action="{$rutaApp}/moderar_mensajes.php" method="POST"">
+                    <form action="moderar_mensajes.php" method="POST"">
                         <input type="hidden" name="mensaje_id" value="{$mensaje->getId()}">
                         <button type="submit" name="accion" value="eliminar" 
                             class="boton-eliminar" 
@@ -64,9 +64,20 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
             $mensajeId = $_POST['mensaje_id'] ?? null;
             if ($_POST['accion'] === 'eliminar' && $mensajeId) {
-                MensajeForo::eliminarMensaje($mensajeId);
-                header("Location: {$rutaApp}/moderar_mensajes.php");
-                exit();
+                try {
+                    $mensaje = MensajeForo::getMensajePorId($mensajeId);
+                    if ($mensaje){
+                        $mensaje->eliminarMensaje($mensajeId);
+                        header("Location: moderar_mensajes.php");
+                        exit();
+                    }
+                    else {
+                        throw new \Exception("Mensaje no encontrado.");
+                    }
+                } catch (\Exception $e) {
+                    error_log("Error al eliminar el mensaje: " . $e->getMessage());
+                    $contenidoPrincipal .= "<p class='error'>Error al eliminar el mensaje</p>";
+                }
             }
         }
     } else {

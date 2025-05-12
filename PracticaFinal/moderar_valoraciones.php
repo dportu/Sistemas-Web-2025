@@ -27,7 +27,7 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
             <td>{$valoracion->getFecha()}</td>
             <td class="acciones-celda">
                 $botonEditar
-                <form action="{$rutaApp}/moderar_valoraciones.php" method="POST">
+                <form action="moderar_valoraciones.php" method="POST">
                     <input type="hidden" name="valoracion_id" value="{$valoracion->getId()}">
                     <button type="submit" name="accion" value="eliminar" 
                         class="boton-eliminar" 
@@ -41,41 +41,7 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
     }
 
     $contenidoPrincipal = <<<EOS
-    <style>
-        /* Añade los mismos estilos que en moderar_mensajes.php */
-        .tabla-moderacion {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .tabla-moderacion th {
-            background: #2c3e50;
-            color: white;
-            padding: 12px;
-        }
-        .tabla-moderacion td {
-            padding: 10px;
-            border-bottom: 1px solid #ecf0f1;
-            max-width: 300px;
-            word-wrap: break-word;
-        }
-        .boton-editar {
-            background: #3498db;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-right: 10px;
-        }
-        .boton-eliminar {
-            background: #e74c3c;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    </style>
+  
     <div class="admin-section">
         <h2>Moderación de Valoraciones</h2>
         <table class="tabla-moderacion">
@@ -100,9 +66,20 @@ if ($app->tieneRol(Usuario::ADMIN_ROLE)) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
         $valoracionId = $_POST['valoracion_id'] ?? null;
         if ($_POST['accion'] === 'eliminar' && $valoracionId) {
-            Valoracion::eliminarValoracion($valoracionId);
-            header("Location: {$rutaApp}/moderar_valoraciones.php");
-            exit();
+            try{
+                $valoracion = Valoracion::getValoracionPorId($valoracionId);
+                if ($valoracion ){
+                    $valoracion->eliminarValoracion($valoracionId);
+                    header("Location: moderar_valoraciones.php");
+                    exit();
+                } else{
+                    throw new \Exception("Valoración no encontrada");
+                }
+            } catch (\Exception $e) {
+                error_log("Error al eliminar la valoración: " . $e->getMessage());
+                $contenidoPrincipal .= "<p class='error'>Error al eliminar la valoración</p>";
+            }
+           
         }
     }
 } else {
