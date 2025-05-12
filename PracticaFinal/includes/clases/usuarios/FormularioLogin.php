@@ -24,12 +24,12 @@ class FormularioLogin extends Formulario
         <fieldset>
             <div>
                 <label for="username">Nombre de usuario:</label>
-                <input id="username" type="text" name="username" value="$nombreUsuario">
+                <input id="username" type="text" class="texto-card" name="username" value="$nombreUsuario" >
                 {$erroresCampos['username']}
             </div>
             <div>
                 <label for="password">Password:</label>
-                <input id="password" type="password" name="password">
+                <input id="password" type="password" class="texto-card" name="password">
                 {$erroresCampos['password']}
             </div>
             <div>

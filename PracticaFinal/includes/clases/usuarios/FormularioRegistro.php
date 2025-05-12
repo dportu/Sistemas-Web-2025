@@ -23,7 +23,7 @@ class FormularioRegistro extends Formulario {
                 <legend>Datos para el registro</legend>
                 <div>
                     <label for="username">Nombre de usuario:</label>
-                    <input required id="username" type="text" name="username">
+                    <input required id="username" type="text" class="texto-card" name="username">
                     {$erroresCampos['username']}
                     <span id="userOK">&#x2714;</span> 
                     <span id="userMal">&#x274C;</span>
@@ -31,19 +31,19 @@ class FormularioRegistro extends Formulario {
                 </div>
                 <div>
                     <label for="email">Correo electrónico:</label>
-                    <input required id="email" type="email" name="email">
+                    <input required id="email" type="email" class="texto-card" name="email" id="campoEmail">
                     <span id="correoOK">&#x2714;</span> 
                     <span id="correoMal">&#x274C;</span>
                     {$erroresCampos['email']}
                 </div>
                 <div>
                     <label for="password">Contraseña:</label>
-                    <input id="password" type="password" name="password" required>
+                    <input id="password" type="password" class="texto-card" name="password" required>
                     {$erroresCampos['password']}
                 </div>
                 <div>
                     <label for="password2">Reintroduce la contraseña:</label>
-                    <input id="password2" type="password" name="password2" required>
+                    <input id="password2" type="password" class="texto-card" name="password2" required>
                     {$erroresCampos['password2']}
                 </div>
                 <div>
